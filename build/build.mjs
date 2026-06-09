@@ -14,6 +14,8 @@ const SITE = 'https://kramer.paris';
 
 const html = readFileSync(join(WEB, 'index.html'), 'utf8');
 const ARTISTS = eval(html.match(/const ARTISTS=(\[[\s\S]*?\]);/)[1]);
+/* Cloudflare Web Analytics token — single-sourced from index.html (const CF_TOKEN='…') */
+const CF_TOKEN = (html.match(/const CF_TOKEN='([^']*)'/) || [])[1] || '';
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -96,6 +98,7 @@ ${works}${cv}
   });
 })();
 </script>
+${CF_TOKEN ? `<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='${JSON.stringify({ token: CF_TOKEN })}'></script>` : ''}
 </body>
 </html>
 `;
