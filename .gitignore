@@ -1,0 +1,34 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Large image originals — keep web-optimised copies only
+# Place full-res artwork scans in images/originals/ — they will not be committed
+images/originals/
+
+# Video files (should be hosted externally)
+*.mp4
+*.mov
+*.avi
+*.mkv
+
+# Large raw formats
+*.tif
+*.tiff
+*.psd
+*.ai
+*.indd
+
+# Python environments (RESEARCH/instagram-artist-discovery)
+.venv/
+__pycache__/
+*.pyc
+
+# Editor / OS
+.idea/
+.vscode/
+Thumbs.db
+
+# Internal project notes — now lives in the vault root (KRAMER/CLAUDE.md), not in the public repo
+CLAUDE.md
