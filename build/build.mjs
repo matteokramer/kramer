@@ -29,10 +29,10 @@ function page(a, i) {
   ].join('\n      ');
 
   const works = a.works.length ? `
-    <p class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''} · ${a.code}</p>
+    <p class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''}</p>
     <div class="works-grid">
       ${a.works.map(w => `<div class="work-item">
-        <div class="work-plate"><img src="../../images/placeholder.png" alt="${esc(w.t)}"><span class="work-plate-tag">${esc(ref)}</span></div>
+        <div class="work-plate"><img src="../../images/placeholder.png" alt="${esc(w.t)}"></div>
         <p class="work-cap"><em>${esc(w.t)}</em>, ${esc(w.d)} &middot; ${esc(w.s)}</p>
         <a class="work-inquire" href="#" data-t="${esc(w.t)}" data-d="${esc(w.d)}" data-s="${esc(w.s)}">Demander la fiche →</a>
       </div>`).join('\n      ')}
@@ -66,14 +66,14 @@ function page(a, i) {
 <link rel="stylesheet" href="../../kramer.css">
 </head>
 <body>
-<div class="chrome ct"><div class="c9">Répertoire : K › Kr</div><div class="c9i">Entrée ${entry} · ${esc(a.code)}</div></div>
+<div class="chrome ct"><div class="c9">Répertoire : K › Kr</div><div class="c9i">Entrée ${entry}</div></div>
 
 <div class="wrap">
   <a class="back" href="../../"><span class="wordmark">Kramer</span></a>
   <p class="crumb"><a href="../../#section-artistes">Registre des artistes</a> › ${esc(a.name)}</p>
 
   <h1 class="a-name">${esc(a.name)}</h1>
-  <p class="a-ref">Entrée ${entry} · La Bride · ${esc(ref)}</p>
+  <p class="a-ref">Entrée ${entry} · La Bride</p>
   <div class="a-fields">
       ${fields}
   </div>
