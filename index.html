@@ -550,7 +550,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
     <p>L'ensemble des contenus de ce site (textes, images des œuvres, identité visuelle) est protégé par le droit d'auteur. Les œuvres reproduites demeurent la propriété de leurs auteurs. Toute reproduction, représentation ou diffusion, totale ou partielle, est interdite sans autorisation préalable.</p>
 
     <p class="lb-cv-section">Données personnelles</p>
-    <p>Les informations transmises via le formulaire ne sont utilisées que pour répondre à votre demande et ne sont jamais cédées à des tiers. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données en écrivant à <span id="legal-email-2"></span>.</p>
+    <p>Les informations transmises via le formulaire ne sont utilisées que pour répondre à votre demande et ne sont jamais cédées à des tiers. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression de vos données en écrivant à <span id="legal-email-2"></span>. La mesure d'audience du site est assurée par Cloudflare Web Analytics, sans cookies ni collecte de données personnelles ; aucun bandeau de consentement n'est donc nécessaire.</p>
   </div>
 </div>
 
@@ -606,6 +606,13 @@ const LOREM='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiu
 
 /* Assembled at runtime so the literal address stays out of the static source (same logic as the contact obfuscation below) */
 const GALLERY_EMAIL='contact'+'@'+'kramer'+String.fromCharCode(46)+'paris';
+
+/* Cloudflare Web Analytics — cookieless, EU-friendly, no consent banner needed.
+   ▸ Paste your Site Token between the quotes (dash.cloudflare.com → Web Analytics → Add a site → kramer.paris).
+   ▸ This is the ONLY place to set it. After editing, run `node build/build.mjs` so the
+     artist pages pick it up too, then commit + push. Empty string = analytics off (nothing loads). */
+const CF_TOKEN='';
+if(CF_TOKEN){var cfb=document.createElement('script');cfb.defer=true;cfb.src='https://static.cloudflareinsights.com/beacon.min.js';cfb.setAttribute('data-cf-beacon',JSON.stringify({token:CF_TOKEN}));document.head.appendChild(cfb);}
 
 /* Carousel hero image per artist. Drop optimised photos in images/artists/ and map them here
    (slug → path); anything unmapped falls back to the placeholder, so no broken images. */
@@ -723,8 +730,22 @@ async function rsvpSubmit(e){
   e.preventDefault();
   const form=e.target, b=form.querySelector('.btn');
   b.disabled=true; b.textContent='Envoi\u2026';
+  const fd=new FormData(form);
+  const newsletter=fd.get('newsletter');
+  const payload={
+    nom:fd.get('nom'),email:fd.get('email'),
+    affiliation:fd.get('affiliation'),newsletter:newsletter
+  };
   try{
-    const r=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
+    const calls=[
+      fetch(form.action,{method:'POST',body:fd,headers:{'Accept':'application/json'}})
+    ];
+    if(newsletter==='oui'){
+      calls.push(fetch('https://kramer-brevo.cloudflare-untouched375.workers.dev',{
+        method:'POST',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'}
+      }));
+    }
+    const [r]=await Promise.all(calls);
     if(r.ok){
       b.textContent='Envoy\u00e9 \u2713';
       setTimeout(()=>{form.reset();b.textContent='Envoyer';b.disabled=false;},2400);
