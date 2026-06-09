@@ -36,13 +36,12 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 /* Structural column with 1px side borders, like the home scroll container */
 .wrap{border:1px solid #222;border-width:0 1px;min-height:calc(100vh - 50px)}
 
-/* Back to home — clear text button (no wordmark; avoids colliding with the artist name) */
+/* Retour — plain text link back to the index (no wordmark; avoids colliding with the artist name) */
 .home-btn{
-  display:inline-block;margin:12px 10px 4px;padding:5px 10px;
+  display:inline-block;margin:12px 10px 4px;
   font-size:11px;letter-spacing:.04em;color:#000;
-  border:1px solid #222;transition:background .12s,color .12s;
 }
-.home-btn:hover{background:#000;color:#fff}
+.home-btn:hover{text-decoration:underline}
 .hb-arrow{margin-right:5px}
 .crumb{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55);padding:2px 10px 0}
 .crumb a:hover{text-decoration:underline}

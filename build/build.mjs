@@ -102,7 +102,7 @@ ${jsonld}
 <div class="chrome ct"><div class="c9">Répertoire : K › Kr</div><div class="c9i">Entrée ${entry}</div></div>
 
 <div class="wrap">
-  <a class="home-btn" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Back home</a>
+  <a class="home-btn" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Retour</a>
   <p class="crumb"><a href="../../#section-artistes">Registre des artistes</a> › ${esc(a.name)}</p>
 
   <h1 class="a-name">${esc(a.name)}</h1>
