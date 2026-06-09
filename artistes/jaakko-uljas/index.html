@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jaakko Uljas — Kramer</title>
-<meta name="description" content="Jaakko Uljas — Registre des artistes, exposition La Bride. Kramer, galerie d'art contemporain, Paris.">
+<title>Jaakko Uljas — Peinture · La Bride · Kramer, Paris</title>
+<meta name="description" content="Jaakko Uljas, peinture, installation (Helsinki) — exposition « La Bride » (KR/01), registre des artistes. Kramer, galerie d'art contemporain, Paris 10e.">
 <link rel="canonical" href="https://kramer.paris/artistes/jaakko-uljas/">
 <link rel="icon" href="../../images/edelweiss.svg">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Jaakko Uljas — Kramer">
-<meta property="og:description" content="Registre des artistes · La Bride">
+<meta property="og:description" content="Peinture, installation · La Bride · Kramer, Paris">
 <meta property="og:url" content="https://kramer.paris/artistes/jaakko-uljas/">
 <meta property="og:image" content="https://kramer.paris/images/kramer_wordmark.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Person","name":"Jaakko Uljas","url":"https://kramer.paris/artistes/jaakko-uljas/","memberOf":{"@type":"ArtGallery","name":"Kramer","url":"https://kramer.paris/"}}
+{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://kramer.paris/artistes/jaakko-uljas/#person","name":"Jaakko Uljas","url":"https://kramer.paris/artistes/jaakko-uljas/","jobTitle":"Artiste","knowsAbout":["Peinture","installation"],"birthDate":"1999","birthPlace":{"@type":"Place","name":"Helsinki"},"memberOf":{"@type":"ArtGallery","name":"Kramer","url":"https://kramer.paris/"},"sameAs":["https://jaakkouljas.com","https://www.instagram.com/jaakkouljas/"]}]}
 </script>
 <link rel="stylesheet" href="https://use.typekit.net/svm4vfk.css">
 <link rel="stylesheet" href="../../kramer.css">
@@ -22,7 +22,7 @@
 <div class="chrome ct"><div class="c9">Répertoire : K › Kr</div><div class="c9i">Entrée 004</div></div>
 
 <div class="wrap">
-  <a class="home-btn" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Back to home</a>
+  <a class="home-btn" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Back home</a>
   <p class="crumb"><a href="../../#section-artistes">Registre des artistes</a> › Jaakko Uljas</p>
 
   <h1 class="a-name">Jaakko Uljas</h1>
@@ -60,6 +60,29 @@
     var body=encodeURIComponent('Bonjour,\n\nJe souhaite recevoir la fiche de l’œuvre suivante :\n— '+t+' ('+d+'), '+s+'\nRéf. '+ref+'\n\n');
     el.setAttribute('href','mailto:'+addr+'?subject='+subj+'&body='+body);
   });
+})();
+
+/* Registry reticle cursor — replaces the OS pointer on mouse devices.
+   Text fields keep the I-beam; touch / coarse pointers are left alone. */
+(function(){
+  if(!(window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches))return;
+  var r=document.createElement('div');
+  r.className='reticle';r.setAttribute('aria-hidden','true');
+  document.body.appendChild(r);
+  function suppress(t){
+    if(!t||!t.closest)return false;
+    if(t.closest('.slider-wrap'))return true;
+    var f=t.closest('input,textarea');
+    if(!f)return false;
+    if(f.tagName==='TEXTAREA')return true;
+    var ty=(f.getAttribute('type')||'text').toLowerCase();
+    return ty!=='checkbox'&&ty!=='radio';
+  }
+  document.addEventListener('mousemove',function(e){
+    if(suppress(e.target)){r.style.opacity='0';return;}
+    r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';r.style.opacity='1';
+  },{passive:true});
+  document.documentElement.addEventListener('mouseleave',function(){r.style.opacity='0';});
 })();
 </script>
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"89f5b84374df4f9f916220221b029d3d"}'></script>

@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Signe Ralkov — Kramer</title>
-<meta name="description" content="Signe Ralkov — Registre des artistes, exposition La Bride. Kramer, galerie d'art contemporain, Paris.">
+<title>Signe Ralkov — Photographie · La Bride · Kramer, Paris</title>
+<meta name="description" content="Signe Ralkov, photographie, dessin (Berlin) — exposition « La Bride » (KR/01), registre des artistes. Kramer, galerie d'art contemporain, Paris 10e.">
 <link rel="canonical" href="https://kramer.paris/artistes/signe-ralkov/">
 <link rel="icon" href="../../images/edelweiss.svg">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Signe Ralkov — Kramer">
-<meta property="og:description" content="Registre des artistes · La Bride">
+<meta property="og:description" content="Photographie, dessin · La Bride · Kramer, Paris">
 <meta property="og:url" content="https://kramer.paris/artistes/signe-ralkov/">
 <meta property="og:image" content="https://kramer.paris/images/kramer_wordmark.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Person","name":"Signe Ralkov","url":"https://kramer.paris/artistes/signe-ralkov/","memberOf":{"@type":"ArtGallery","name":"Kramer","url":"https://kramer.paris/"}}
+{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://kramer.paris/artistes/signe-ralkov/#person","name":"Signe Ralkov","url":"https://kramer.paris/artistes/signe-ralkov/","jobTitle":"Artiste","knowsAbout":["Photographie","dessin"],"birthDate":"1997","birthPlace":{"@type":"Place","name":"Roskilde"},"memberOf":{"@type":"ArtGallery","name":"Kramer","url":"https://kramer.paris/"}},{"@type":"VisualArtwork","name":"Perlen (1844–1864)","creator":{"@id":"https://kramer.paris/artistes/signe-ralkov/#person"},"url":"https://kramer.paris/artistes/signe-ralkov/","dateCreated":"2025","artform":"Photographie","artMedium":"Silver gelatin print"},{"@type":"VisualArtwork","name":"Restoration film I","creator":{"@id":"https://kramer.paris/artistes/signe-ralkov/#person"},"url":"https://kramer.paris/artistes/signe-ralkov/","dateCreated":"2025","artform":"Photographie","artMedium":"Silverpoint on paper"}]}
 </script>
 <link rel="stylesheet" href="https://use.typekit.net/svm4vfk.css">
 <link rel="stylesheet" href="../../kramer.css">
@@ -22,7 +22,7 @@
 <div class="chrome ct"><div class="c9">Répertoire : K › Kr</div><div class="c9i">Entrée 009</div></div>
 
 <div class="wrap">
-  <a class="home-btn" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Back to home</a>
+  <a class="home-btn" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Back home</a>
   <p class="crumb"><a href="../../#section-artistes">Registre des artistes</a> › Signe Ralkov</p>
 
   <h1 class="a-name">Signe Ralkov</h1>
@@ -38,12 +38,12 @@
     <p class="s-head">Œuvres — 2 entrées</p>
     <div class="works-grid">
       <div class="work-item">
-        <div class="work-plate"><img src="../../images/placeholder.png" alt="Perlen (1844–1864)"></div>
+        <div class="work-plate"><img src="../../images/placeholder.png" alt="Perlen (1844–1864), Silver gelatin print · 47.3 × 57.4 cm"></div>
         <p class="work-cap"><em>Perlen (1844–1864)</em>, 2025 &middot; 47.3 × 57.4 cm</p>
         <a class="work-inquire" href="#" data-t="Perlen (1844–1864)" data-d="2025" data-s="47.3 × 57.4 cm">Demander la fiche →</a>
       </div>
       <div class="work-item">
-        <div class="work-plate"><img src="../../images/placeholder.png" alt="Restoration film I"></div>
+        <div class="work-plate"><img src="../../images/placeholder.png" alt="Restoration film I, Silverpoint on paper · 37.2 × 47.4 cm"></div>
         <p class="work-cap"><em>Restoration film I</em>, 2025 &middot; 37.2 × 47.4 cm</p>
         <a class="work-inquire" href="#" data-t="Restoration film I" data-d="2025" data-s="37.2 × 47.4 cm">Demander la fiche →</a>
       </div>
@@ -67,6 +67,29 @@
     var body=encodeURIComponent('Bonjour,\n\nJe souhaite recevoir la fiche de l’œuvre suivante :\n— '+t+' ('+d+'), '+s+'\nRéf. '+ref+'\n\n');
     el.setAttribute('href','mailto:'+addr+'?subject='+subj+'&body='+body);
   });
+})();
+
+/* Registry reticle cursor — replaces the OS pointer on mouse devices.
+   Text fields keep the I-beam; touch / coarse pointers are left alone. */
+(function(){
+  if(!(window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches))return;
+  var r=document.createElement('div');
+  r.className='reticle';r.setAttribute('aria-hidden','true');
+  document.body.appendChild(r);
+  function suppress(t){
+    if(!t||!t.closest)return false;
+    if(t.closest('.slider-wrap'))return true;
+    var f=t.closest('input,textarea');
+    if(!f)return false;
+    if(f.tagName==='TEXTAREA')return true;
+    var ty=(f.getAttribute('type')||'text').toLowerCase();
+    return ty!=='checkbox'&&ty!=='radio';
+  }
+  document.addEventListener('mousemove',function(e){
+    if(suppress(e.target)){r.style.opacity='0';return;}
+    r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';r.style.opacity='1';
+  },{passive:true});
+  document.documentElement.addEventListener('mouseleave',function(){r.style.opacity='0';});
 })();
 </script>
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"89f5b84374df4f9f916220221b029d3d"}'></script>

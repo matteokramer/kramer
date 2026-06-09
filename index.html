@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kramer</title>
-<meta name="description" content="Kramer — galerie d'art contemporain, Paris.">
+<title>Kramer — galerie d'art contemporain · Paris 10e</title>
+<meta name="description" content="Kramer — galerie d'art contemporain, Paris 10e. Galerie d'appartement. Exposition « La Bride » (KR/01), 25 juin–1 août 2026 : dix artistes internationaux.">
 <link rel="canonical" href="https://kramer.paris/">
 <link rel="icon" href="images/edelweiss.svg">
 <!-- Share preview = the Kramer wordmark. Export a 1200x630 PNG of the wordmark on
      white (real Acumin) and save it as images/kramer_wordmark.png — see note in chat. -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Kramer">
-<meta property="og:description" content="Galerie d'art contemporain · Paris">
+<meta property="og:description" content="Exposition « La Bride » · 25 juin–1 août 2026 · galerie d'art contemporain, Paris 10e">
 <meta property="og:url" content="https://kramer.paris/">
 <meta property="og:image" content="https://kramer.paris/images/kramer_wordmark.png">
 <meta property="og:image:width" content="1200">
@@ -34,6 +34,7 @@
       "image":"https://kramer.paris/images/kramer_wordmark.png",
       "address":{"@type":"PostalAddress","streetAddress":"132 Bd de Magenta","postalCode":"75010","addressLocality":"Paris","addressCountry":"FR"},
       "openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"12:00","closes":"19:00"}],
+      "knowsAbout":["art contemporain","galerie d'appartement","art et technologie","art et nature","diaspora","altérité","classe","peinture","sculpture","photographie","dessin","gravure","installation","collage","sérigraphie","art vidéo"],
       "sameAs":["https://www.instagram.com/galeriekramer/"]
     },
     {
@@ -103,6 +104,27 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 /* Classic hyperlink blue for navigation/menu links */
 .addr-link{color:inherit;text-decoration:none}
 .addr-link:hover{text-decoration:underline}
+
+/* ============================================================
+   CUSTOM CURSOR — registry reticle (fine-pointer / mouse only)
+   A thin black registration cross trails the pointer across the
+   whole page. The OS cursor is hidden; text fields keep the I-beam
+   and the carousel keeps its own ←/→/↗ arrows (the reticle is
+   suppressed over both in JS). Touch devices keep native cursors.
+============================================================ */
+@media(hover:hover) and (pointer:fine){
+  *{cursor:none !important}
+  input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
+  textarea{cursor:text !important}
+}
+.reticle{
+  position:fixed;left:0;top:0;z-index:9999;
+  width:17px;height:17px;pointer-events:none;
+  opacity:0;transition:opacity .12s ease;
+  transform:translate(-50%,-50%);
+}
+.reticle::before{content:'';position:absolute;left:8px;top:0;width:1px;height:6px;background:#000;box-shadow:0 11px 0 #000}
+.reticle::after{content:'';position:absolute;top:8px;left:0;width:6px;height:1px;background:#000;box-shadow:11px 0 0 #000}
 
 /* ============================================================
    LAYOUT
@@ -569,43 +591,43 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
    DATA
 ================================================================ */
 const ARTISTS=[
-  {slug:'annael-shavit',name:'Annael Shavit',born:'1998, Tel Aviv',based:'Paris',medium:'Peinture',code:'AS',g:'f',
+  {slug:'annael-shavit',name:'Annael Shavit',born:'1998, Tel Aviv',based:'Paris',medium:'Peinture',code:'AS',g:'f',links:['https://www.instagram.com/annael_shavit/'],
    works:[],
    solo:[],
    group:[['2025','« ANIMAL!? », Fonds Hélène & Édouard Leclerc'],['2025','Centre Pompidou-Metz'],['2025','The More I Learn About People, The More I Like My Dog, Galerie C+A Contemporary, Vienne'],['2025','Le Grippault, résidence + exposition collective'],['2024','La Villette, Paris'],['2024','Furry Friends Are Welcome, Galerie Programme (M/M Paris)']]},
-  {slug:'gaia-del-santo',name:'Gaia del Santo',born:'1999',based:'Zürich / Lausanne',medium:'Collage, sérigraphie, impression',code:'GS',g:'f',
+  {slug:'gaia-del-santo',name:'Gaia del Santo',born:'1999',based:'Zürich / Lausanne',medium:'Collage, sérigraphie, impression',code:'GS',g:'f',links:['https://www.instagram.com/artificialsilkg1rl/'],
    works:[{t:'still life 3',d:'2024',m:'Magazine clippings, screen print on mat, aluminium frame (museum glass UV 70)',s:'42 × 29.7 × 2 cm'},{t:'still life 5',d:'2024',m:'Magazine clippings, screen print on mat, aluminium frame',s:'42 × 29.7 × 2 cm'},{t:'still life 7',d:'2024',m:'Magazine clippings, screen print on mat, aluminium frame (museum glass UV 70)',s:'42 × 29.7 × 2 cm'},{t:'amelia’s algorithmic realism (matcha metaphor)',d:'2025',m:'Inkjet print on Epson semi-gloss 240g, framed',s:'59.4 × 42 × 2 cm'}],
    solo:[['2025','Casting Days, Burned Out, Basel (à deux)'],['2024','Acme Studios, marytwo, Lucerne'],['2020','brb…crying, Warenlift, Zürich']],
    group:[['2025','Deemed Visionless, Treize, Paris'],['2025','Moniker, HALMET, Zürich'],['2025','SCOPE, Sentiment, Zürich'],['2024','Long Distance, HALMET, Zürich'],['2023','a room of one’s one, Stadtgalerie Baliere, Frauenfeld'],['2021','Bräuel, Eulachtunnel, Winterthur']]},
-  {slug:'henri-chetaille',name:'Henri Chetaille',born:'2002',based:'Paris',medium:'Bois, sculpture',code:'HC',g:'m',
+  {slug:'henri-chetaille',name:'Henri Chetaille',born:'2002',based:'Paris',medium:'Bois, sculpture',code:'HC',g:'m',links:['https://www.instagram.com/henri.cht/'],
    works:[],
    solo:[],
    group:[['2025','Galerie Dauphine, Paris'],['2025','Galerie Romero Paprocki, Paris']]},
-  {slug:'jaakko-uljas',name:'Jaakko Uljas',born:'1999, Helsinki',based:'Helsinki',medium:'Peinture, installation',code:'JU',g:'m',
+  {slug:'jaakko-uljas',name:'Jaakko Uljas',born:'1999, Helsinki',based:'Helsinki',medium:'Peinture, installation',code:'JU',g:'m',links:['https://jaakkouljas.com','https://www.instagram.com/jaakkouljas/'],
    works:[],
    solo:[['2019','Ykkyhy, Äänekoski City Hall, Äänekoski']],
    group:[['2026','Why are gay people late, Academy of Fine Arts, Helsinki'],['2026','Jahresausstellung, HFBK Hamburg'],['2025','Spring cleaning, Vapaan taiteen tila, Helsinki'],['2025','Habitats, Kuva/Tila, Helsinki'],['2024','BFA exhibition, Kuva/Tila, Helsinki'],['2023','Třpytky, Národní galerie v Perle']]},
-  {slug:'jurgen-baumann',name:'Jürgen Baumann',born:'1988',based:'Winterthur',medium:'Sculpture, technique mixte',code:'JB',g:'m',
+  {slug:'jurgen-baumann',name:'Jürgen Baumann',born:'1988',based:'Winterthur',medium:'Sculpture, technique mixte',code:'JB',g:'m',links:['https://juergenbaumann.ch'],
    works:[{t:'Geisterschrank I',d:'2022',m:'Polystyrene sheets',s:'120 × 78 × 10 cm'},{t:'Geisterschrank II',d:'2022',m:'Polystyrene sheet, acrylic',s:'143 × 57 × 10 cm'},{t:'Geisterschrank III',d:'2022',m:'Polystyrene sheet, acrylic',s:'120 × ~76 × ~10 cm'},{t:'Geisterschrank IV',d:'2022',m:'Polystyrene sheet, acrylic',s:'130 × 57 × ~10 cm'},{t:'Karkass',d:'2026',m:'Metal, mixed media, polyester resin, epoxy resin',s:'~45 × 80 × 45 cm'}],
    solo:[['2024','ein Häuschen in Nöten, lokal-int, Biel'],['2021','The Chase, Material, Zürich'],['2019','von Schalen und Tunneln, Kunstraum Aarau'],['2016','eternal orbit, Tart, Zürich'],['2015','Morphographs Nr. 1, Mikro, Zürich']],
    group:[['2025','Avalon, emergency space, Paris'],['2025','bisous moshpit, warenlift, Zürich'],['2024','VI: Cuneiform Architecture, Canticle Chorus, Stroboskop, Warszawa'],['2023','Dezemberausstellung, Kunstmuseum Winterthur'],['2023','Floral & Machine, Pauluskirche, Basel'],['2022','Palimpsest, Alte Tankstelle Deutz, Köln']]},
-  {slug:'karim-hussein',name:'Karim Hussein',born:'1995, Linz',based:'Berlin',medium:'Peinture',code:'KH',g:'m',
+  {slug:'karim-hussein',name:'Karim Hussein',born:'1995, Linz',based:'Berlin',medium:'Peinture',code:'KH',g:'m',links:['https://www.instagram.com/karimhussein.gmx/'],
    works:[{t:'on the road (again)',d:'2026',m:'Oil on canvas',s:'150 × 140 cm'}],
    solo:[['2024','Diplom — « I don’t like reality, it’s way too clear to me », Kunstuniversität Linz']],
    group:[['2026','Hibernation, banana global, Berlin'],['2025','Final Auction, Weserhalle, Berlin'],['2025','Nur das was muss, Spoiler Aktionsraum Moabit, Berlin'],['2024','Parallel, Vienne'],['2023','Vanitas Fair, Galerie Anton Janizewski, Berlin'],['2023','über das Neue, Belvedere 21, Vienne'],['2022','Inventur, Kunsthalle am Hamburgerplatz, Berlin'],['2020','Graffiti and Bananas, Stadtmuseum Linz']]},
-  {slug:'nanna-kaiser',name:'Nanna Kaiser',born:'1991, Friesach',based:'Vienne / Neumarkt',medium:'Dessin, gravure',code:'NK',g:'f',
+  {slug:'nanna-kaiser',name:'Nanna Kaiser',born:'1991, Friesach',based:'Vienne / Neumarkt',medium:'Dessin, gravure',code:'NK',g:'f',links:['https://nannakaiser.info'],
    works:[],
    solo:[['2024','Zone 1, Vienna Contemporary, Vienne'],['2023','Catch of 39/5, Shore Gallery, Vienne'],['2022','Hot Conditions, Stiege13, Vienne']],
    group:[['2025','Future of Melancholia, Museum of Contemporary Art, Belgrade'],['2025','Margins of the Visible, ACF, Prague'],['2023','Über das Neue, Belvedere 21, Vienne'],['2023','40 ans du Frac!, Frac Île-de-France, Romainville']]},
-  {slug:'padyn-humble',name:'Padyn Humble',born:'Montana, USA',based:'Berlin',medium:'Sculpture, installation, vidéo',code:'PH',g:'m',
+  {slug:'padyn-humble',name:'Padyn Humble',born:'Montana, USA',based:'Berlin',medium:'Sculpture, installation, vidéo',code:'PH',g:'m',links:['https://padynhumble.com','https://www.instagram.com/padyn/'],
    works:[{t:'Empty Prayers',d:'2026',m:'Wrangler denim, belt buckle, paper mache, acrylic paint',s:'88 × 50 × 30 cm'}],
    solo:[['2024','it could be a valentine, Number 1 Main Road, Berlin'],['2022','Baby Blue, Too, Granite City Art and Design District, St. Louis'],['2022','MFA Thesis Exhibition, Surplus Gallery, Carbondale'],['2022','A Dove is Just a White Pigeon, Roy G BIV, Columbus (à deux)'],['2021','Barn Dance, Dream Clinic Project Space, Columbus'],['2020','In the Garden is Good, Surplus Gallery, Carbondale'],['2020','Sporting Goods, Ogden Museum of Southern Art, New Orleans'],['2019','For Sport, Bunker Projects, Pittsburgh'],['2018','Giddy, Frontier Space Gallery, Missoula'],['2018','Pink Charles, The Seltzer Gallery, Great Falls'],['2017','Home/Homme, The Foundry, Bozeman']],
    group:[['2024','IASPIS 60th Venice Biennale Invitation, Studio Giardini, Venise'],['2024','I Should Have Been a Pair of Ragged Claws, Wassaic Project, NY'],['2023','International Sculpture Center Awards Exhibition, Jersey City'],['2023','Quiet Moments, Dream Clinic Project Space, Columbus'],['2023','Ways to Train Songbirds, Belger Arts Center, Kansas City'],['2023','Prismatic, Dairy Arts Center, Denver'],['2022','No Sex with Robots, Kunsthalle am Hamburgerplatz, Berlin'],['2021','Ask: Our Diverse World, ICADE, Tsinghua University, Beijing'],['2021','Out of Office, Collarworks, Troy'],['2021','Softcore, IRL, Brooklyn'],['2021','What’s so funny?, Well Well Projects, Portland'],['2020','Incognito, Institute of Contemporary Art LA, Los Angeles'],['2020','Reality Flex, Paradice Palase, Brooklyn'],['2020','Emerging Artists Exhibition, Strohl Art Center, Chautauqua'],['2019','Waist Deep, Tempus Projects, Tampa']]},
-  {slug:'signe-ralkov',name:'Signe Ralkov',born:'1997, Roskilde',based:'Berlin',medium:'Photographie, dessin',code:'SR',g:'f',
+  {slug:'signe-ralkov',name:'Signe Ralkov',born:'1997, Roskilde',based:'Berlin',medium:'Photographie, dessin',code:'SR',g:'f',links:[],
    works:[{t:'Perlen (1844–1864)',d:'2025',m:'Silver gelatin print',s:'47.3 × 57.4 cm'},{t:'Restoration film I',d:'2025',m:'Silverpoint on paper',s:'37.2 × 47.4 cm'}],
    solo:[['2025','Hold still, OTP Copenhagen, Copenhague'],['2024','Pod, OTP Copenhagen, Copenhague']],
    group:[]},
-  {slug:'tekla-kighuradze',name:'Tekla Kighuradze',born:'2000, Tbilisi',based:'Tbilisi',medium:'Technique mixte, peinture',code:'TK',g:'f',
+  {slug:'tekla-kighuradze',name:'Tekla Kighuradze',born:'2000, Tbilisi',based:'Tbilisi',medium:'Technique mixte, peinture',code:'TK',g:'f',links:['https://teklakighuradze.com','https://www.instagram.com/goldrugon/'],
    works:[{t:'If the Curls Hadn’t Crawled Like a Scorpion',d:'2024',m:'Mixed media, wood',s:'30 × 40 × 5 cm'},{t:'Disappear / Appear',d:'2024',m:'Mixed media, wood',s:'30 × 40 × 5 cm'},{t:'A Loaded Gun',d:'2025',m:'Mixed media on canvas',s:'90 × 110 × 3 cm'}],
    solo:[['2023','I Hide Myself Within My Flower (avec Nodo Ugulava), duo-show'],['2022','Hidden Sparks, The Why Not Gallery, Tbilisi']],
    group:[['2025','Red Dot, or: A Pseudo-Archive of Repression, Mzetopshop'],['2024','Here at Home, While You Make Your Way, Art Villa Garikula']]}
@@ -878,6 +900,32 @@ function downloadIcal(){
   if(w)w.textContent=addr;
   const a=document.getElementById('addr-access');
   if(a)a.innerHTML=addrMultiline;
+})();
+
+/* ================================================================
+   REGISTRY RETICLE CURSOR — replaces the OS pointer on mouse devices.
+   Suppressed over text fields (I-beam stays) and over the carousel
+   (its ←/→/↗ arrows stay). Touch / coarse pointers are left alone.
+================================================================ */
+(function(){
+  if(!(window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches))return;
+  const r=document.createElement('div');
+  r.className='reticle';r.setAttribute('aria-hidden','true');
+  document.body.appendChild(r);
+  function suppress(t){
+    if(!t||!t.closest)return false;
+    if(t.closest('.slider-wrap'))return true;          /* carousel keeps its own arrows */
+    const f=t.closest('input,textarea');
+    if(!f)return false;
+    if(f.tagName==='TEXTAREA')return true;
+    const ty=(f.getAttribute('type')||'text').toLowerCase();
+    return ty!=='checkbox'&&ty!=='radio';              /* text-entry fields keep the I-beam */
+  }
+  document.addEventListener('mousemove',function(e){
+    if(suppress(e.target)){r.style.opacity='0';return;}
+    r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';r.style.opacity='1';
+  },{passive:true});
+  document.documentElement.addEventListener('mouseleave',function(){r.style.opacity='0';});
 })();
 
 

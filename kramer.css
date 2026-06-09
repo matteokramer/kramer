@@ -81,3 +81,23 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .cv-section{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55);margin:12px 0 4px}
 .cv-row{display:flex;gap:12px;font-size:13px;line-height:20px}
 .cv-yr{font-size:9px;letter-spacing:.03em;min-width:32px;line-height:20px;color:rgba(0,0,0,.55)}
+
+/* ============================================================
+   CUSTOM CURSOR — registry reticle (fine-pointer / mouse only)
+   Matches the home page: a thin black registration cross trails
+   the pointer; the OS cursor is hidden. Touch devices are left
+   alone. (The reticle element + handler are injected by build.mjs.)
+============================================================ */
+@media(hover:hover) and (pointer:fine){
+  *{cursor:none !important}
+  input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
+  textarea{cursor:text !important}
+}
+.reticle{
+  position:fixed;left:0;top:0;z-index:9999;
+  width:17px;height:17px;pointer-events:none;
+  opacity:0;transition:opacity .12s ease;
+  transform:translate(-50%,-50%);
+}
+.reticle::before{content:'';position:absolute;left:8px;top:0;width:1px;height:6px;background:#000;box-shadow:0 11px 0 #000}
+.reticle::after{content:'';position:absolute;top:8px;left:0;width:6px;height:1px;background:#000;box-shadow:11px 0 0 #000}
