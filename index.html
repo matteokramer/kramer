@@ -701,11 +701,11 @@ function initSlider(){
     if(Math.abs(dx)>40)showSlide(dx<0?idx+1:idx-1);
     touchNav=true;setTimeout(()=>{touchNav=false;},500); /* swallow the ghost click that follows */
   });
-  wrap.addEventListener('click',function(e){
-    if(touchNav)return; /* came from touch — already handled, don't double-navigate */
-    const r=wrap.getBoundingClientRect();
-    showSlide((e.clientX-r.left)<r.width/2?idx-1:idx+1);
-  });
+  /* Paging is on the slim ← → buttons; the image is a link to the artist page. */
+  document.getElementById('slide-prev').addEventListener('click',function(e){e.preventDefault();showSlide(idx-1);});
+  document.getElementById('slide-next').addEventListener('click',function(e){e.preventDefault();showSlide(idx+1);});
+  /* After a swipe, the browser fires a ghost click on the link — swallow it so a swipe never opens the page. */
+  document.getElementById('slide-link').addEventListener('click',function(e){if(touchNav)e.preventDefault();});
   /* Gentle autoplay (5s). Pauses on hover/focus/touch and when the tab is hidden;
      respects prefers-reduced-motion. Manual nav restarts the timer rather than fighting it. */
   const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
