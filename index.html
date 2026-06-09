@@ -184,18 +184,6 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
   display:block;width:100%;height:100%;position:relative;
   overflow:hidden;
 }
-/* Slim prev/next buttons — navigation lives here so the image itself can link to the artist page */
-.slide-btn{
-  position:absolute;top:50%;transform:translateY(-50%);z-index:11;
-  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
-  border:1px solid #222;background:#fff;color:#000;cursor:pointer;
-  font-size:15px;line-height:1;opacity:.85;
-  transition:opacity .12s,background .12s,color .12s;
-}
-.slide-btn:hover{opacity:1;background:#000;color:#fff}
-.slide-prev{left:8px}
-.slide-next{right:8px}
-@media(max-width:600px){.slide-btn{width:30px;height:30px;font-size:14px}}
 /* Pending text — no box, no border, just muted label */
 .slide-pending{
   font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.4);
@@ -398,8 +386,6 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 
     <!-- ARTWORK SLIDER — key opener, manual navigation only -->
     <div class="slider-wrap" id="section-artworks">
-      <button type="button" class="slide-btn slide-prev" id="slide-prev" aria-label="Œuvre précédente">←</button>
-      <button type="button" class="slide-btn slide-next" id="slide-next" aria-label="Œuvre suivante">→</button>
       <div class="slide-cursor" id="slide-cursor">→</div>
       <div class="slide-area">
         <a class="slide-plate" id="slide-link" href="#" aria-label="Voir la fiche de l'artiste">
@@ -603,7 +589,7 @@ const ARTISTS=[
    works:[{t:'Geisterschrank I',d:'2022',m:'Polystyrene sheets',s:'120 × 78 × 10 cm'},{t:'Geisterschrank II',d:'2022',m:'Polystyrene sheet, acrylic',s:'143 × 57 × 10 cm'},{t:'Geisterschrank III',d:'2022',m:'Polystyrene sheet, acrylic',s:'120 × ~76 × ~10 cm'},{t:'Geisterschrank IV',d:'2022',m:'Polystyrene sheet, acrylic',s:'130 × 57 × ~10 cm'},{t:'Karkass',d:'2026',m:'Metal, mixed media, polyester resin, epoxy resin',s:'~45 × 80 × 45 cm'}],
    solo:[['2024','ein Häuschen in Nöten, lokal-int, Biel'],['2021','The Chase, Material, Zürich'],['2019','von Schalen und Tunneln, Kunstraum Aarau'],['2016','eternal orbit, Tart, Zürich'],['2015','Morphographs Nr. 1, Mikro, Zürich']],
    group:[['2025','Avalon, emergency space, Paris'],['2025','bisous moshpit, warenlift, Zürich'],['2024','VI: Cuneiform Architecture, Canticle Chorus, Stroboskop, Warszawa'],['2023','Dezemberausstellung, Kunstmuseum Winterthur'],['2023','Floral & Machine, Pauluskirche, Basel'],['2022','Palimpsest, Alte Tankstelle Deutz, Köln']]},
-  {slug:'karim-hussein',name:'Karim Hussein',born:'1995, Linz',based:'Berlin',medium:'Peinture',code:'KH',g:'',
+  {slug:'karim-hussein',name:'Karim Hussein',born:'1995, Linz',based:'Berlin',medium:'Peinture',code:'KH',g:'m',
    works:[{t:'on the road (again)',d:'2026',m:'Oil on canvas',s:'150 × 140 cm'}],
    solo:[['2024','Diplom — « I don’t like reality, it’s way too clear to me », Kunstuniversität Linz']],
    group:[['2026','Hibernation, banana global, Berlin'],['2025','Final Auction, Weserhalle, Berlin'],['2025','Nur das was muss, Spoiler Aktionsraum Moabit, Berlin'],['2024','Parallel, Vienne'],['2023','Vanitas Fair, Galerie Anton Janizewski, Berlin'],['2023','über das Neue, Belvedere 21, Vienne'],['2022','Inventur, Kunsthalle am Hamburgerplatz, Berlin'],['2020','Graffiti and Bananas, Stadtmuseum Linz']]},
@@ -700,7 +686,8 @@ function initSlider(){
     const r=wrap.getBoundingClientRect();
     const x=e.clientX-r.left,y=e.clientY-r.top;
     cur.style.left=x+'px';cur.style.top=y+'px';cur.style.opacity='1';/* reveal once positioned */
-    cur.textContent='↗'; /* image click opens the artist page; paging is on the buttons */
+    const f=x/r.width;
+    cur.textContent=f<.25?'←':f>.75?'→':'↗'; /* edges flip works · centre opens the artist page */
   });
   wrap.addEventListener('mouseleave',function(){cur.style.opacity='0';});
   let tx=0,touchNav=false;
@@ -710,11 +697,15 @@ function initSlider(){
     if(Math.abs(dx)>40)showSlide(dx<0?idx+1:idx-1);
     touchNav=true;setTimeout(()=>{touchNav=false;},500); /* swallow the ghost click that follows */
   });
-  /* Paging is on the slim ← → buttons; the image is a link to the artist page. */
-  document.getElementById('slide-prev').addEventListener('click',function(e){e.preventDefault();showSlide(idx-1);});
-  document.getElementById('slide-next').addEventListener('click',function(e){e.preventDefault();showSlide(idx+1);});
-  /* After a swipe, the browser fires a ghost click on the link — swallow it so a swipe never opens the page. */
-  document.getElementById('slide-link').addEventListener('click',function(e){if(touchNav)e.preventDefault();});
+  /* Edges flip works (← left quarter / → right quarter); the centre opens the artist page.
+     The image stays an <a>, so middle-click / open-in-new-tab still work on the centre zone. */
+  document.getElementById('slide-link').addEventListener('click',function(e){
+    if(touchNav){e.preventDefault();return;} /* a swipe just fired — swallow the ghost click */
+    const r=wrap.getBoundingClientRect(),f=(e.clientX-r.left)/r.width;
+    if(f<.25){e.preventDefault();showSlide(idx-1);}
+    else if(f>.75){e.preventDefault();showSlide(idx+1);}
+    /* centre: let the link navigate to the artist page */
+  });
   /* Gentle autoplay (5s). Pauses on hover/focus/touch and when the tab is hidden;
      respects prefers-reduced-motion. Manual nav restarts the timer rather than fighting it. */
   const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
