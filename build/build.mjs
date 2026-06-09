@@ -24,8 +24,9 @@ function page(a, i) {
   const ref = 'KR/01·' + a.code;
   const url = `${SITE}/artistes/${a.slug}/`;
 
+  const bornLbl = a.g === 'f' ? 'Née' : a.g === 'm' ? 'Né' : 'Né(e)';
   const fields = [
-    a.born ? `<div class="a-field"><span class="a-lbl">Né(e)</span><span class="a-val">${esc(a.born)}</span></div>` : '',
+    a.born ? `<div class="a-field"><span class="a-lbl">${bornLbl}</span><span class="a-val">${esc(a.born)}</span></div>` : '',
     a.based ? `<div class="a-field"><span class="a-lbl">Résidence</span><span class="a-val">${esc(a.based)}</span></div>` : '',
     `<div class="a-field"><span class="a-lbl">Au registre</span><span class="a-val">La Bride · KR/01</span></div>`,
   ].join('\n      ');
