@@ -24,6 +24,36 @@ function page(a, i) {
   const ref = 'KR/01·' + a.code;
   const url = `${SITE}/artistes/${a.slug}/`;
 
+  /* --- SEO-derived values (only from on-file data) --- */
+  const mediumList = a.medium ? a.medium.split(',').map(s => s.trim()).filter(Boolean) : [];
+  const primaryMedium = mediumList[0] || '';
+  const titleMedium = primaryMedium ? ` — ${primaryMedium}` : '';
+  const descMedium = a.medium ? `, ${a.medium.toLowerCase()}` : '';
+  const descBased = a.based ? ` (${a.based})` : '';
+  const ogDesc = (a.medium ? a.medium + ' · ' : '') + 'La Bride · Kramer, Paris';
+  /* birth year + place parsed from a.born ("1998, Tel Aviv" | "1999" | "Montana, USA" | "2002") */
+  const yearMatch = (a.born || '').match(/\b(?:18|19|20)\d{2}\b/);
+  const birthDate = yearMatch ? yearMatch[0] : '';
+  const birthPlace = (a.born || '').replace(/\b(?:18|19|20)\d{2}\b/, '').replace(/^[\s,]+|[\s,]+$/g, '').trim();
+
+  /* JSON-LD graph: enriched Person + a VisualArtwork per consigned work */
+  const personId = `${url}#person`;
+  const person = {
+    '@type': 'Person', '@id': personId, name: a.name, url, jobTitle: 'Artiste',
+    ...(mediumList.length ? { knowsAbout: mediumList } : {}),
+    ...(birthDate ? { birthDate } : {}),
+    ...(birthPlace ? { birthPlace: { '@type': 'Place', name: birthPlace } } : {}),
+    memberOf: { '@type': 'ArtGallery', name: 'Kramer', url: `${SITE}/` },
+    ...(a.links && a.links.length ? { sameAs: a.links } : {}),
+  };
+  const artworks = a.works.map(w => ({
+    '@type': 'VisualArtwork', name: w.t, creator: { '@id': personId }, url,
+    ...(w.d ? { dateCreated: String(w.d) } : {}),
+    ...(primaryMedium ? { artform: primaryMedium } : {}),
+    ...(w.m ? { artMedium: w.m } : {}),
+  }));
+  const jsonld = JSON.stringify({ '@context': 'https://schema.org', '@graph': [person, ...artworks] });
+
   const bornLbl = a.g === 'f' ? 'Née' : a.g === 'm' ? 'Né' : 'Né(e)';
   const fields = [
     a.born ? `<div class="a-field"><span class="a-lbl">${bornLbl}</span><span class="a-val">${esc(a.born)}</span></div>` : '',
@@ -35,7 +65,7 @@ function page(a, i) {
     <p class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''}</p>
     <div class="works-grid">
       ${a.works.map(w => `<div class="work-item">
-        <div class="work-plate"><img src="../../images/placeholder.png" alt="${esc(w.t)}"></div>
+        <div class="work-plate"><img src="../../images/placeholder.png" alt="${esc(w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : ''))}"></div>
         <p class="work-cap"><em>${esc(w.t)}</em>, ${esc(w.d)} &middot; ${esc(w.s)}</p>
         <a class="work-inquire" href="#" data-t="${esc(w.t)}" data-d="${esc(w.d)}" data-s="${esc(w.s)}">Demander la fiche →</a>
       </div>`).join('\n      ')}
@@ -53,17 +83,17 @@ function page(a, i) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${esc(a.name)} — Kramer</title>
-<meta name="description" content="${esc(a.name)} — Registre des artistes, exposition La Bride. Kramer, galerie d'art contemporain, Paris.">
+<title>${esc(a.name + titleMedium)} · La Bride · Kramer, Paris</title>
+<meta name="description" content="${esc(a.name + descMedium + descBased)} — exposition « La Bride » (KR/01), registre des artistes. Kramer, galerie d'art contemporain, Paris 10e.">
 <link rel="canonical" href="${url}">
 <link rel="icon" href="../../images/edelweiss.svg">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="${esc(a.name)} — Kramer">
-<meta property="og:description" content="Registre des artistes · La Bride">
+<meta property="og:description" content="${esc(ogDesc)}">
 <meta property="og:url" content="${url}">
 <meta property="og:image" content="${SITE}/images/kramer_wordmark.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Person","name":${JSON.stringify(a.name)},"url":"${url}","memberOf":{"@type":"ArtGallery","name":"Kramer","url":"${SITE}/"}}
+${jsonld}
 </script>
 <link rel="stylesheet" href="https://use.typekit.net/svm4vfk.css">
 <link rel="stylesheet" href="../../kramer.css">
@@ -72,7 +102,7 @@ function page(a, i) {
 <div class="chrome ct"><div class="c9">Répertoire : K › Kr</div><div class="c9i">Entrée ${entry}</div></div>
 
 <div class="wrap">
-  <a class="home-btn" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Back to home</a>
+  <a class="home-btn" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Back home</a>
   <p class="crumb"><a href="../../#section-artistes">Registre des artistes</a> › ${esc(a.name)}</p>
 
   <h1 class="a-name">${esc(a.name)}</h1>
@@ -97,6 +127,29 @@ ${works}${cv}
     var body=encodeURIComponent('Bonjour,\\n\\nJe souhaite recevoir la fiche de l’œuvre suivante :\\n— '+t+' ('+d+'), '+s+'\\nRéf. '+ref+'\\n\\n');
     el.setAttribute('href','mailto:'+addr+'?subject='+subj+'&body='+body);
   });
+})();
+
+/* Registry reticle cursor — replaces the OS pointer on mouse devices.
+   Text fields keep the I-beam; touch / coarse pointers are left alone. */
+(function(){
+  if(!(window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches))return;
+  var r=document.createElement('div');
+  r.className='reticle';r.setAttribute('aria-hidden','true');
+  document.body.appendChild(r);
+  function suppress(t){
+    if(!t||!t.closest)return false;
+    if(t.closest('.slider-wrap'))return true;
+    var f=t.closest('input,textarea');
+    if(!f)return false;
+    if(f.tagName==='TEXTAREA')return true;
+    var ty=(f.getAttribute('type')||'text').toLowerCase();
+    return ty!=='checkbox'&&ty!=='radio';
+  }
+  document.addEventListener('mousemove',function(e){
+    if(suppress(e.target)){r.style.opacity='0';return;}
+    r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';r.style.opacity='1';
+  },{passive:true});
+  document.documentElement.addEventListener('mouseleave',function(){r.style.opacity='0';});
 })();
 </script>
 ${CF_TOKEN ? `<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='${JSON.stringify({ token: CF_TOKEN })}'></script>` : ''}

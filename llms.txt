@@ -1,0 +1,35 @@
+# Kramer — registre des expositions
+
+> Kramer est une galerie d'art contemporain à Paris (132 Bd de Magenta, 75010, 4e étage),
+> conçue comme un « registre des expositions » auto-institué — une galerie d'appartement
+> qui adopte une forme institutionnelle et administrative. Visites sur rendez-vous et lors
+> des vernissages. Territoire thématique : humains/technologie, humains/nature, diaspora,
+> altérité, classe.
+
+## Exposition en cours
+- **KR/01 — « La Bride »** — 25 juin–1 août 2026. Dix artistes internationaux.
+- Vernissage : 25 juin 2026, 17–21h (sur présentation au registre / RSVP).
+- Page : https://kramer.paris/
+
+## Registre des artistes (La Bride · KR/01)
+- [Annael Shavit — peinture](https://kramer.paris/artistes/annael-shavit/) · Paris
+- [Gaia del Santo — collage, sérigraphie, impression](https://kramer.paris/artistes/gaia-del-santo/) · Zürich / Lausanne
+- [Henri Chetaille — bois, sculpture](https://kramer.paris/artistes/henri-chetaille/) · Paris
+- [Jaakko Uljas — peinture, installation](https://kramer.paris/artistes/jaakko-uljas/) · Helsinki
+- [Jürgen Baumann — sculpture, technique mixte](https://kramer.paris/artistes/jurgen-baumann/) · Winterthur
+- [Karim Hussein — peinture](https://kramer.paris/artistes/karim-hussein/) · Berlin
+- [Nanna Kaiser — dessin, gravure](https://kramer.paris/artistes/nanna-kaiser/) · Vienne / Neumarkt
+- [Padyn Humble — sculpture, installation, vidéo](https://kramer.paris/artistes/padyn-humble/) · Berlin
+- [Signe Ralkov — photographie, dessin](https://kramer.paris/artistes/signe-ralkov/) · Berlin
+- [Tekla Kighuradze — technique mixte, peinture](https://kramer.paris/artistes/tekla-kighuradze/) · Tbilisi
+
+## Accès & contact
+- Galerie : 132 Bd de Magenta, 75010 Paris — 4e étage (ascenseur)
+- Horaires : samedi 12h–19h, et sur rendez-vous
+- Instagram : @galeriekramer
+- E-mail : voir la section « Bureau d'accès » sur https://kramer.paris/
+  (adresse volontairement non publiée en clair pour limiter le harvesting)
+
+## Notes
+- Site mono-page (front-desk) + une page-registre statique par artiste (canonique, indexable).
+- Sitemap : https://kramer.paris/sitemap.xml

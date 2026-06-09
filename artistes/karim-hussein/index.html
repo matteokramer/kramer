@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Karim Hussein — Kramer</title>
-<meta name="description" content="Karim Hussein — Registre des artistes, exposition La Bride. Kramer, galerie d'art contemporain, Paris.">
+<title>Karim Hussein — Peinture · La Bride · Kramer, Paris</title>
+<meta name="description" content="Karim Hussein, peinture (Berlin) — exposition « La Bride » (KR/01), registre des artistes. Kramer, galerie d'art contemporain, Paris 10e.">
 <link rel="canonical" href="https://kramer.paris/artistes/karim-hussein/">
 <link rel="icon" href="../../images/edelweiss.svg">
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Karim Hussein — Kramer">
-<meta property="og:description" content="Registre des artistes · La Bride">
+<meta property="og:description" content="Peinture · La Bride · Kramer, Paris">
 <meta property="og:url" content="https://kramer.paris/artistes/karim-hussein/">
 <meta property="og:image" content="https://kramer.paris/images/kramer_wordmark.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Person","name":"Karim Hussein","url":"https://kramer.paris/artistes/karim-hussein/","memberOf":{"@type":"ArtGallery","name":"Kramer","url":"https://kramer.paris/"}}
+{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://kramer.paris/artistes/karim-hussein/#person","name":"Karim Hussein","url":"https://kramer.paris/artistes/karim-hussein/","jobTitle":"Artiste","knowsAbout":["Peinture"],"birthDate":"1995","birthPlace":{"@type":"Place","name":"Linz"},"memberOf":{"@type":"ArtGallery","name":"Kramer","url":"https://kramer.paris/"},"sameAs":["https://www.instagram.com/karimhussein.gmx/"]},{"@type":"VisualArtwork","name":"on the road (again)","creator":{"@id":"https://kramer.paris/artistes/karim-hussein/#person"},"url":"https://kramer.paris/artistes/karim-hussein/","dateCreated":"2026","artform":"Peinture","artMedium":"Oil on canvas"}]}
 </script>
 <link rel="stylesheet" href="https://use.typekit.net/svm4vfk.css">
 <link rel="stylesheet" href="../../kramer.css">
@@ -22,7 +22,7 @@
 <div class="chrome ct"><div class="c9">Répertoire : K › Kr</div><div class="c9i">Entrée 006</div></div>
 
 <div class="wrap">
-  <a class="home-btn" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Back to home</a>
+  <a class="home-btn" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Back home</a>
   <p class="crumb"><a href="../../#section-artistes">Registre des artistes</a> › Karim Hussein</p>
 
   <h1 class="a-name">Karim Hussein</h1>
@@ -38,7 +38,7 @@
     <p class="s-head">Œuvres — 1 entrée</p>
     <div class="works-grid">
       <div class="work-item">
-        <div class="work-plate"><img src="../../images/placeholder.png" alt="on the road (again)"></div>
+        <div class="work-plate"><img src="../../images/placeholder.png" alt="on the road (again), Oil on canvas · 150 × 140 cm"></div>
         <p class="work-cap"><em>on the road (again)</em>, 2026 &middot; 150 × 140 cm</p>
         <a class="work-inquire" href="#" data-t="on the road (again)" data-d="2026" data-s="150 × 140 cm">Demander la fiche →</a>
       </div>
@@ -70,6 +70,29 @@
     var body=encodeURIComponent('Bonjour,\n\nJe souhaite recevoir la fiche de l’œuvre suivante :\n— '+t+' ('+d+'), '+s+'\nRéf. '+ref+'\n\n');
     el.setAttribute('href','mailto:'+addr+'?subject='+subj+'&body='+body);
   });
+})();
+
+/* Registry reticle cursor — replaces the OS pointer on mouse devices.
+   Text fields keep the I-beam; touch / coarse pointers are left alone. */
+(function(){
+  if(!(window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches))return;
+  var r=document.createElement('div');
+  r.className='reticle';r.setAttribute('aria-hidden','true');
+  document.body.appendChild(r);
+  function suppress(t){
+    if(!t||!t.closest)return false;
+    if(t.closest('.slider-wrap'))return true;
+    var f=t.closest('input,textarea');
+    if(!f)return false;
+    if(f.tagName==='TEXTAREA')return true;
+    var ty=(f.getAttribute('type')||'text').toLowerCase();
+    return ty!=='checkbox'&&ty!=='radio';
+  }
+  document.addEventListener('mousemove',function(e){
+    if(suppress(e.target)){r.style.opacity='0';return;}
+    r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';r.style.opacity='1';
+  },{passive:true});
+  document.documentElement.addEventListener('mouseleave',function(){r.style.opacity='0';});
 })();
 </script>
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"89f5b84374df4f9f916220221b029d3d"}'></script>
