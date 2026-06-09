@@ -181,9 +181,21 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 /* Plates show the whole work — scale varies, content is never cropped */
 .plate-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .slide-plate{
-  width:100%;height:100%;position:relative;
+  display:block;width:100%;height:100%;position:relative;
   overflow:hidden;
 }
+/* Slim prev/next buttons — navigation lives here so the image itself can link to the artist page */
+.slide-btn{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:11;
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid #222;background:#fff;color:#000;cursor:pointer;
+  font-size:15px;line-height:1;opacity:.85;
+  transition:opacity .12s,background .12s,color .12s;
+}
+.slide-btn:hover{opacity:1;background:#000;color:#fff}
+.slide-prev{left:8px}
+.slide-next{right:8px}
+@media(max-width:600px){.slide-btn{width:30px;height:30px;font-size:14px}}
 /* Pending text — no box, no border, just muted label */
 .slide-pending{
   font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.4);
@@ -386,13 +398,15 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 
     <!-- ARTWORK SLIDER — key opener, manual navigation only -->
     <div class="slider-wrap" id="section-artworks">
+      <button type="button" class="slide-btn slide-prev" id="slide-prev" aria-label="Œuvre précédente">←</button>
+      <button type="button" class="slide-btn slide-next" id="slide-next" aria-label="Œuvre suivante">→</button>
       <div class="slide-cursor" id="slide-cursor">→</div>
       <div class="slide-area">
-        <div class="slide-plate">
+        <a class="slide-plate" id="slide-link" href="#" aria-label="Voir la fiche de l'artiste">
           <img src="images/placeholder.png" class="plate-img" id="slide-img" alt="">
           <span class="slide-tag" id="slide-tag"></span>
           <span class="slide-counter" id="slide-counter">1 / 10</span>
-        </div>
+        </a>
       </div>
       <div class="slide-caption">
         <a class="slide-artist" id="slide-artist" href="#"></a>
@@ -611,7 +625,7 @@ const GALLERY_EMAIL='contact'+'@'+'kramer'+String.fromCharCode(46)+'paris';
    ▸ Paste your Site Token between the quotes (dash.cloudflare.com → Web Analytics → Add a site → kramer.paris).
    ▸ This is the ONLY place to set it. After editing, run `node build/build.mjs` so the
      artist pages pick it up too, then commit + push. Empty string = analytics off (nothing loads). */
-const CF_TOKEN='';
+const CF_TOKEN='89f5b84374df4f9f916220221b029d3d';
 if(CF_TOKEN){var cfb=document.createElement('script');cfb.defer=true;cfb.src='https://static.cloudflareinsights.com/beacon.min.js';cfb.setAttribute('data-cf-beacon',JSON.stringify({token:CF_TOKEN}));document.head.appendChild(cfb);}
 
 /* Carousel hero image per artist. Drop optimised photos in images/artists/ and map them here
@@ -650,6 +664,8 @@ function showSlide(n){
   const a=ARTISTS[idx];
   const img=document.getElementById('slide-img');
   if(img){img.src=ARTIST_IMG[a.slug]||'images/placeholder.png';img.alt=a.name;}
+  const link=document.getElementById('slide-link');
+  if(link){link.setAttribute('href','artistes/'+a.slug+'/');link.setAttribute('aria-label','Voir la fiche de '+a.name);}
   document.getElementById('slide-tag').textContent='KR/01·'+a.code;
   document.getElementById('slide-counter').textContent=(idx+1)+'\u2009/\u2009'+ARTISTS.length;
   const artistEl=document.getElementById('slide-artist');
@@ -675,7 +691,7 @@ function initSlider(){
     const r=wrap.getBoundingClientRect();
     const x=e.clientX-r.left,y=e.clientY-r.top;
     cur.style.left=x+'px';cur.style.top=y+'px';cur.style.opacity='1';/* reveal once positioned */
-    cur.textContent=x<r.width/2?'\u2190':'\u2192'; /* ← → */
+    cur.textContent='↗'; /* image click opens the artist page; paging is on the buttons */
   });
   wrap.addEventListener('mouseleave',function(){cur.style.opacity='0';});
   let tx=0,touchNav=false;
