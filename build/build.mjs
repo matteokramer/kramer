@@ -58,7 +58,6 @@ function page(a, i) {
   const fields = [
     a.born ? `<div class="a-field"><span class="a-lbl">${bornLbl}</span><span class="a-val">${esc(a.born)}</span></div>` : '',
     a.based ? `<div class="a-field"><span class="a-lbl">Résidence</span><span class="a-val">${esc(a.based)}</span></div>` : '',
-    a.medium ? `<div class="a-field"><span class="a-lbl">Médium</span><span class="a-val">${esc(a.medium)}</span></div>` : '',
     `<div class="a-field"><span class="a-lbl">Au registre</span><span class="a-val">La Bride · KR/01</span></div>`,
   ].join('\n      ');
 
