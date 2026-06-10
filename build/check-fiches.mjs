@@ -29,7 +29,6 @@ const EXCLUDE = /statement|reference|internal|to confirm|gaps|notes de recherche
 /* known-deliberate gaps — each entry silences one warning, keep the why next to it */
 const ALLOW = [
   /la bride/i,                 // Nanna's CV lists our own show — self-referential, kept off her page
-  /digital spirituality/i,     // installation title inside Tekla's Here at Home entry — detail not carried
   /per research notes/i,       // Henri: Art Brussels / Dior Castle are provisional research notes
   /co-curateur|co-curator/i,   // Jürgen: translated summary line of the fiche's curation paragraph
 ];
