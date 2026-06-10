@@ -406,7 +406,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
       <p class="logo-addr"><a href="https://www.google.com/maps/search/?api=1&amp;query=132%20Bd%20de%20Magenta%2C%2075010%20Paris" target="_blank" rel="noopener" class="addr-link" id="addr-wordmark"></a></p>
     </div>
 
-    <!-- ARTWORK SLIDER — key opener, manual navigation only -->
+    <!-- ARTWORK SLIDER — key opener: gentle autoplay + manual nav -->
     <div class="slider-wrap" id="section-artworks">
       <div class="slide-cursor" id="slide-cursor">→</div>
       <div class="slide-area">
@@ -549,7 +549,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 
   <!-- CHROME BOTTOM -->
   <div class="chrome cb">
-    <div class="c9i hsm" id="vstamp">Version 0.10 · Au : —</div>
+    <div class="c9i hsm" id="vstamp">Version 0.11 · Au : —</div>
     <div>
       <a href="#" class="cnav c9" onclick="openLegal();return false">Mentions légales</a>
       <a href="#" class="cnav c9 hsm">Colophon</a>
@@ -647,8 +647,6 @@ const ARTISTS=[
    group:[['2025','Red Dot, or: A Pseudo-Archive of Repression, Mzetopshop'],['2024','Here at Home, While You Make Your Way, Art Villa Garikula']]}
 ];
 
-const LOREM='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.';
-
 /* Assembled at runtime so the literal address stays out of the static source (same logic as the contact obfuscation below) */
 const GALLERY_EMAIL='contact'+'@'+'kramer'+String.fromCharCode(46)+'paris';
 
@@ -686,10 +684,9 @@ function goTo(id){
 }
 
 /* ================================================================
-   ARTWORK SLIDER — manual cursor / swipe / keyboard nav (no autoplay)
+   ARTWORK SLIDER — gentle autoplay (5s) + cursor / swipe / keyboard nav
 ================================================================ */
 let idx=0;
-/* Carousel is manual-only — no autoplay. */
 function showSlide(n){
   idx=((n%ARTISTS.length)+ARTISTS.length)%ARTISTS.length;
   const a=ARTISTS[idx];
@@ -828,7 +825,7 @@ function stamp(){
   const el=document.getElementById('vstamp');if(!el)return;
   const n=new Date(),p=x=>String(x).padStart(2,'0');
   const m=['jan.','f\u00e9v.','mars','avr.','mai','juin','juil.','ao\u00fbt','sept.','oct.','nov.','d\u00e9c.'];
-  el.textContent=`Version 0.10 \u00b7 Au\u00a0: ${p(n.getUTCDate())} ${m[n.getUTCMonth()]} ${n.getUTCFullYear()} ${p(n.getUTCHours())}:${p(n.getUTCMinutes())}:${p(n.getUTCSeconds())} GMT`;
+  el.textContent=`Version 0.11 \u00b7 Au\u00a0: ${p(n.getUTCDate())} ${m[n.getUTCMonth()]} ${n.getUTCFullYear()} ${p(n.getUTCHours())}:${p(n.getUTCMinutes())}:${p(n.getUTCSeconds())} GMT`;
 }
 
 /* ================================================================
@@ -949,68 +946,5 @@ initScrollSpy();
 tick();
 stamp();
 </script>
-<!--
-=================================================================
-  OPUS FINAL REVIEW CHECKLIST — v0.10
-  For the senior developer pass: verify each item below
-=================================================================
-
-FUNCTIONALITY TO VERIFY:
-  [ ] Form action: .rsvp form has no action="" — connect Formspree
-      or equivalent before launch. Add: action="https://formspree.io/f/YOURKEY" method="POST"
-  [ ] Slider on mobile: touchstart/touchend swipe works.
-      Cursor hidden on hover:none devices via @media(hover:none). Confirm on real device.
-  [ ] Lightbox Escape key: confirmed in JS. Also test click-outside-to-close (not yet implemented).
-  [ ] Scroll reset: goTo() scrolls #scroll container correctly. Confirm on iOS Safari.
-  [ ] Session clock: starts from 0 on each page load (correct, not wall-clock).
-  [ ] Build stamp: updates correctly on load.
-  [ ] All internal links (#) are placeholder — wire up Mentions légales and Colophon
-      to actual pages or content before launch.
-
-ACCESSIBILITY:
-  [ ] No <meta name="description"> — add for SEO.
-  [ ] No Open Graph tags (og:title, og:image, og:description) — add before launch.
-  [ ] Lightbox has no focus trap: when open, Tab key can escape it. Add focus management.
-  [ ] Image alt text: all <img> tags that replace plates will need descriptive alt text.
-  [ ] Checkbox labels use <label class="fcheck"> wrapping — correct, accessible pattern. ✓
-  [ ] Button "Envoyer" is a <button type="submit"> — correct. ✓
-  [ ] color contrast: chrome bar text (#000) on Fichte brown (#C4A07A) ≈ 4.2:1 — acceptable
-      for decorative chrome at 9px. Monitor if color changes.
-
-PERFORMANCE:
-  [ ] Typekit loads synchronously (render-blocking). Consider adding font-display:swap
-      via the Typekit dashboard settings.
-  [ ] No lazy loading on hatch plates — fine since they are CSS-only.
-  [ ] All 9 artist bios are in the JS bundle (not lazy). Acceptable for this scale.
-
-SUGGESTIONS FOR IMPROVEMENT:
-  1. IntersectionObserver: auto-update the active checkbox in the step-nav
-     as the user scrolls past sections. Currently only updates on click.
-  2. Lightbox: add click-outside-to-close and swipe-down-to-close on mobile.
-  3. Image placeholders: when real photos arrive, use <picture> with WebP + JPEG fallback,
-     and width/height attributes to prevent layout shift.
-  4. Slide counter: consider showing artist initials or a dot indicator
-     instead of "1 / 9" for a more gallery-appropriate feel.
-  5. The form's demo note ("Formulaire de démonstration...") should be removed at launch.
-  6. Add a <link rel="canonical"> once the domain is confirmed.
-  7. Version stamp currently shows UTC time — consider showing Paris local time (Europe/Paris)
-     since this is a Paris gallery.
-  8. The wordmark links to #section-artworks — consider whether it should link to top of page instead.
-  9. The slide-cursor shows → in the top-left corner briefly before mouse enters the slider.
-     Fix: initialize slide-cursor opacity:0 (already done) and ensure mouseleave resets position.
-  10. Consider adding a <noscript> fallback — all navigation is JS-driven.
-
-BEFORE LAUNCH CHECKLIST:
-  [ ] Replace all Lorem ipsum with real copy
-  [ ] Add real artist images (replacing hatch plates)
-  [ ] Connect form to Formspree / mailing service
-  [ ] Wire up Mentions légales / Colophon / Données personnelles pages
-  [ ] Test on: Chrome, Firefox, Safari, iOS Safari, Android Chrome
-  [ ] Test with keyboard navigation only
-  [ ] Add Google Analytics or privacy-compliant analytics if needed
-  [ ] Set Content-Security-Policy headers on GitHub Pages (or host)
-  [ ] Confirm Typekit kit includes all required Acumin weights
-=================================================================
--->
 </body>
 </html>
