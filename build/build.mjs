@@ -180,3 +180,6 @@ ${urls.map(u => `  <url><loc>${u}</loc><lastmod>2026-06-09</lastmod></url>`).joi
 writeFileSync(join(WEB, 'sitemap.xml'), sitemap);
 
 console.log(`Generated ${count} artist pages + sitemap (${urls.length} urls).`);
+
+/* drift check: warn if the ARTISTS array and the fiches disagree (no-op when the vault is absent) */
+try { await import('./check-fiches.mjs'); } catch (e) { console.warn('check-fiches skipped:', e.message); }
