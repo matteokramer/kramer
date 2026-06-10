@@ -58,6 +58,7 @@ function page(a, i) {
   const fields = [
     a.born ? `<div class="a-field"><span class="a-lbl">${bornLbl}</span><span class="a-val">${esc(a.born)}</span></div>` : '',
     a.based ? `<div class="a-field"><span class="a-lbl">Résidence</span><span class="a-val">${esc(a.based)}</span></div>` : '',
+    a.medium ? `<div class="a-field"><span class="a-lbl">Médium</span><span class="a-val">${esc(a.medium)}</span></div>` : '',
     `<div class="a-field"><span class="a-lbl">Au registre</span><span class="a-val">La Bride · KR/01</span></div>`,
   ].join('\n      ');
 
@@ -74,8 +75,11 @@ function page(a, i) {
   const cvBlock = (label, rows) => rows.length ? `
     <p class="cv-section">${label}</p>
     ${rows.map(r => `<div class="cv-row"><span class="cv-yr">${esc(r[0])}</span><span>${esc(r[1])}</span></div>`).join('\n    ')}` : '';
-  const cv = (a.solo.length || a.group.length) ? `
-    <div class="cv">${cvBlock('Solo exhibitions (selection)', a.solo)}${cvBlock('Group exhibitions (selection)', a.group)}
+  /* extra: optional public-record sections from the fiche (education, awards, publications…)
+     — each {l:'Label', rows:[[year,text],…]} renders like the solo/group blocks */
+  const extras = (a.extra || []).map(s => cvBlock(s.l, s.rows)).join('');
+  const cv = (a.solo.length || a.group.length || extras) ? `
+    <div class="cv">${cvBlock('Solo exhibitions', a.solo)}${cvBlock('Group exhibitions', a.group)}${extras}
     </div>` : '';
 
   return `<!DOCTYPE html>
