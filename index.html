@@ -872,27 +872,6 @@ function stamp(){
 }
 
 /* ================================================================
-   SCROLL SPY — activates step-nav checkbox as section enters view
-================================================================ */
-function initScrollSpy(){
-  const sc=document.getElementById('scroll');
-  const map={
-    'section-news':'cb-news','section-artistes':'cb-artistes',
-    'section-exposition':'cb-exposition','section-acces':'cb-acces'
-  };
-  const obs=new IntersectionObserver(entries=>{
-    entries.forEach(en=>{
-      if(en.isIntersecting){
-        document.querySelectorAll('.cb-box').forEach(b=>b.classList.remove('on'));
-        const cid=map[en.target.id];
-        if(cid){const c=document.getElementById(cid);if(c)c.classList.add('on');}
-      }
-    });
-  },{root:sc,threshold:0.15});
-  Object.keys(map).forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el);});
-}
-
-/* ================================================================
    MENTIONS LÉGALES — overlay open/close
 ================================================================ */
 function openLegal(){
@@ -985,7 +964,6 @@ function downloadIcal(){
 
 initSlider();
 renderArtistList();
-initScrollSpy();
 tick();
 stamp();
 </script>
