@@ -106,25 +106,18 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 .addr-link:hover{text-decoration:underline}
 
 /* ============================================================
-   CUSTOM CURSOR — registry reticle (fine-pointer / mouse only)
-   A thin black registration cross trails the pointer across the
-   whole page. The OS cursor is hidden; text fields keep the I-beam
-   and the carousel keeps its own ←/→/↗ arrows (the reticle is
-   suppressed over both in JS). Touch devices keep native cursors.
+   CUSTOM CURSOR — vintage white arrow (fine-pointer / mouse only)
+   The classic "old-internet" north-west pointer (images/cursor.png,
+   hotspot at the tip) replaces the OS cursor across the page. Native
+   cursor: no lag, correct hotspot. Text fields keep the I-beam; the
+   carousel keeps its own ←/→/↗ arrows. Touch devices are untouched.
 ============================================================ */
 @media(hover:hover) and (pointer:fine){
-  *{cursor:none !important}
+  *{cursor:url(images/cursor.png) 2 2, auto !important}
   input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
   textarea{cursor:text !important}
+  .slider-wrap, .slider-wrap *{cursor:none !important}   /* carousel keeps its own ←/→/↗ arrows */
 }
-.reticle{
-  position:fixed;left:0;top:0;z-index:9999;
-  width:17px;height:17px;pointer-events:none;
-  opacity:0;transition:opacity .12s ease;
-  transform:translate(-50%,-50%);
-}
-.reticle::before{content:'';position:absolute;left:8px;top:0;width:1px;height:6px;background:#000;box-shadow:0 11px 0 #000}
-.reticle::after{content:'';position:absolute;top:8px;left:0;width:6px;height:1px;background:#000;box-shadow:11px 0 0 #000}
 
 /* ============================================================
    LAYOUT
@@ -677,10 +670,11 @@ const ARTISTS=[
     {l:'Recognition, residencies & awards',rows:[['2023','Wassaic Project, Summer Session residency, Wassaic (NY)'],['2023','Featured in Sculpture Magazine (Jan/Feb issue)'],['2022','International Sculpture Center — Outstanding Achievement in Contemporary Sculpture award'],['2022','Red Lodge Clay Center, group residency avec Sticky Gold Collective, Red Lodge (MT)'],['2021','PICTURE BERLIN residency, Berlin'],['2021','3rd Place Artist Grant (artistgrant.org)'],['2020','Chautauqua School of Art, Chautauqua (NY)'],['2019','Bunker Projects, Pittsburgh (PA)']]}]},
   {slug:'signe-ralkov',name:'Signe Ralkov',born:'1997, Roskilde',based:'Berlin',medium:'Photographie, dessin',code:'SR',g:'f',links:[],
    works:[{t:'Perlen (1844–1864)',d:'2025',m:'Silver gelatin print',s:'47.3 × 57.4 cm'},{t:'Restoration film I',d:'2025',m:'Silverpoint on paper',s:'37.2 × 47.4 cm'}],
-   solo:[['2025','Hold still, OTP Copenhagen, Copenhague'],['2025','Hundred years, Ping Pong Kælderen, Copenhague (duo avec Christine Dahlerup)'],['2024','Pod, OTP Copenhagen, Copenhague']],
-   group:[['2025','MFA Degree Show 2025, Kunsthal Charlottenborg, Copenhague'],['2025','Rundgang, The Royal Danish Academy of Fine Arts, Copenhague']],
+   solo:[['2025','Hold still, OTP Copenhagen, Copenhague'],['2024','Pod, OTP Copenhagen, Copenhague'],['2021','I’m Ago, Bricks Gallery, Copenhague'],['2020','Shedding Season, Gallery Steinsland Berliner, Stockholm']],
+   group:[['2027','Duo exhibition, Galleri 69, Oslo'],['2026','PART II, UA26, Vienne'],['2026','Twilight, Isaak Fangel, Copenhague'],['2025','Hundred years, Ping Pong Kælderen, Copenhague (duo avec Christine Dahlerup)'],['2025','MFA Degree Show 2025, Kunsthal Charlottenborg, Copenhague'],['2025','Rundgang, The Royal Danish Academy of Fine Arts, Copenhague'],['2023','Cultural Talents of the Future, The Ministry of Culture, Copenhague'],['2023','Charlottenborg Spring Exhibition, Kunsthal Charlottenborg, Copenhague'],['2022','The Sun Rises in Peculiar ways, Gether Contemporary, Copenhague'],['2022','Bachelor exhibition, The Royal Danish Academy of Fine Arts, Copenhague'],['2021','Eve Presents, Eve Leibe Gallery, Londres'],['2020','I’m drunk and I want to sleep in the bog tonight, Salon 75, Copenhague'],['2020','Cave Canem, Eve Leibe Gallery, Londres'],['2020','Tales of Mere Existence, Bricks Gallery, Copenhague'],['2019','Førsteårsudstillingen, Gallery Q, Copenhague'],['2019','No Scrubs, Hot Dock Project Space, Bratislava'],['2019','Once in a Blue Moon, se!, Aarhus'],['2018','Vibenvej præsenterer, Rentemestervej 69b, Copenhague'],['2018','Sculpture park, Honeyland festival, Allinge'],['2018','Artist Supply Store, DELFI, Malmö'],['2018','Nye rør, Salon 75, Copenhague']],
    extra:[
-    {l:'Education',rows:[['2025','MFA, The Royal Danish Academy of Fine Arts, Copenhague']]}]},
+    {l:'Education',rows:[['2022–2025','MFA, The Royal Danish Academy of Fine Arts, Copenhague'],['2021–2022','BFA, Berlin University of the Arts, Berlin'],['2019–2022','BFA, The Royal Danish Academy of Fine Arts, Copenhague']]},
+    {l:'Grants',rows:[['2026','Working grant, Danish Arts Foundation'],['2025','Stipend, Fondation Idella'],['2022','Stipend, Birgit Vibeke Tofts Mindefond']]}]},
   {slug:'tekla-kighuradze',name:'Tekla Kighuradze',born:'2000, Tbilisi',based:'Tbilisi',medium:'Technique mixte, peinture',code:'TK',g:'f',links:['https://teklakighuradze.com','https://www.instagram.com/goldrugon/'],
    works:[{t:'If the Curls Hadn’t Crawled Like a Scorpion',d:'2024',m:'Mixed media, wood',s:'30 × 40 × 5 cm'},{t:'Disappear / Appear',d:'2024',m:'Mixed media, wood',s:'30 × 40 × 5 cm'},{t:'A Loaded Gun',d:'2025',m:'Mixed media on canvas',s:'90 × 110 × 3 cm'}],
    solo:[['2023','I Hide Myself Within My Flower (avec Nodo Ugulava), duo-show'],['2022','Hidden Sparks, The Why Not Gallery, Tbilisi']],
@@ -935,32 +929,8 @@ function downloadIcal(){
   if(a)a.innerHTML=addrMultiline;
 })();
 
-/* ================================================================
-   REGISTRY RETICLE CURSOR — replaces the OS pointer on mouse devices.
-   Suppressed over text fields (I-beam stays) and over the carousel
-   (its ←/→/↗ arrows stay). Touch / coarse pointers are left alone.
-================================================================ */
-(function(){
-  if(!(window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches))return;
-  const r=document.createElement('div');
-  r.className='reticle';r.setAttribute('aria-hidden','true');
-  document.body.appendChild(r);
-  function suppress(t){
-    if(!t||!t.closest)return false;
-    if(t.closest('.slider-wrap'))return true;          /* carousel keeps its own arrows */
-    const f=t.closest('input,textarea');
-    if(!f)return false;
-    if(f.tagName==='TEXTAREA')return true;
-    const ty=(f.getAttribute('type')||'text').toLowerCase();
-    return ty!=='checkbox'&&ty!=='radio';              /* text-entry fields keep the I-beam */
-  }
-  document.addEventListener('mousemove',function(e){
-    if(suppress(e.target)){r.style.opacity='0';return;}
-    r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';r.style.opacity='1';
-  },{passive:true});
-  document.documentElement.addEventListener('mouseleave',function(){r.style.opacity='0';});
-})();
-
+/* The custom cursor is now a native CSS image cursor (see the
+   "vintage white arrow" block in the stylesheet) — no JS needed. */
 
 initSlider();
 renderArtistList();

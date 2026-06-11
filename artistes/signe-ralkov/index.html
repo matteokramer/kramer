@@ -51,13 +51,39 @@
     <div class="cv">
     <p class="cv-section">Solo exhibitions</p>
     <div class="cv-row"><span class="cv-yr">2025</span><span>Hold still, OTP Copenhagen, Copenhague</span></div>
-    <div class="cv-row"><span class="cv-yr">2025</span><span>Hundred years, Ping Pong Kælderen, Copenhague (duo avec Christine Dahlerup)</span></div>
     <div class="cv-row"><span class="cv-yr">2024</span><span>Pod, OTP Copenhagen, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2021</span><span>I’m Ago, Bricks Gallery, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2020</span><span>Shedding Season, Gallery Steinsland Berliner, Stockholm</span></div>
     <p class="cv-section">Group exhibitions</p>
+    <div class="cv-row"><span class="cv-yr">2027</span><span>Duo exhibition, Galleri 69, Oslo</span></div>
+    <div class="cv-row"><span class="cv-yr">2026</span><span>PART II, UA26, Vienne</span></div>
+    <div class="cv-row"><span class="cv-yr">2026</span><span>Twilight, Isaak Fangel, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2025</span><span>Hundred years, Ping Pong Kælderen, Copenhague (duo avec Christine Dahlerup)</span></div>
     <div class="cv-row"><span class="cv-yr">2025</span><span>MFA Degree Show 2025, Kunsthal Charlottenborg, Copenhague</span></div>
     <div class="cv-row"><span class="cv-yr">2025</span><span>Rundgang, The Royal Danish Academy of Fine Arts, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2023</span><span>Cultural Talents of the Future, The Ministry of Culture, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2023</span><span>Charlottenborg Spring Exhibition, Kunsthal Charlottenborg, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2022</span><span>The Sun Rises in Peculiar ways, Gether Contemporary, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2022</span><span>Bachelor exhibition, The Royal Danish Academy of Fine Arts, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2021</span><span>Eve Presents, Eve Leibe Gallery, Londres</span></div>
+    <div class="cv-row"><span class="cv-yr">2020</span><span>I’m drunk and I want to sleep in the bog tonight, Salon 75, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2020</span><span>Cave Canem, Eve Leibe Gallery, Londres</span></div>
+    <div class="cv-row"><span class="cv-yr">2020</span><span>Tales of Mere Existence, Bricks Gallery, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2019</span><span>Førsteårsudstillingen, Gallery Q, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2019</span><span>No Scrubs, Hot Dock Project Space, Bratislava</span></div>
+    <div class="cv-row"><span class="cv-yr">2019</span><span>Once in a Blue Moon, se!, Aarhus</span></div>
+    <div class="cv-row"><span class="cv-yr">2018</span><span>Vibenvej præsenterer, Rentemestervej 69b, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2018</span><span>Sculpture park, Honeyland festival, Allinge</span></div>
+    <div class="cv-row"><span class="cv-yr">2018</span><span>Artist Supply Store, DELFI, Malmö</span></div>
+    <div class="cv-row"><span class="cv-yr">2018</span><span>Nye rør, Salon 75, Copenhague</span></div>
     <p class="cv-section">Education</p>
-    <div class="cv-row"><span class="cv-yr">2025</span><span>MFA, The Royal Danish Academy of Fine Arts, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2022–2025</span><span>MFA, The Royal Danish Academy of Fine Arts, Copenhague</span></div>
+    <div class="cv-row"><span class="cv-yr">2021–2022</span><span>BFA, Berlin University of the Arts, Berlin</span></div>
+    <div class="cv-row"><span class="cv-yr">2019–2022</span><span>BFA, The Royal Danish Academy of Fine Arts, Copenhague</span></div>
+    <p class="cv-section">Grants</p>
+    <div class="cv-row"><span class="cv-yr">2026</span><span>Working grant, Danish Arts Foundation</span></div>
+    <div class="cv-row"><span class="cv-yr">2025</span><span>Stipend, Fondation Idella</span></div>
+    <div class="cv-row"><span class="cv-yr">2022</span><span>Stipend, Birgit Vibeke Tofts Mindefond</span></div>
     </div>
 </div>
 
@@ -75,28 +101,8 @@
   });
 })();
 
-/* Registry reticle cursor — replaces the OS pointer on mouse devices.
-   Text fields keep the I-beam; touch / coarse pointers are left alone. */
-(function(){
-  if(!(window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches))return;
-  var r=document.createElement('div');
-  r.className='reticle';r.setAttribute('aria-hidden','true');
-  document.body.appendChild(r);
-  function suppress(t){
-    if(!t||!t.closest)return false;
-    if(t.closest('.slider-wrap'))return true;
-    var f=t.closest('input,textarea');
-    if(!f)return false;
-    if(f.tagName==='TEXTAREA')return true;
-    var ty=(f.getAttribute('type')||'text').toLowerCase();
-    return ty!=='checkbox'&&ty!=='radio';
-  }
-  document.addEventListener('mousemove',function(e){
-    if(suppress(e.target)){r.style.opacity='0';return;}
-    r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';r.style.opacity='1';
-  },{passive:true});
-  document.documentElement.addEventListener('mouseleave',function(){r.style.opacity='0';});
-})();
+/* The custom cursor is a native CSS image cursor (vintage white arrow,
+   see kramer.css) — no JS needed. */
 </script>
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"89f5b84374df4f9f916220221b029d3d"}'></script>
 </body>
