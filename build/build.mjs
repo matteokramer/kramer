@@ -117,7 +117,7 @@ ${jsonld}
 ${works}${cv}
 </div>
 
-<div class="chrome cb"><div class="c9">Kramer · 132 Bd de Magenta, 75010 Paris<span class="hsm"> · <span id="footer-email"></span></span></div><a href="../../#section-acces" class="cnav c9">Contact</a></div>
+<div class="chrome cb"><div class="c9">© Kramer 2026</div><a href="../../#section-acces" class="cnav c9">Contact</a></div>
 
 <script>
 /* email assembled at runtime so it stays out of the static source */
@@ -129,8 +129,6 @@ ${works}${cv}
     var body=encodeURIComponent(‘Bonjour,\\n\\nJe souhaite recevoir la fiche de l’œuvre suivante :\\n— ‘+t+’ (‘+d+’), ‘+s+’\\nRéf. ‘+ref+’\\n\\n’);
     el.setAttribute(‘href’,’mailto:’+addr+’?subject=’+subj+’&body=’+body);
   });
-  var fe=document.getElementById(‘footer-email’);
-  if(fe)fe.innerHTML=’<a href="mailto:’+addr+’" style="color:inherit">’+addr+’</a>’;
 })();
 
 </script>
