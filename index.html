@@ -161,8 +161,10 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 }
 /* h1 wrapper carries page semantics without altering the wordmark look */
 .logo-sect h1{font:inherit;margin:0;width:100%}
-/* Address always full-width below wordmark */
-.logo-addr{font-size:9px;line-height:14px;letter-spacing:.03em;width:100%}
+/* Address always full-width below wordmark; small indent nudges it under the
+   wordmark's visible "K" stem (the Extra-Condensed cut bakes a big left side-bearing
+   in at display size). Tuned for desktop; ~1–2px off at the smallest clamp width. */
+.logo-addr{font-size:9px;line-height:14px;letter-spacing:.03em;width:100%;text-indent:clamp(3px,.5vw,7px)}
 
 /* ============================================================
    ARTWORK SLIDER — border-bottom only (no top border)
@@ -190,7 +192,6 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
   font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.4);
   text-align:center;
 }
-.slide-tag{position:absolute;top:5px;left:8px;font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.6)}
 .slide-counter{position:absolute;bottom:5px;right:8px;font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.6)}
 .slide-caption{
   display:flex;justify-content:space-between;align-items:baseline;
@@ -395,7 +396,6 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
       <div class="slide-area">
         <a class="slide-plate" id="slide-link" href="#" aria-label="Voir la fiche de l'artiste">
           <img src="images/placeholder.png" class="plate-img" id="slide-img" alt="">
-          <span class="slide-tag" id="slide-tag"></span>
           <span class="slide-counter" id="slide-counter">1 / 10</span>
         </a>
       </div>
@@ -518,7 +518,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
           <div class="ff"><label>Adresse e-mail</label><input type="email" name="email" required></div>
           <div class="ff"><label>Affiliation (facultatif)</label><input type="text" name="affiliation"></div>
           <div class="ff">
-            <label class="fcheck"><input type="checkbox" name="vernissage" value="oui" checked> Vernissage — 25 juin, 17h–21h</label>
+            <label class="fcheck"><input type="checkbox" name="vernissage" value="oui"> Vernissage — 25 juin, 17h–21h</label>
             <label class="fcheck"><input type="checkbox" name="rendez-vous" value="oui"> Demander un rendez-vous</label>
             <label class="fcheck"><input type="checkbox" name="newsletter" value="oui"> S'inscrire à la newsletter</label>
           </div>
@@ -534,10 +534,8 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 
   <!-- CHROME BOTTOM -->
   <div class="chrome cb">
-    <div class="c9">Kramer · 132 Bd de Magenta, 75010 Paris<span class="hsm"> · <span id="footer-email"></span></span></div>
-    <div>
-      <span class="c9i hsm" id="vstamp" style="margin-right:10px">Version 0.12 · Au : —</span><a href="#" class="cnav c9" onclick="goTo('section-acces');return false">Contact</a>
-    </div>
+    <div class="c9">© Kramer 2026</div>
+    <a href="#" class="cnav c9" onclick="goTo('section-acces');return false">Contact</a>
   </div>
 
 </div><!-- /wrap -->
@@ -722,7 +720,6 @@ function showSlide(n){
   if(img){img.src=ARTIST_IMG[a.slug]||'images/placeholder.png';img.alt=a.name;}
   const link=document.getElementById('slide-link');
   if(link){link.setAttribute('href','artistes/'+a.slug+'/');link.setAttribute('aria-label','Voir la fiche de '+a.name);}
-  document.getElementById('slide-tag').textContent='KR/01·'+a.code;
   document.getElementById('slide-counter').textContent=(idx+1)+'\u2009/\u2009'+ARTISTS.length;
   const artistEl=document.getElementById('slide-artist');
   artistEl.textContent=a.name;
@@ -849,12 +846,6 @@ function tick(){
   upd();                 /* paint 00:00:00 immediately, not after 1s */
   setInterval(upd,1000);
 }
-function stamp(){
-  const el=document.getElementById('vstamp');if(!el)return;
-  const n=new Date(),p=x=>String(x).padStart(2,'0');
-  const m=['jan.','f\u00e9v.','mars','avr.','mai','juin','juil.','ao\u00fbt','sept.','oct.','nov.','d\u00e9c.'];
-  el.textContent=`Version 0.12 \u00b7 Au\u00a0: ${p(n.getUTCDate())} ${m[n.getUTCMonth()]} ${n.getUTCFullYear()} ${p(n.getUTCHours())}:${p(n.getUTCMinutes())}:${p(n.getUTCSeconds())} GMT`;
-}
 
 /* ================================================================
    MENTIONS LÉGALES — overlay open/close
@@ -908,7 +899,7 @@ function downloadIcal(){
   if(p)p.innerHTML=link;
   const s=document.getElementById('contact-email-inline');
   if(s)s.innerHTML=link;
-  ['legal-email','legal-email-2','footer-email'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=link;});
+  ['legal-email','legal-email-2'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=link;});
 })();
 
 (function(){
@@ -923,7 +914,6 @@ function downloadIcal(){
 initSlider();
 renderArtistList();
 tick();
-stamp();
 if(window.location.hash==='#mentions-legales')openLegal();
 if(window.location.hash==='#section-acces')goTo('section-acces');
 </script>
