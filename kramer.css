@@ -82,21 +82,14 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .cv-yr{font-size:9px;letter-spacing:.03em;min-width:64px;line-height:20px;color:rgba(0,0,0,.55)} /* wide enough for year ranges (2004–2012) so columns stay aligned */
 
 /* ============================================================
-   CUSTOM CURSOR — registry reticle (fine-pointer / mouse only)
-   Matches the home page: a thin black registration cross trails
-   the pointer; the OS cursor is hidden. Touch devices are left
-   alone. (The reticle element + handler are injected by build.mjs.)
+   CUSTOM CURSOR — vintage white arrow (fine-pointer / mouse only)
+   Matches the home page: the classic "old-internet" north-west
+   pointer (images/cursor.png, hotspot at the tip) replaces the OS
+   cursor natively. Text fields keep the I-beam. Touch devices are
+   left alone. (url() resolves relative to this file → /images/.)
 ============================================================ */
 @media(hover:hover) and (pointer:fine){
-  *{cursor:none !important}
+  *{cursor:url(images/cursor.png) 2 2, auto !important}
   input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
   textarea{cursor:text !important}
 }
-.reticle{
-  position:fixed;left:0;top:0;z-index:9999;
-  width:17px;height:17px;pointer-events:none;
-  opacity:0;transition:opacity .12s ease;
-  transform:translate(-50%,-50%);
-}
-.reticle::before{content:'';position:absolute;left:8px;top:0;width:1px;height:6px;background:#000;box-shadow:0 11px 0 #000}
-.reticle::after{content:'';position:absolute;top:8px;left:0;width:6px;height:1px;background:#000;box-shadow:11px 0 0 #000}

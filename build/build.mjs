@@ -132,28 +132,8 @@ ${works}${cv}
   });
 })();
 
-/* Registry reticle cursor — replaces the OS pointer on mouse devices.
-   Text fields keep the I-beam; touch / coarse pointers are left alone. */
-(function(){
-  if(!(window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches))return;
-  var r=document.createElement('div');
-  r.className='reticle';r.setAttribute('aria-hidden','true');
-  document.body.appendChild(r);
-  function suppress(t){
-    if(!t||!t.closest)return false;
-    if(t.closest('.slider-wrap'))return true;
-    var f=t.closest('input,textarea');
-    if(!f)return false;
-    if(f.tagName==='TEXTAREA')return true;
-    var ty=(f.getAttribute('type')||'text').toLowerCase();
-    return ty!=='checkbox'&&ty!=='radio';
-  }
-  document.addEventListener('mousemove',function(e){
-    if(suppress(e.target)){r.style.opacity='0';return;}
-    r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';r.style.opacity='1';
-  },{passive:true});
-  document.documentElement.addEventListener('mouseleave',function(){r.style.opacity='0';});
-})();
+/* The custom cursor is a native CSS image cursor (vintage white arrow,
+   see kramer.css) — no JS needed. */
 </script>
 ${CF_TOKEN ? `<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='${JSON.stringify({ token: CF_TOKEN })}'></script>` : ''}
 </body>
