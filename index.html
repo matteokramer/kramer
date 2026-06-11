@@ -423,7 +423,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
             </a></li>
             <li class="cb-item"><a class="cb-link" onclick="goTo('section-acces');return false" href="#">
               <div class="cb-box" id="cb-acces"></div>
-              <span class="cb-txt">Le <strong>bureau d'accès</strong></span>
+              <span class="cb-txt">L'<strong>accès</strong></span>
             </a></li>
           </ul>
         </div>
@@ -528,10 +528,9 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 
   <!-- CHROME BOTTOM -->
   <div class="chrome cb">
-    <div class="c9i hsm" id="vstamp">Version 0.11 · Au : —</div>
+    <div class="c9">Kramer · 132 Bd de Magenta, 75010 Paris<span class="hsm"> · <span id="footer-email"></span></span></div>
     <div>
-      <a href="#" class="cnav c9" onclick="openLegal();return false">Mentions légales</a>
-      <a href="#" class="cnav c9 hsm">Colophon</a>
+      <span class="c9i hsm" id="vstamp" style="margin-right:10px">Version 0.11 · Au : —</span><a href="#" class="cnav c9" onclick="openLegal();return false">Mentions légales</a>
     </div>
   </div>
 
@@ -903,7 +902,7 @@ function downloadIcal(){
   if(p)p.innerHTML=link;
   const s=document.getElementById('contact-email-inline');
   if(s)s.innerHTML=link;
-  ['legal-email','legal-email-2'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=link;});
+  ['legal-email','legal-email-2','footer-email'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=link;});
 })();
 
 (function(){
@@ -919,6 +918,7 @@ initSlider();
 renderArtistList();
 tick();
 stamp();
+if(window.location.hash==='#mentions-legales')openLegal();
 </script>
 </body>
 </html>
