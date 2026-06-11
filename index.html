@@ -304,7 +304,11 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 .ac-lbl{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.45);margin-bottom:3px}
 .ac-big{font-family:'acumin-pro',Arial,sans-serif;font-size:clamp(16px,2.2vw,20px);font-weight:400;line-height:1.3}
 
-/* RSVP form */
+/* Page footer — quiet legal link at the bottom of the content flow */
+.page-foot{border-top:1px solid #222;margin:8px 10px 0;padding:8px 0 24px;font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.45)}
+.page-foot a:hover{text-decoration:underline}
+
+/* Contact form */
 .rsvp{padding:0 10px 32px;max-width:480px}
 .ff{margin-bottom:8px}
 .ff label{display:block;font-size:9px;letter-spacing:.03em;margin-bottom:2px}
@@ -508,7 +512,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
       </div>
 
       <div style="padding:0 10px 12px">
-        <p class="s-head" style="padding-left:0;margin-bottom:12px">Accès visiteur · RSVP · Formulaire KR/RSVP</p>
+        <p class="s-head" style="padding-left:0;margin-bottom:12px">Formulaire de contact</p>
         <form class="rsvp" action="https://formspree.io/f/xzdqvpbg" method="POST" onsubmit="return rsvpSubmit(event)">
           <div class="ff"><label>Nom</label><input type="text" name="nom" required></div>
           <div class="ff"><label>Adresse e-mail</label><input type="email" name="email" required></div>
@@ -524,13 +528,15 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
       </div>
     </div>
 
+    <p class="page-foot"><a href="#" onclick="openLegal();return false">Mentions légales</a></p>
+
   </div><!-- /scroll -->
 
   <!-- CHROME BOTTOM -->
   <div class="chrome cb">
     <div class="c9">Kramer · 132 Bd de Magenta, 75010 Paris<span class="hsm"> · <span id="footer-email"></span></span></div>
     <div>
-      <span class="c9i hsm" id="vstamp" style="margin-right:10px">Version 0.11 · Au : —</span><a href="#" class="cnav c9" onclick="openLegal();return false">Mentions légales</a>
+      <span class="c9i hsm" id="vstamp" style="margin-right:10px">Version 0.12 · Au : —</span><a href="#" class="cnav c9" onclick="goTo('section-acces');return false">Contact</a>
     </div>
   </div>
 
@@ -847,7 +853,7 @@ function stamp(){
   const el=document.getElementById('vstamp');if(!el)return;
   const n=new Date(),p=x=>String(x).padStart(2,'0');
   const m=['jan.','f\u00e9v.','mars','avr.','mai','juin','juil.','ao\u00fbt','sept.','oct.','nov.','d\u00e9c.'];
-  el.textContent=`Version 0.11 \u00b7 Au\u00a0: ${p(n.getUTCDate())} ${m[n.getUTCMonth()]} ${n.getUTCFullYear()} ${p(n.getUTCHours())}:${p(n.getUTCMinutes())}:${p(n.getUTCSeconds())} GMT`;
+  el.textContent=`Version 0.12 \u00b7 Au\u00a0: ${p(n.getUTCDate())} ${m[n.getUTCMonth()]} ${n.getUTCFullYear()} ${p(n.getUTCHours())}:${p(n.getUTCMinutes())}:${p(n.getUTCSeconds())} GMT`;
 }
 
 /* ================================================================
@@ -919,6 +925,7 @@ renderArtistList();
 tick();
 stamp();
 if(window.location.hash==='#mentions-legales')openLegal();
+if(window.location.hash==='#section-acces')goTo('section-acces');
 </script>
 </body>
 </html>
