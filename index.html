@@ -1,4 +1,4 @@
-s<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -104,20 +104,6 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 /* Classic hyperlink blue for navigation/menu links */
 .addr-link{color:inherit;text-decoration:none}
 .addr-link:hover{text-decoration:underline}
-
-/* ============================================================
-   CUSTOM CURSOR — vintage white arrow (fine-pointer / mouse only)
-   The classic "old-internet" north-west pointer (images/cursor.png,
-   hotspot at the tip) replaces the OS cursor across the page. Native
-   cursor: no lag, correct hotspot. Text fields keep the I-beam; the
-   carousel keeps its own ←/→/↗ arrows. Touch devices are untouched.
-============================================================ */
-@media(hover:hover) and (pointer:fine){
-  *{cursor:url(images/cursor.png) 2 2, auto !important}
-  input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
-  textarea{cursor:text !important}
-  .slider-wrap, .slider-wrap *{cursor:none !important}   /* carousel keeps its own ←/→/↗ arrows */
-}
 
 /* ============================================================
    LAYOUT
@@ -387,14 +373,14 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 
   <!-- CHROME TOP -->
   <div class="chrome ct">
-    <div class="c9">Répertoire : K › Kr</div>
+    <a href="#" class="cnav c9" onclick="goTo('section-accueil');return false">Accueil</a>
     <div class="c9i">Session : <span id="clock">00:00:00</span></div>
   </div>
 
   <div id="scroll">
 
     <!-- LOGO -->
-    <div class="logo-sect">
+    <div class="logo-sect" id="section-accueil">
       <h1><a href="#" class="wordmark" onclick="goTo('section-artworks');return false">Kramer</a></h1>
       <p class="logo-addr"><a href="https://www.google.com/maps/search/?api=1&amp;query=132%20Bd%20de%20Magenta%2C%2075010%20Paris" target="_blank" rel="noopener" class="addr-link" id="addr-wordmark"></a></p>
     </div>
@@ -928,9 +914,6 @@ function downloadIcal(){
   const a=document.getElementById('addr-access');
   if(a)a.innerHTML=addrMultiline;
 })();
-
-/* The custom cursor is now a native CSS image cursor (see the
-   "vintage white arrow" block in the stylesheet) — no JS needed. */
 
 initSlider();
 renderArtistList();

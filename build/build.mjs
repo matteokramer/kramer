@@ -102,10 +102,9 @@ ${jsonld}
 <link rel="stylesheet" href="../../kramer.css">
 </head>
 <body>
-<div class="chrome ct"><div class="c9">Répertoire : K › Kr</div><div class="c9i">Entrée ${entry}</div></div>
+<div class="chrome ct"><a class="cnav c9" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Retour</a><div class="c9i">Entrée ${entry}</div></div>
 
 <div class="wrap">
-  <a class="home-btn" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Retour</a>
   <p class="crumb"><a href="../../#section-artistes">Registre des artistes</a> › ${esc(a.name)}</p>
 
   <h1 class="a-name">${esc(a.name)}</h1>
@@ -118,7 +117,7 @@ ${jsonld}
 ${works}${cv}
 </div>
 
-<div class="chrome cb"><div class="c9">Kramer · 132 Bd de Magenta, 75010 Paris</div><div><a class="cnav c9" href="../../">Accueil</a></div></div>
+<div class="chrome cb"><div class="c9">Kramer · 132 Bd de Magenta, 75010 Paris</div></div>
 
 <script>
 /* email assembled at runtime so it stays out of the static source */
@@ -132,8 +131,6 @@ ${works}${cv}
   });
 })();
 
-/* The custom cursor is a native CSS image cursor (vintage white arrow,
-   see kramer.css) — no JS needed. */
 </script>
 ${CF_TOKEN ? `<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='${JSON.stringify({ token: CF_TOKEN })}'></script>` : ''}
 </body>
