@@ -514,6 +514,9 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
       <div style="padding:0 10px 12px">
         <p class="s-head" style="padding-left:0;margin-bottom:12px">Formulaire de contact</p>
         <form class="rsvp" action="https://formspree.io/f/xzdqvpbg" method="POST" onsubmit="return rsvpSubmit(event)">
+          <!-- Honeypot: invisible to humans, silently traps bots. Formspree drops any
+               submission where _gotcha is filled. Do not remove the inline hiding. -->
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
           <div class="ff"><label>Nom</label><input type="text" name="nom" required></div>
           <div class="ff"><label>Adresse e-mail</label><input type="email" name="email" required></div>
           <div class="ff"><label>Affiliation (facultatif)</label><input type="text" name="affiliation"></div>
@@ -807,24 +810,28 @@ async function rsvpSubmit(e){
     nom:fd.get('nom'),email:fd.get('email'),
     affiliation:fd.get('affiliation'),newsletter:newsletter
   };
+  /* Newsletter sign-up is fire-and-forget: a Brevo failure must never
+     block a valid RSVP, so it runs independently of the Formspree call. */
+  if(newsletter==='oui'){
+    fetch('https://kramer-brevo.cloudflare-untouched375.workers.dev',{
+      method:'POST',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'}
+    }).catch(err=>console.warn('[kramer] newsletter sign-up failed:',err));
+  }
   try{
-    const calls=[
-      fetch(form.action,{method:'POST',body:fd,headers:{'Accept':'application/json'}})
-    ];
-    if(newsletter==='oui'){
-      calls.push(fetch('https://kramer-brevo.cloudflare-untouched375.workers.dev',{
-        method:'POST',body:JSON.stringify(payload),headers:{'Content-Type':'application/json'}
-      }));
-    }
-    const [r]=await Promise.all(calls);
+    const r=await fetch(form.action,{method:'POST',body:fd,headers:{'Accept':'application/json'}});
     if(r.ok){
       b.textContent='Envoy\u00e9 \u2713';
       setTimeout(()=>{form.reset();b.textContent='Envoyer';b.disabled=false;},2400);
     } else {
+      /* surface Formspree's real reason in the console for diagnosis */
+      let detail='';
+      try{const j=await r.clone().json();detail=(j.errors&&j.errors.map(e=>e.message).join('; '))||j.error||'';}catch(_){}
+      console.error('[kramer] Formspree rejected the submission:',r.status,detail||await r.clone().text().catch(()=>''));
       b.textContent='Erreur \u2014 r\u00e9essayer';
       b.disabled=false;
     }
-  } catch(_){
+  } catch(err){
+    console.error('[kramer] Formspree request failed:',err);
     b.textContent='Erreur \u2014 r\u00e9essayer';
     b.disabled=false;
   }
