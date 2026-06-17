@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://kramer.paris/artistes/annael-shavit/">
 <meta property="og:image" content="https://kramer.paris/images/kramer_wordmark.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://kramer.paris/artistes/annael-shavit/#person","name":"Annael Shavit","url":"https://kramer.paris/artistes/annael-shavit/","jobTitle":"Artiste","knowsAbout":["Peinture"],"birthDate":"1998","birthPlace":{"@type":"Place","name":"Tel Aviv"},"memberOf":{"@type":"ArtGallery","name":"Kramer","url":"https://kramer.paris/"},"sameAs":["https://www.instagram.com/annael_shavit/"]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://kramer.paris/artistes/annael-shavit/#person","name":"Annael Shavit","url":"https://kramer.paris/artistes/annael-shavit/","jobTitle":"Artiste","knowsAbout":["Peinture"],"birthDate":"1998","birthPlace":{"@type":"Place","name":"Tel Aviv"},"memberOf":{"@type":"ArtGallery","name":"Kramer","url":"https://kramer.paris/"},"sameAs":["https://www.instagram.com/annael_shavit/"]},{"@type":"VisualArtwork","name":"Chocolate labrador (not black)","creator":{"@id":"https://kramer.paris/artistes/annael-shavit/#person"},"url":"https://kramer.paris/artistes/annael-shavit/","dateCreated":"2026","artform":"Peinture","artMedium":"Oil, pastel and acrylic on canvas","image":"https://kramer.paris/images/works/annael-shavit--chocolate-labrador.jpg"}]}
 </script>
 <link rel="stylesheet" href="https://use.typekit.net/svm4vfk.css">
 <link rel="stylesheet" href="../../kramer.css">
@@ -34,6 +34,14 @@
 
   <div class="a-bio"><!-- bio à venir --></div>
 
+    <p class="s-head">Œuvres — 1 entrée</p>
+    <div class="works-grid">
+      <div class="work-item">
+        <div class="work-plate"><img src="../../images/works/annael-shavit--chocolate-labrador.jpg" alt="Chocolate labrador (not black), Oil, pastel and acrylic on canvas · 130 × 97 cm"></div>
+        <p class="work-cap"><em>Chocolate labrador (not black)</em>, 2026 &middot; 130 × 97 cm</p>
+        <a class="work-inquire" href="#" data-t="Chocolate labrador (not black)" data-d="2026" data-s="130 × 97 cm">Demander la fiche →</a>
+      </div>
+    </div>
     <div class="cv">
     <p class="cv-section">Group exhibitions</p>
     <div class="cv-row"><span class="cv-yr">2025</span><span>Centre Pompidou-Metz — collaboration Louvre / Beaux-Arts de Paris, avec Elizabeth Peyton</span></div>
@@ -77,11 +85,11 @@
 /* email assembled at runtime so it stays out of the static source */
 (function(){
   var addr='contact'+'@'+'kramer'+String.fromCharCode(46)+'paris', ref="KR/01·AS";
-  document.querySelectorAll(‘.work-inquire’).forEach(function(el){
-    var t=el.getAttribute(‘data-t’), d=el.getAttribute(‘data-d’), s=el.getAttribute(‘data-s’);
-    var subj=encodeURIComponent(‘Demande — ‘+ref+’ · ‘+t);
-    var body=encodeURIComponent(‘Bonjour,\n\nJe souhaite recevoir la fiche de l’œuvre suivante :\n— ‘+t+’ (‘+d+’), ‘+s+’\nRéf. ‘+ref+’\n\n’);
-    el.setAttribute(‘href’,’mailto:’+addr+’?subject=’+subj+’&body=’+body);
+  document.querySelectorAll('.work-inquire').forEach(function(el){
+    var t=el.getAttribute('data-t'), d=el.getAttribute('data-d'), s=el.getAttribute('data-s');
+    var subj=encodeURIComponent('Demande — '+ref+' · '+t);
+    var body=encodeURIComponent('Bonjour,\n\nJe souhaite recevoir la fiche de l\'œuvre suivante :\n— '+t+' ('+d+'), '+s+'\nRéf. '+ref+'\n\n');
+    el.setAttribute('href','mailto:'+addr+'?subject='+subj+'&body='+body);
   });
 })();
 

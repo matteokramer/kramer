@@ -51,6 +51,7 @@ function page(a, i) {
     ...(w.d ? { dateCreated: String(w.d) } : {}),
     ...(primaryMedium ? { artform: primaryMedium } : {}),
     ...(w.m ? { artMedium: w.m } : {}),
+    ...(w.i ? { image: `${SITE}/images/works/${w.i}` } : {}),
   }));
   const jsonld = JSON.stringify({ '@context': 'https://schema.org', '@graph': [person, ...artworks] });
 
@@ -65,7 +66,7 @@ function page(a, i) {
     <p class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''}</p>
     <div class="works-grid">
       ${a.works.map(w => `<div class="work-item">
-        <div class="work-plate"><img src="../../images/placeholder.png" alt="${esc(w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : ''))}"></div>
+        <div class="work-plate"><img src="../../images/${w.i ? 'works/' + w.i : 'placeholder.png'}" alt="${esc(w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : ''))}"></div>
         <p class="work-cap"><em>${esc(w.t)}</em>, ${esc(w.d)} &middot; ${esc(w.s)}</p>
         <a class="work-inquire" href="#" data-t="${esc(w.t)}" data-d="${esc(w.d)}" data-s="${esc(w.s)}">Demander la fiche →</a>
       </div>`).join('\n      ')}
@@ -123,11 +124,11 @@ ${works}${cv}
 /* email assembled at runtime so it stays out of the static source */
 (function(){
   var addr='contact'+'@'+'kramer'+String.fromCharCode(46)+'paris', ref=${JSON.stringify(ref)};
-  document.querySelectorAll(‘.work-inquire’).forEach(function(el){
-    var t=el.getAttribute(‘data-t’), d=el.getAttribute(‘data-d’), s=el.getAttribute(‘data-s’);
-    var subj=encodeURIComponent(‘Demande — ‘+ref+’ · ‘+t);
-    var body=encodeURIComponent(‘Bonjour,\\n\\nJe souhaite recevoir la fiche de l’œuvre suivante :\\n— ‘+t+’ (‘+d+’), ‘+s+’\\nRéf. ‘+ref+’\\n\\n’);
-    el.setAttribute(‘href’,’mailto:’+addr+’?subject=’+subj+’&body=’+body);
+  document.querySelectorAll('.work-inquire').forEach(function(el){
+    var t=el.getAttribute('data-t'), d=el.getAttribute('data-d'), s=el.getAttribute('data-s');
+    var subj=encodeURIComponent('Demande — '+ref+' · '+t);
+    var body=encodeURIComponent('Bonjour,\\n\\nJe souhaite recevoir la fiche de l\\'œuvre suivante :\\n— '+t+' ('+d+'), '+s+'\\nRéf. '+ref+'\\n\\n');
+    el.setAttribute('href','mailto:'+addr+'?subject='+subj+'&body='+body);
   });
 })();
 
