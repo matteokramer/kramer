@@ -515,7 +515,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
         </div>
       </div>
 
-      <div style="padding:0 10px 12px">
+      <div id="form-rsvp" style="padding:0 10px 12px">
         <p class="s-head" style="padding-left:0;margin-bottom:12px">Formulaire de contact</p>
         <form class="rsvp" action="https://formspree.io/f/xzdqvpbg" method="POST" onsubmit="return rsvpSubmit(event)">
           <!-- Honeypot: invisible to humans, silently traps bots. Formspree drops any
@@ -713,7 +713,8 @@ function goTo(id){
   sc.scrollTo({top,behavior:'smooth'});
   const map={
     'section-news':'cb-news','section-artistes':'cb-artistes',
-    'section-exposition':'cb-exposition','section-acces':'cb-acces'
+    'section-exposition':'cb-exposition','section-acces':'cb-acces',
+    'form-rsvp':'cb-acces'
   };
   document.querySelectorAll('.cb-box').forEach(b=>b.classList.remove('on'));
   const cid=map[id];if(cid){const c=document.getElementById(cid);if(c)c.classList.add('on');}
@@ -930,6 +931,8 @@ renderArtistList();
 tick();
 if(window.location.hash==='#mentions-legales')openLegal();
 if(window.location.hash==='#section-acces')goTo('section-acces');
+/* /rsvp landing — the redirect page sends visitors here to land on the form */
+if(window.location.hash==='#form-rsvp')goTo('form-rsvp');
 </script>
 </body>
 </html>
