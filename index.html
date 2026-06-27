@@ -20,7 +20,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Kramer">
 <meta name="twitter:image" content="https://kramer.paris/images/kramer_wordmark.png">
-<!-- Structured data: gallery + exhibition + vernissage. Artist Persons carry name only
+<!-- Structured data: gallery + exhibition. Artist Persons carry name only
      (no fabricated birth data). Email omitted to preserve the JS obfuscation. -->
 <script type="application/ld+json">
 {
@@ -33,7 +33,7 @@
       "url":"https://kramer.paris/",
       "image":"https://kramer.paris/images/kramer_wordmark.png",
       "address":{"@type":"PostalAddress","streetAddress":"132 Bd de Magenta","postalCode":"75010","addressLocality":"Paris","addressCountry":"FR"},
-      "openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"12:00","closes":"19:00"}],
+      "openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":"Saturday","opens":"12:00","closes":"18:00"}],
       "knowsAbout":["art contemporain","galerie d'appartement","art et technologie","art et nature","diaspora","altérité","classe","peinture","sculpture","photographie","dessin","gravure","installation","collage","sérigraphie","art vidéo"],
       "sameAs":["https://www.instagram.com/galeriekramer/"]
     },
@@ -60,21 +60,6 @@
         {"@type":"Person","name":"Signe Ralkov"},
         {"@type":"Person","name":"Tekla Kighuradze"}
       ]
-    },
-    {
-      "@type":"Event",
-      "@id":"https://kramer.paris/#vernissage",
-      "name":"Vernissage — La Bride",
-      "startDate":"2026-06-25T17:00:00+02:00",
-      "endDate":"2026-06-25T21:00:00+02:00",
-      "eventStatus":"https://schema.org/EventScheduled",
-      "eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode",
-      "isAccessibleForFree":true,
-      "image":"https://kramer.paris/images/kramer_wordmark.png",
-      "location":{"@id":"https://kramer.paris/#gallery"},
-      "organizer":{"@id":"https://kramer.paris/#gallery"},
-      "superEvent":{"@id":"https://kramer.paris/#la-bride"},
-      "description":"Vernissage de l'exposition La Bride. Sur présentation au registre (RSVP)."
     }
   ]
 }
@@ -266,7 +251,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 }
 .exh-dates{font-size:9px;letter-spacing:.03em;margin-bottom:16px}
 
-/* "Vernissage" status — condensed Acumin bold, large display */
+/* Actualité status tag (e.g. "Cycle de projections") — condensed Acumin bold, large display */
 .tag-encours{
   font-family:var(--ec);font-weight:700;font-size:clamp(28px,4.5vw,48px);
   letter-spacing:0;margin-right:0;display:block;margin-bottom:8px;line-height:.9;
@@ -438,11 +423,10 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
     <div class="section" id="section-news" style="padding-top:20px">
       <p class="s-head">Actualité</p>
       <div class="news-block">
-        <p class="tag-encours">Vernissage</p>
-        <p class="ac-big"><em>La Bride</em> — 25 juin 2026, 17h–21h</p>
-        <p style="font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:4px">132 Bd de Magenta · 75010 Paris</p>
-        <p style="font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:2px">RSVP, s'il vous plaît</p>
-        <button class="btn" onclick="downloadIcal()" style="margin-top:12px">Ajouter au calendrier</button>
+        <p class="tag-encours">Cycle de projections</p>
+        <p class="ac-big"><em>Bewebtbild</em></p>
+        <p style="font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:4px">Première projection · samedi prochain</p>
+        <p style="font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:2px">Informations à suivre</p>
       </div>
     </div>
 
@@ -472,14 +456,17 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
         <p class="exh-ref">exposition en cours</p>
         <h2 class="exh-title">La Bride</h2>
         <p class="exh-dates">25 juin – 1er août 2026 · 132 Bd de Magenta, Paris</p>
-        <!-- Exhibition prose hidden for the moment (placeholder lorem ipsum — Matteo writes the
-             real text). To restore, delete this comment wrapper around the .prose block. -->
-        <!--
         <div class="prose">
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <p>The trigger for this exhibition is, essentially, that my brother's favourite horse was recently processed into salami. Rest in peace, Brown Beauty. The second, and real, reason is that Gustav and Leon from bendingwords are letting me use their office. Thank you.</p>
+          <p>As for the title « La Bride » can be read in both English and French. The two meanings have, at first, nothing to do with one another, and the observation is probably just a coincidence. And yet, from the tension, one can draw out shared questions of control, power, and desire. Should these elements surface in the works, anyone who wishes is welcome to follow them.</p>
+          <p>Let me borrow a few pages from Erich Fromm's « To Have or To Be? » to understand this better. In it, two poems are set against one another, each reflecting a different stance toward possessing knowledge.</p>
+          <p>First, one by the nineteenth-century English poet Tennyson:<br>Flower in the crannied wall,<br>I pluck you out of the crannies,<br>I hold you here, root and all, in my hand,<br>Little flower—but if I could understand<br>What you are, root and all, and all in all,<br>I should know what God and man is.</p>
+          <p>Then Basho's haiku, which in translation runs more or less like this :<br>When I look carefully<br>I see the nazuna blooming<br>By the hedge!</p>
+          <p>(nazuna is a flower)</p>
+          <p>Rather than examining the works gathered here for common ground and thereby uprooting the flower, and ultimately killing it — you — are — warmly — invited — to — look — carefully.</p>
+          <p>Considering that the practices gathered here come from Berlin, Copenhagen, Zurich, Winterthur, Tbilisi, Vienna, Helsinki, and Paris, it soon becomes clear that looking carefully is the only way to approach the works.</p>
+          <p>But yes, the exhibitions is also about horses.</p>
         </div>
-        -->
       </div>
       <!-- Installation views hidden 2026-06-17: only placeholder images for now (no install shots
            until the show opens 25 June). To restore, delete this comment wrapper around the grid. -->
@@ -505,7 +492,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
         </div>
         <div>
           <p class="ac-lbl">Horaires</p>
-          <p style="font-size:13px;line-height:20px">Samedi · 12h–19h<br>Et sur rendez-vous</p>
+          <p style="font-size:13px;line-height:20px">Samedi · 12h–18h<br>Et sur rendez-vous</p>
         </div>
         <div>
           <p class="ac-lbl">Contact</p>
@@ -529,7 +516,6 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
           <div class="ff"><label>Adresse e-mail</label><input type="email" name="email" required></div>
           <div class="ff"><label>Affiliation (facultatif)</label><input type="text" name="affiliation"></div>
           <div class="ff">
-            <label class="fcheck"><input type="checkbox" name="vernissage" value="oui"> Vernissage — 25 juin, 17h–21h</label>
             <label class="fcheck"><input type="checkbox" name="rendez-vous" value="oui"> Demander un rendez-vous</label>
             <label class="fcheck"><input type="checkbox" name="newsletter" value="oui"> S'inscrire à la newsletter</label>
           </div>
@@ -581,7 +567,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
     <p>L'ensemble des contenus de ce site (textes, images des œuvres, identité visuelle) est protégé par le droit d'auteur. Les œuvres reproduites demeurent la propriété de leurs auteurs. Toute reproduction, représentation ou diffusion, totale ou partielle, est interdite sans autorisation préalable.</p>
 
     <p class="lb-cv-section">Données personnelles</p>
-    <p>Le responsable de traitement est KRAMER (Matteo Kramer). Les seules données personnelles collectées le sont via le formulaire d'accès (nom, adresse e-mail et, le cas échéant, affiliation et message). Elles sont traitées sur la base de votre consentement, à seule fin de répondre à votre demande et de gérer les inscriptions au vernissage. Elles ne sont ni vendues, ni utilisées à des fins publicitaires, ni communiquées à des tiers autres que les prestataires techniques mentionnés ci-dessous. Elles sont conservées le temps nécessaire au traitement de votre demande, puis archivées ou supprimées dans un délai maximal de trois ans à compter du dernier contact.</p>
+    <p>Le responsable de traitement est KRAMER (Matteo Kramer). Les seules données personnelles collectées le sont via le formulaire d'accès (nom, adresse e-mail et, le cas échéant, affiliation et message). Elles sont traitées sur la base de votre consentement, à seule fin de répondre à votre demande et de gérer les rendez-vous et inscriptions. Elles ne sont ni vendues, ni utilisées à des fins publicitaires, ni communiquées à des tiers autres que les prestataires techniques mentionnés ci-dessous. Elles sont conservées le temps nécessaire au traitement de votre demande, puis archivées ou supprimées dans un délai maximal de trois ans à compter du dernier contact.</p>
     <p>Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement, d'opposition, de limitation et de portabilité de vos données, ainsi que du droit de retirer votre consentement à tout moment, en écrivant à <span id="legal-email-2"></span>. Vous pouvez également introduire une réclamation auprès de la CNIL (www.cnil.fr).</p>
 
     <p class="lb-cv-section">Cookies et traceurs</p>
@@ -879,35 +865,6 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&document.getElementById('legal').classList.contains('open'))closeLegal();
 });
 
-/* ================================================================
-   iCAL DOWNLOAD
-================================================================ */
-function downloadIcal(){
-  const lines=[
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Kramer//kramer.paris//FR',
-    'CALSCALE:GREGORIAN',
-    'BEGIN:VEVENT',
-    'DTSTART;TZID=Europe/Paris:20260625T170000',
-    'DTEND;TZID=Europe/Paris:20260625T210000',
-    'SUMMARY:Vernissage \u2014 La Bride \u00b7 Kramer',
-    'LOCATION:132 Bd de Magenta\\\, 75010 Paris',
-    'DESCRIPTION:Vernissage de l\u2019exposition La Bride \u00b7 Galerie Kramer',
-    'URL:https://kramer.paris/',
-    'END:VEVENT',
-    'END:VCALENDAR'
-  ];
-  const ics=lines.join('\r\n');
-  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='vernissage-la-bride.ics';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
-}
 /* ================================================================
    EMAIL + ADDRESS OBFUSCATION — assembled in JS so crawlers can't harvest
 ================================================================ */
