@@ -67,7 +67,7 @@ function page(a, i) {
   ].join('\n      ');
 
   const works = a.works.length ? `
-    <p class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''}</p>
+    <h2 class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''}</h2>
     <div class="works-grid">
       ${a.works.map(w => {
         const imgs = workImgs(w);
@@ -83,8 +83,14 @@ function page(a, i) {
       }).join('\n      ')}
     </div>` : '';
 
+  /* bio: optional data field (Matteo-written, per-artist) — paragraphs split on blank lines.
+     Absent field keeps the empty placeholder; never generated. */
+  const bio = a.bio
+    ? `<div class="a-bio">${a.bio.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join('')}</div>`
+    : `<div class="a-bio"><!-- bio à venir --></div>`;
+
   const cvBlock = (label, rows) => rows.length ? `
-    <p class="cv-section">${label}</p>
+    <h2 class="cv-section">${label}</h2>
     ${rows.map(r => `<div class="cv-row"><span class="cv-yr">${esc(r[0])}</span><span>${esc(r[1])}</span></div>`).join('\n    ')}` : '';
   /* extra: optional public-record sections from the fiche (education, awards, publications…)
      — each {l:'Label', rows:[[year,text],…]} renders like the solo/group blocks */
@@ -116,18 +122,20 @@ ${jsonld}
 <body>
 <div class="chrome ct"><a class="cnav c9" href="../../"><span class="hb-arrow" aria-hidden="true">←</span> Retour</a><div class="c9i">Entrée ${entry}</div></div>
 
-<div class="wrap">
+<main class="wrap">
   <p class="crumb"><a href="../../#section-artistes">Registre des artistes</a> › ${esc(a.name)}</p>
 
+  <article>
   <h1 class="a-name">${esc(a.name)}</h1>
   <p class="a-ref">Entrée ${entry} · La Bride</p>
   <div class="a-fields">
       ${fields}
   </div>
 
-  <div class="a-bio"><!-- bio à venir --></div>
+  ${bio}
 ${works}${cv}
-</div>
+  </article>
+</main>
 
 <div class="chrome cb"><div class="c9">© Kramer 2026</div><a href="../../#section-acces" class="cnav c9">Contact</a></div>
 
