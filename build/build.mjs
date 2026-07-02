@@ -16,8 +16,27 @@ const html = readFileSync(join(WEB, 'index.html'), 'utf8');
 const ARTISTS = eval(html.match(/const ARTISTS=(\[[\s\S]*?\]);/)[1]);
 /* Cloudflare Web Analytics token — single-sourced from index.html (const CF_TOKEN='…') */
 const CF_TOKEN = (html.match(/const CF_TOKEN='([^']*)'/) || [])[1] || '';
+/* Carousel hero map — single-sourced from index.html (const ARTIST_IMG={…}); used as Person image */
+const ARTIST_IMG = eval('(' + ((html.match(/const ARTIST_IMG=(\{[\s\S]*?\});/) || [])[1] || '{}') + ')');
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/* Mechanical name variants for entity disambiguation (people search with and
+   without diacritics). Derived only: diacritics stripped + German umlaut
+   transliteration + any hand-supplied a.alt spellings. Never invented. */
+const stripDiacritics = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const umlauts = s => s.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/Ä/g, 'Ae').replace(/Ö/g, 'Oe').replace(/Ü/g, 'Ue').replace(/ß/g, 'ss');
+const nameVariants = a => [...new Set([stripDiacritics(a.name), umlauts(a.name), ...(a.alt || [])])].filter(v => v && v !== a.name);
+
+/* One gallery entity, embedded in every record page's graph so Person.affiliation
+   resolves without a cross-page fetch. Mirrors the home-page ArtGallery node. */
+const GALLERY_ID = `${SITE}/#gallery`;
+const GALLERY = {
+  '@type': 'ArtGallery', '@id': GALLERY_ID, name: 'Kramer', url: `${SITE}/`,
+  image: `${SITE}/images/kramer_wordmark.png`,
+  address: { '@type': 'PostalAddress', streetAddress: '132 Bd de Magenta', postalCode: '75010', addressLocality: 'Paris', addressCountry: 'FR' },
+  sameAs: ['https://www.instagram.com/galeriekramer/'],
+};
 
 function page(a, i) {
   const entry = String(i + 1).padStart(3, '0');
@@ -36,28 +55,52 @@ function page(a, i) {
   const birthDate = yearMatch ? yearMatch[0] : '';
   const birthPlace = (a.born || '').replace(/\b(?:18|19|20)\d{2}\b/, '').replace(/^[\s,]+|[\s,]+$/g, '').trim();
 
-  /* JSON-LD graph: enriched Person + a VisualArtwork per consigned work */
+  /* JSON-LD graph: WebPage (mainEntity → Person) + enriched Person + the gallery
+     + a VisualArtwork per consigned work */
   const personId = `${url}#person`;
+  const titleTxt = `${a.name}${titleMedium} · La Bride · Kramer, Paris`;
+  const descTxt = `${a.name}${descMedium}${descBased} — exposition « La Bride » (KR/01), registre des artistes. Kramer, galerie d'art contemporain, Paris 10e.`;
+  const variants = nameVariants(a);
+  const heroImg = ARTIST_IMG[a.slug] ? `${SITE}/${ARTIST_IMG[a.slug]}`
+    : (a.works[0] && a.works[0].i ? `${SITE}/images/works/${a.works[0].i}` : '');
+  const webpage = {
+    '@type': 'WebPage', '@id': url, url, name: titleTxt, description: descTxt,
+    inLanguage: 'fr', mainEntity: { '@id': personId },
+    isPartOf: { '@type': 'WebSite', name: 'Kramer', url: `${SITE}/` },
+  };
   const person = {
-    '@type': 'Person', '@id': personId, name: a.name, url, jobTitle: 'Artiste',
+    '@type': 'Person', '@id': personId, name: a.name,
+    ...(variants.length ? { alternateName: variants.length === 1 ? variants[0] : variants } : {}),
+    url, jobTitle: ['Artiste', 'Visual Artist'],
+    ...(heroImg ? { image: heroImg } : {}),
     ...(mediumList.length ? { knowsAbout: mediumList } : {}),
     ...(birthDate ? { birthDate } : {}),
     ...(birthPlace ? { birthPlace: { '@type': 'Place', name: birthPlace } } : {}),
-    memberOf: { '@type': 'ArtGallery', name: 'Kramer', url: `${SITE}/` },
+    ...(a.nat ? { nationality: { '@type': 'Country', name: a.nat } } : {}),
+    ...(a.based ? { homeLocation: { '@type': 'Place', name: a.based } } : {}),
+    affiliation: { '@id': GALLERY_ID },
     ...(a.links && a.links.length ? { sameAs: a.links } : {}),
   };
   const workImgs = w => [w.i, ...(w.views || [])].filter(Boolean);
   const artworks = a.works.map(w => {
     const imgs = workImgs(w);
+    /* "130 × 97 cm" | "30 × 40 × 5 cm" → height × width (× depth), gallery convention;
+       non-numeric sizes ("dimensions variables") are skipped */
+    const dims = (w.s || '').match(/^([\d.]+)\s*×\s*([\d.]+)(?:\s*×\s*([\d.]+))?\s*cm$/);
     return {
       '@type': 'VisualArtwork', name: w.t, creator: { '@id': personId }, url,
       ...(w.d ? { dateCreated: String(w.d) } : {}),
       ...(primaryMedium ? { artform: primaryMedium } : {}),
       ...(w.m ? { artMedium: w.m } : {}),
+      ...(dims ? {
+        height: { '@type': 'Distance', name: `${dims[1]} cm` },
+        width: { '@type': 'Distance', name: `${dims[2]} cm` },
+        ...(dims[3] ? { depth: { '@type': 'Distance', name: `${dims[3]} cm` } } : {}),
+      } : {}),
       ...(imgs.length ? { image: imgs.length === 1 ? `${SITE}/images/works/${imgs[0]}` : imgs.map(f => `${SITE}/images/works/${f}`) } : {}),
     };
   });
-  const jsonld = JSON.stringify({ '@context': 'https://schema.org', '@graph': [person, ...artworks] });
+  const jsonld = JSON.stringify({ '@context': 'https://schema.org', '@graph': [webpage, person, GALLERY, ...artworks] });
 
   const bornLbl = a.g === 'f' ? 'Née' : a.g === 'm' ? 'Né' : 'Né(e)';
   const fields = [
@@ -104,8 +147,8 @@ function page(a, i) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${esc(a.name + titleMedium)} · La Bride · Kramer, Paris</title>
-<meta name="description" content="${esc(a.name + descMedium + descBased)} — exposition « La Bride » (KR/01), registre des artistes. Kramer, galerie d'art contemporain, Paris 10e.">
+<title>${esc(titleTxt)}</title>
+<meta name="description" content="${esc(descTxt)}">
 <link rel="canonical" href="${url}">
 <link rel="icon" href="../../images/edelweiss.svg">
 <meta property="og:type" content="profile">
