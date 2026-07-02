@@ -498,6 +498,8 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
         <div>
           <p class="ac-lbl">Contact</p>
           <p style="font-size:13px;line-height:20px" id="contact-email-p"></p>
+          <p class="ac-lbl" style="margin-top:8px">Téléphone</p>
+          <p style="font-size:13px;line-height:20px" id="contact-phone"></p>
           <p class="ac-lbl" style="margin-top:8px">Instagram</p>
           <p style="font-size:13px;line-height:20px"><a href="https://www.instagram.com/galeriekramer/" target="_blank" rel="noopener" class="addr-link">@galeriekramer</a></p>
         </div>
@@ -879,6 +881,15 @@ document.addEventListener('keydown',e=>{
   const s=document.getElementById('contact-email-inline');
   if(s)s.innerHTML=link;
   ['legal-email','legal-email-2'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=link;});
+})();
+
+(function(){
+  /* Phone assembled from parts so no dialable pattern sits in the static source */
+  const parts=['+33','7','59','35','95','82'];
+  const disp=parts.join(String.fromCharCode(160)); /* non-breaking spaces */
+  const tel=parts.join('');
+  const el=document.getElementById('contact-phone');
+  if(el)el.innerHTML='<a href="tel:'+tel+'" style="color:inherit">'+disp+'</a>';
 })();
 
 (function(){
