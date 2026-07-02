@@ -46,13 +46,17 @@ function page(a, i) {
     memberOf: { '@type': 'ArtGallery', name: 'Kramer', url: `${SITE}/` },
     ...(a.links && a.links.length ? { sameAs: a.links } : {}),
   };
-  const artworks = a.works.map(w => ({
-    '@type': 'VisualArtwork', name: w.t, creator: { '@id': personId }, url,
-    ...(w.d ? { dateCreated: String(w.d) } : {}),
-    ...(primaryMedium ? { artform: primaryMedium } : {}),
-    ...(w.m ? { artMedium: w.m } : {}),
-    ...(w.i ? { image: `${SITE}/images/works/${w.i}` } : {}),
-  }));
+  const workImgs = w => [w.i, ...(w.views || [])].filter(Boolean);
+  const artworks = a.works.map(w => {
+    const imgs = workImgs(w);
+    return {
+      '@type': 'VisualArtwork', name: w.t, creator: { '@id': personId }, url,
+      ...(w.d ? { dateCreated: String(w.d) } : {}),
+      ...(primaryMedium ? { artform: primaryMedium } : {}),
+      ...(w.m ? { artMedium: w.m } : {}),
+      ...(imgs.length ? { image: imgs.length === 1 ? `${SITE}/images/works/${imgs[0]}` : imgs.map(f => `${SITE}/images/works/${f}`) } : {}),
+    };
+  });
   const jsonld = JSON.stringify({ '@context': 'https://schema.org', '@graph': [person, ...artworks] });
 
   const bornLbl = a.g === 'f' ? 'Née' : a.g === 'm' ? 'Né' : 'Né(e)';
@@ -65,11 +69,18 @@ function page(a, i) {
   const works = a.works.length ? `
     <p class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''}</p>
     <div class="works-grid">
-      ${a.works.map(w => `<div class="work-item">
-        <div class="work-plate"><img src="../../images/${w.i ? 'works/' + w.i : 'placeholder.png'}" alt="${esc(w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : ''))}"></div>
+      ${a.works.map(w => {
+        const imgs = workImgs(w);
+        const baseAlt = w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : '');
+        const plates = imgs.length
+          ? imgs.map((f, k) => `<div class="work-plate"><img src="../../images/works/${f}" alt="${esc(baseAlt + (imgs.length > 1 ? ` (vue ${k + 1}/${imgs.length})` : ''))}"></div>`).join('\n        ')
+          : `<div class="work-plate"><img src="../../images/placeholder.png" alt="${esc(baseAlt)}"></div>`;
+        return `<div class="work-item">
+        ${plates}
         <p class="work-cap"><em>${esc(w.t)}</em>, ${esc(w.d)} &middot; ${esc(w.s)}</p>
         <a class="work-inquire" href="#" data-t="${esc(w.t)}" data-d="${esc(w.d)}" data-s="${esc(w.s)}">Demander la fiche →</a>
-      </div>`).join('\n      ')}
+      </div>`;
+      }).join('\n      ')}
     </div>` : '';
 
   const cvBlock = (label, rows) => rows.length ? `
