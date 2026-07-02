@@ -59,7 +59,7 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .a-bio p{margin-bottom:.75em}
 
 /* Section labels */
-.s-head{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55);padding:0 10px 8px;border-top:1px solid #222;padding-top:8px;margin-top:24px}
+.s-head{font-size:9px;font-weight:400;letter-spacing:.03em;color:rgba(0,0,0,.55);padding:0 10px 8px;border-top:1px solid #222;padding-top:8px;margin-top:24px}
 
 /* Works — one large plate per row, centered caption below */
 .works-grid{display:flex;flex-direction:column;padding:0 0 8px}
@@ -74,6 +74,6 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 
 /* CV */
 .cv{padding:0 10px 24px}
-.cv-section{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55);margin:12px 0 4px}
+.cv-section{font-size:9px;font-weight:400;letter-spacing:.03em;color:rgba(0,0,0,.55);margin:12px 0 4px}
 .cv-row{display:flex;gap:12px;font-size:13px;line-height:20px}
 .cv-yr{font-size:9px;letter-spacing:.03em;min-width:64px;line-height:20px;color:rgba(0,0,0,.55)} /* wide enough for year ranges (2004–2012) so columns stay aligned */
