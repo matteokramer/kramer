@@ -22,11 +22,16 @@ const ARTIST_IMG = eval('(' + ((html.match(/const ARTIST_IMG=(\{[\s\S]*?\});/) |
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 /* Mechanical name variants for entity disambiguation (people search with and
-   without diacritics). Derived only: diacritics stripped + German umlaut
-   transliteration + any hand-supplied a.alt spellings. Never invented. */
+   without diacritics). Derived only: diacritics stripped + German/Nordic
+   transliteration, applied to the display name AND any hand-supplied a.alt
+   spellings (real variants only — e.g. a legal name). Never invented. */
 const stripDiacritics = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-const umlauts = s => s.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/Ä/g, 'Ae').replace(/Ö/g, 'Oe').replace(/Ü/g, 'Ue').replace(/ß/g, 'ss');
-const nameVariants = a => [...new Set([stripDiacritics(a.name), umlauts(a.name), ...(a.alt || [])])].filter(v => v && v !== a.name);
+const translit = s => s.replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/Ä/g, 'Ae').replace(/Ö/g, 'Oe').replace(/Ü/g, 'Ue').replace(/ß/g, 'ss')
+  .replace(/ø/g, 'o').replace(/Ø/g, 'O').replace(/æ/g, 'ae').replace(/Æ/g, 'Ae');
+const nameVariants = a => {
+  const bases = [a.name, ...(a.alt || [])];
+  return [...new Set(bases.flatMap(n => [n, stripDiacritics(n), translit(n)]))].filter(v => v && v !== a.name);
+};
 
 /* One gallery entity, embedded in every record page's graph so Person.affiliation
    resolves without a cross-page fetch. Mirrors the home-page ArtGallery node. */
