@@ -109,6 +109,9 @@ function page(a, i) {
     `<div class="a-field"><span class="a-lbl">Au registre</span><span class="a-val">La Bride · KR/01</span></div>`,
   ].join('\n      ');
 
+  /* first plate is the likely LCP → eager; everything after lazy-loads */
+  let plateN = 0;
+  const plateAttrs = () => plateN++ === 0 ? ' fetchpriority="high"' : ' loading="lazy" decoding="async"';
   const works = a.works.length ? `
     <h2 class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''}</h2>
     <div class="works-grid">
@@ -116,8 +119,8 @@ function page(a, i) {
         const imgs = workImgs(w);
         const baseAlt = w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : '');
         const plates = imgs.length
-          ? imgs.map((f, k) => `<div class="work-plate"><img src="../../images/works/${f}" alt="${esc(baseAlt + (imgs.length > 1 ? ` (vue ${k + 1}/${imgs.length})` : ''))}"></div>`).join('\n        ')
-          : `<div class="work-plate"><img src="../../images/placeholder.png" alt="${esc(baseAlt)}"></div>`;
+          ? imgs.map((f, k) => `<div class="work-plate"><img src="../../images/works/${f}" alt="${esc(baseAlt + (imgs.length > 1 ? ` (vue ${k + 1}/${imgs.length})` : ''))}"${plateAttrs()}></div>`).join('\n        ')
+          : `<div class="work-plate"><img src="../../images/placeholder.png" alt="${esc(baseAlt)}"${plateAttrs()}></div>`;
         return `<div class="work-item">
         ${plates}
         <p class="work-cap"><em>${esc(w.t)}</em>, ${esc(w.d)} &middot; ${esc(w.s)}</p>
@@ -155,7 +158,12 @@ function page(a, i) {
 <meta property="og:title" content="${esc(a.name)} — Kramer">
 <meta property="og:description" content="${esc(ogDesc)}">
 <meta property="og:url" content="${url}">
-<meta property="og:image" content="${SITE}/images/kramer_wordmark.png">
+<meta property="og:image" content="${heroImg || `${SITE}/images/kramer_wordmark.png`}">
+<meta property="og:image:alt" content="${esc(heroImg ? a.name + (a.works[0] ? ' — ' + a.works[0].t : '') : 'Kramer')}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(a.name)} — Kramer">
+<meta name="twitter:description" content="${esc(ogDesc)}">
+<meta name="twitter:image" content="${heroImg || `${SITE}/images/kramer_wordmark.png`}">
 <script type="application/ld+json">
 ${jsonld}
 </script>
@@ -210,11 +218,12 @@ for (let i = 0; i < ARTISTS.length; i++) {
   count++;
 }
 
-/* sitemap: home + one entry per artist page */
+/* sitemap: home + one entry per artist page; lastmod = build date */
+const today = new Date().toISOString().slice(0, 10);
 const urls = [`${SITE}/`, ...ARTISTS.map(a => `${SITE}/artistes/${a.slug}/`)];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(u => `  <url><loc>${u}</loc><lastmod>2026-06-09</lastmod></url>`).join('\n')}
+${urls.map(u => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join('\n')}
 </urlset>
 `;
 writeFileSync(join(WEB, 'sitemap.xml'), sitemap);
