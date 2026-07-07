@@ -252,6 +252,13 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 }
 .exh-dates{font-size:9px;letter-spacing:.03em;margin-bottom:16px}
 
+/* Prose language toggle — a registry field ("Texte · FR / EN"), not a widget.
+   Active language is plain ink and inert; the other is a classic-blue link. */
+.lang-toggle{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.6);margin-bottom:12px}
+.lang-toggle a{color:var(--link);text-decoration:none}
+.lang-toggle a:hover{text-decoration:underline}
+.lang-toggle a.on{color:#000;pointer-events:none}
+
 /* Actualité status tag (e.g. "Cycle de projections") — condensed Acumin bold, large display */
 .tag-encours{
   font-family:var(--ec);font-weight:700;font-size:clamp(28px,4.5vw,48px);
@@ -457,7 +464,19 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
         <p class="exh-ref">exposition en cours</p>
         <h2 class="exh-title">La Bride</h2>
         <p class="exh-dates">25 juin – 1er août 2026 · 132 Bd de Magenta, Paris</p>
-        <div class="prose">
+        <p class="lang-toggle">Texte · <a href="#" id="lt-fr" class="on" onclick="setProseLang('fr');return false">FR</a> / <a href="#" id="lt-en" onclick="setProseLang('en');return false">EN — original</a></p>
+        <div class="prose" id="prose-fr" lang="fr">
+          <p>Le déclencheur de cette exposition, c'est, pour l'essentiel, que le cheval préféré de mon frère a récemment été transformé en salami. Repose en paix, Brown Beauty. La seconde raison, la vraie, c'est que Gustav et Leon, de bendingwords, me prêtent leur bureau. Merci.</p>
+          <p>Quant au titre : « La Bride » peut se lire aussi bien en anglais qu'en français. Les deux sens n'ont, au premier abord, rien à voir l'un avec l'autre, et l'observation n'est probablement qu'une coïncidence. Et pourtant, de cette tension, on peut tirer des questions communes de contrôle, de pouvoir et de désir. Si ces éléments venaient à affleurer dans les œuvres, libre à qui le souhaite de les suivre.</p>
+          <p>Permettez-moi d'emprunter quelques pages à « Avoir ou être ? » d'Erich Fromm pour mieux comprendre tout cela. Deux poèmes y sont mis en regard, chacun reflétant une attitude différente face à la possession du savoir.</p>
+          <p>D'abord, un poème du poète anglais du XIX<sup>e</sup> siècle, Tennyson :<br>Fleur dans les fissures du mur,<br>Je t'arrache aux fissures,<br>Je te tiens là, racine et tout, dans ma main,<br>Petite fleur — mais si je pouvais comprendre<br>Ce que tu es, racine et tout, et tout en tout,<br>Je saurais ce qu'est Dieu, et ce qu'est l'homme.</p>
+          <p>Puis le haïku de Bashō, qui, en traduction, donne à peu près ceci :<br>Quand je regarde attentivement,<br>Je vois la nazuna en fleur<br>Près de la haie !</p>
+          <p>(la nazuna est une fleur)</p>
+          <p>Plutôt que d'examiner les œuvres réunies ici en quête d'un terrain commun — et, ce faisant, de déraciner la fleur pour finir par la tuer — vous — êtes — chaleureusement — invités — à — regarder — attentivement.</p>
+          <p>Si l'on considère que les pratiques réunies ici viennent de Berlin, Copenhague, Zurich, Winterthour, Tbilissi, Vienne, Helsinki et Paris, il apparaît vite que regarder attentivement est la seule manière d'aborder les œuvres.</p>
+          <p>Mais oui, l'exposition parle aussi de chevaux.</p>
+        </div>
+        <div class="prose" id="prose-en" lang="en" hidden>
           <p>The trigger for this exhibition is, essentially, that my brother's favourite horse was recently processed into salami. Rest in peace, Brown Beauty. The second, and real, reason is that Gustav and Leon from bendingwords are letting me use their office. Thank you.</p>
           <p>As for the title « La Bride » can be read in both English and French. The two meanings have, at first, nothing to do with one another, and the observation is probably just a coincidence. And yet, from the tension, one can draw out shared questions of control, power, and desire. Should these elements surface in the works, anyone who wishes is welcome to follow them.</p>
           <p>Let me borrow a few pages from Erich Fromm's « To Have or To Be? » to understand this better. In it, two poems are set against one another, each reflecting a different stance toward possessing knowledge.</p>
@@ -713,6 +732,17 @@ function goTo(id){
   };
   document.querySelectorAll('.cb-box').forEach(b=>b.classList.remove('on'));
   const cid=map[id];if(cid){const c=document.getElementById(cid);if(c)c.classList.add('on');}
+}
+
+/* ================================================================
+   EXPOSITION PROSE — FR / EN (original) toggle. Both texts live in the
+   HTML (crawlable); no persistence, per the no-tracking stance.
+================================================================ */
+function setProseLang(l){
+  document.getElementById('prose-fr').hidden=(l!=='fr');
+  document.getElementById('prose-en').hidden=(l!=='en');
+  document.getElementById('lt-fr').classList.toggle('on',l==='fr');
+  document.getElementById('lt-en').classList.toggle('on',l==='en');
 }
 
 /* ================================================================
