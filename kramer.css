@@ -70,7 +70,7 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .plate-credit{padding:0 10px;margin:-4px 0 8px;font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.45);text-align:center}
 /* caption hugs the photo above it (8px); the next photo in a multi-image work is
    pushed well clear so it's never ambiguous which caption belongs to which plate */
-.work-cap + .work-plate{margin-top:96px}
+.work-cap + .work-plate,.work-inquire + .work-plate{margin-top:96px}
 .work-cap{padding:0 10px;font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55);line-height:16px;text-align:center}
 .work-cap em{font-style:italic}
 .work-inquire{display:block;text-align:center;margin-top:4px;font-size:9px;letter-spacing:.03em;color:#000}
