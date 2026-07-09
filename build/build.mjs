@@ -86,7 +86,13 @@ function page(a, i) {
     affiliation: { '@id': GALLERY_ID },
     ...(a.links && a.links.length ? { sameAs: a.links } : {}),
   };
-  const workImgs = w => [w.i, ...(w.views || [])].filter(Boolean);
+  /* Each plate carries its own photo credit. `i` + string `views` inherit the work's `ph`;
+     an object view {f, ph} overrides it (e.g. Matteo's install shots hung under an artist-
+     credited reproduction). Returns [{f, ph}] in display order. */
+  const workImgs = w => [
+    ...(w.i ? [{ f: w.i, ph: w.ph || '' }] : []),
+    ...(w.views || []).map(v => typeof v === 'string' ? { f: v, ph: w.ph || '' } : { f: v.f, ph: v.ph || w.ph || '' }),
+  ];
   const artworks = a.works.map(w => {
     const imgs = workImgs(w);
     /* "130 × 97 cm" | "30 × 40 × 5 cm" → height × width (× depth), gallery convention;
@@ -102,7 +108,7 @@ function page(a, i) {
         width: { '@type': 'Distance', name: `${dims[2]} cm` },
         ...(dims[3] ? { depth: { '@type': 'Distance', name: `${dims[3]} cm` } } : {}),
       } : {}),
-      ...(imgs.length ? { image: imgs.length === 1 ? `${SITE}/images/works/${imgs[0]}` : imgs.map(f => `${SITE}/images/works/${f}`) } : {}),
+      ...(imgs.length ? { image: imgs.length === 1 ? `${SITE}/images/works/${imgs[0].f}` : imgs.map(im => `${SITE}/images/works/${im.f}`) } : {}),
     };
   });
   const jsonld = JSON.stringify({ '@context': 'https://schema.org', '@graph': [webpage, person, GALLERY, ...artworks] });
@@ -123,12 +129,31 @@ function page(a, i) {
       ${a.works.map(w => {
         const imgs = workImgs(w);
         const baseAlt = w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : '');
+        /* One credit across all plates → fold into the tombstone; differing credits
+           (e.g. an artist-shot reproduction + Matteo's install views) render per plate. */
+        const credits = [...new Set(imgs.map(im => im.ph).filter(Boolean))];
+        const mixed = credits.length > 1;
         const plates = imgs.length
-          ? imgs.map((f, k) => `<div class="work-plate"><img src="../../images/works/${f}" alt="${esc(baseAlt + (imgs.length > 1 ? ` (vue ${k + 1}/${imgs.length})` : ''))}"${plateAttrs()}></div>`).join('\n        ')
+          ? imgs.map((im, k) => {
+              const alt = esc(baseAlt + (imgs.length > 1 ? ` (vue ${k + 1}/${imgs.length})` : ''));
+              const cred = (mixed && im.ph) ? `\n        <p class="plate-credit">Photo : ${esc(im.ph)}</p>` : '';
+              return `<div class="work-plate"><img src="../../images/works/${im.f}" alt="${alt}"${plateAttrs()}></div>${cred}`;
+            }).join('\n        ')
           : `<div class="work-plate"><img src="../../images/placeholder.png" alt="${esc(baseAlt)}"${plateAttrs()}></div>`;
+        /* Tombstone: Artist, Title, year. Medium, dimensions. Courtesy …. Photo: … .
+           `c` overrides the courtesy line (empty string suppresses it); a single shared
+           photo credit is appended here, per-plate credits handle the mixed case. */
+        const courtesy = w.c === undefined ? 'Courtesy the artist' : w.c;
+        const spec = [w.m, w.s].filter(Boolean).join(', ');
+        const cap = [
+          `${esc(a.name)}, <em>${esc(w.t)}</em>${w.d ? ', ' + esc(String(w.d)) : ''}.`,
+          spec ? esc(spec) + '.' : '',
+          courtesy ? esc(courtesy) + '.' : '',
+          (!mixed && credits.length === 1) ? 'Photo : ' + esc(credits[0]) + '.' : '',
+        ].filter(Boolean).join(' ');
         return `<div class="work-item">
         ${plates}
-        <p class="work-cap"><em>${esc(w.t)}</em>, ${esc(w.d)} &middot; ${esc(w.s)}</p>
+        <p class="work-cap">${cap}</p>
         <a class="work-inquire" href="#" data-t="${esc(w.t)}" data-d="${esc(w.d)}" data-s="${esc(w.s)}">Demander la fiche →</a>
       </div>`;
       }).join('\n      ')}
