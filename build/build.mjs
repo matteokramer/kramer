@@ -128,14 +128,17 @@ function page(a, i) {
      gets the museum tombstone. Each caption names its own photographer, so a work
      photographed by several people reads correctly plate by plate. */
   const isInst = f => /inst-\d/i.test(f);
-  const courtesy = w => w.c === undefined ? 'Courtesy the artist' : w.c;
+  const courtesy = w => w.c === undefined ? "Courtoisie de l'artiste" : w.c;
+  /* Credit: the gallery's own shots (Matteo Kramer) are credited simply "Kramer";
+     any other photographer keeps the "Photo : Name" form. */
+  const credit = ph => !ph ? '' : (/^(matteo\s+)?kramer$/i.test(ph) ? 'Kramer' : 'Photo : ' + esc(ph));
   const workCap = (w, ph) => [
     `${esc(a.name)}, <em>${esc(w.t)}</em>${w.d ? ', ' + esc(String(w.d)) : ''}.`,
     [w.m, w.s].filter(Boolean).map(esc).join(', ') ? [w.m, w.s].filter(Boolean).map(esc).join(', ') + '.' : '',
     courtesy(w) ? esc(courtesy(w)) + '.' : '',
-    ph ? 'Photo : ' + esc(ph) + '.' : '',
+    credit(ph) ? credit(ph) + '.' : '',
   ].filter(Boolean).join(' ');
-  const instCap = ph => `«La Bride», vue d'installation, Galerie KRAMER, Paris, 2026.${ph ? ' Photo : ' + esc(ph) + '.' : ''}`;
+  const instCap = ph => `«La Bride», vue d'installation, KRAMER, Paris, 2026.${credit(ph) ? ' ' + credit(ph) + '.' : ''}`;
   const works = a.works.length ? `
     <h2 class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''}</h2>
     <div class="works-grid">
