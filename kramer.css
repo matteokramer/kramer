@@ -63,11 +63,14 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 
 /* Works — one large plate per row, centered caption below */
 .works-grid{display:flex;flex-direction:column;padding:0 0 8px}
-.work-item{width:100%;padding:0 0 48px}
+.work-item{width:100%;padding:0 0 96px}
 .work-plate{height:clamp(240px,60vh,600px);margin-bottom:8px;position:relative;overflow:hidden}
 .work-plate img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .work-plate-tag{position:absolute;top:4px;left:6px;font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55)}
 .plate-credit{padding:0 10px;margin:-4px 0 8px;font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.45);text-align:center}
+/* caption hugs the photo above it (8px); the next photo in a multi-image work is
+   pushed well clear so it's never ambiguous which caption belongs to which plate */
+.work-cap + .work-plate{margin-top:96px}
 .work-cap{padding:0 10px;font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55);line-height:16px;text-align:center}
 .work-cap em{font-style:italic}
 .work-inquire{display:block;text-align:center;margin-top:4px;font-size:9px;letter-spacing:.03em;color:#000}
