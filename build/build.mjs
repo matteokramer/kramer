@@ -128,36 +128,48 @@ function page(a, i) {
      gets the museum tombstone. Each caption names its own photographer, so a work
      photographed by several people reads correctly plate by plate. */
   const isInst = f => /inst-\d/i.test(f);
+  const isDet = f => /det-\d/i.test(f);
   const courtesy = w => w.c === undefined ? "Courtoisie de l'artiste" : w.c;
   /* Credit: the gallery's own shots (Matteo Kramer) are credited simply "Kramer";
      any other photographer keeps the "Photo : Name" form. */
   const credit = ph => !ph ? '' : (/^(matteo\s+)?kramer$/i.test(ph) ? 'Kramer' : 'Photo : ' + esc(ph));
-  const workCap = (w, ph) => [
-    `${esc(a.name)}, <em>${esc(w.t)}</em>${w.d ? ', ' + esc(String(w.d)) : ''}.`,
+  /* det = true for detail shots (filename …det-N…) → title gets a "(détail)" marker */
+  const workCap = (w, ph, det) => [
+    `${esc(a.name)}, <em>${esc(w.t)}</em>${det ? ' (détail)' : ''}${w.d ? ', ' + esc(String(w.d)) : ''}.`,
     [w.m, w.s].filter(Boolean).map(esc).join(', ') ? [w.m, w.s].filter(Boolean).map(esc).join(', ') + '.' : '',
     courtesy(w) ? esc(courtesy(w)) + '.' : '',
     credit(ph) ? credit(ph) + '.' : '',
   ].filter(Boolean).join(' ');
   const instCap = ph => `«La Bride», vue d'installation, KRAMER, Paris, 2026.${credit(ph) ? ' ' + credit(ph) + '.' : ''}`;
+  const inquire = w => `<a class="work-inquire" href="#" data-t="${esc(w.t)}" data-d="${esc(w.d)}" data-s="${esc(w.s)}">Demander la fiche →</a>`;
   const works = a.works.length ? `
     <h2 class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''}</h2>
     <div class="works-grid">
       ${a.works.map(w => {
         const imgs = workImgs(w);
         const baseAlt = esc(w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : ''));
-        const plates = imgs.length
-          ? imgs.map(im => {
-              const inst = isInst(im.f);
-              const alt = inst ? esc(`Vue d'installation de «La Bride», KRAMER — ${a.name}`) : baseAlt;
-              const cap = inst ? instCap(im.ph) : workCap(w, im.ph);
-              return `<div class="work-plate"><img src="../../images/works/${im.f}" alt="${alt}"${plateAttrs()}></div>
+        if (!imgs.length) return `<div class="work-item">
+        <div class="work-plate"><img src="../../images/placeholder.png" alt="${baseAlt}"${plateAttrs()}></div>
+        <p class="work-cap">${workCap(w, '', false)}</p>
+        ${inquire(w)}
+      </div>`;
+        const plates = imgs.map(im => {
+          const inst = isInst(im.f);
+          const alt = inst ? esc(`Vue d'installation de «La Bride», KRAMER — ${a.name}`) : baseAlt;
+          const cap = inst ? instCap(im.ph) : workCap(w, im.ph, isDet(im.f));
+          return `<div class="work-plate"><img src="../../images/works/${im.f}" alt="${alt}"${plateAttrs()}></div>
         <p class="work-cap">${cap}</p>`;
-            }).join('\n        ')
-          : `<div class="work-plate"><img src="../../images/placeholder.png" alt="${baseAlt}"${plateAttrs()}></div>
-        <p class="work-cap">${workCap(w, '')}</p>`;
+        });
+        /* the "Demander la fiche" link belongs under the WORK, never an installation
+           view: drop it in after the last non-install plate; trailing install plates
+           (exhibition context) render below it */
+        let lastWork = -1;
+        imgs.forEach((im, i) => { if (!isInst(im.f)) lastWork = i; });
+        if (lastWork === -1) lastWork = imgs.length - 1;
+        const parts = [];
+        plates.forEach((p, i) => { parts.push(p); if (i === lastWork) parts.push(inquire(w)); });
         return `<div class="work-item">
-        ${plates}
-        <a class="work-inquire" href="#" data-t="${esc(w.t)}" data-d="${esc(w.d)}" data-s="${esc(w.s)}">Demander la fiche →</a>
+        ${parts.join('\n        ')}
       </div>`;
       }).join('\n      ')}
     </div>` : '';
