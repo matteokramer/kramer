@@ -123,37 +123,37 @@ function page(a, i) {
   /* first plate is the likely LCP → eager; everything after lazy-loads */
   let plateN = 0;
   const plateAttrs = () => plateN++ === 0 ? ' fetchpriority="high"' : ' loading="lazy" decoding="async"';
+  /* Every plate carries its own full caption underneath. An installation shot
+     (filename …inst-N…) gets the exhibition caption; a work shot (obj/det/repro)
+     gets the museum tombstone. Each caption names its own photographer, so a work
+     photographed by several people reads correctly plate by plate. */
+  const isInst = f => /inst-\d/i.test(f);
+  const courtesy = w => w.c === undefined ? 'Courtesy the artist' : w.c;
+  const workCap = (w, ph) => [
+    `${esc(a.name)}, <em>${esc(w.t)}</em>${w.d ? ', ' + esc(String(w.d)) : ''}.`,
+    [w.m, w.s].filter(Boolean).map(esc).join(', ') ? [w.m, w.s].filter(Boolean).map(esc).join(', ') + '.' : '',
+    courtesy(w) ? esc(courtesy(w)) + '.' : '',
+    ph ? 'Photo : ' + esc(ph) + '.' : '',
+  ].filter(Boolean).join(' ');
+  const instCap = ph => `«La Bride», vue d'installation, Galerie KRAMER, Paris, 2026.${ph ? ' Photo : ' + esc(ph) + '.' : ''}`;
   const works = a.works.length ? `
     <h2 class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''}</h2>
     <div class="works-grid">
       ${a.works.map(w => {
         const imgs = workImgs(w);
-        const baseAlt = w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : '');
-        /* One credit across all plates → fold into the tombstone; differing credits
-           (e.g. an artist-shot reproduction + Matteo's install views) render per plate. */
-        const credits = [...new Set(imgs.map(im => im.ph).filter(Boolean))];
-        const mixed = credits.length > 1;
+        const baseAlt = esc(w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : ''));
         const plates = imgs.length
-          ? imgs.map((im, k) => {
-              const alt = esc(baseAlt + (imgs.length > 1 ? ` (vue ${k + 1}/${imgs.length})` : ''));
-              const cred = (mixed && im.ph) ? `\n        <p class="plate-credit">Photo : ${esc(im.ph)}</p>` : '';
-              return `<div class="work-plate"><img src="../../images/works/${im.f}" alt="${alt}"${plateAttrs()}></div>${cred}`;
+          ? imgs.map(im => {
+              const inst = isInst(im.f);
+              const alt = inst ? esc(`Vue d'installation de «La Bride», KRAMER — ${a.name}`) : baseAlt;
+              const cap = inst ? instCap(im.ph) : workCap(w, im.ph);
+              return `<div class="work-plate"><img src="../../images/works/${im.f}" alt="${alt}"${plateAttrs()}></div>
+        <p class="work-cap">${cap}</p>`;
             }).join('\n        ')
-          : `<div class="work-plate"><img src="../../images/placeholder.png" alt="${esc(baseAlt)}"${plateAttrs()}></div>`;
-        /* Tombstone: Artist, Title, year. Medium, dimensions. Courtesy …. Photo: … .
-           `c` overrides the courtesy line (empty string suppresses it); a single shared
-           photo credit is appended here, per-plate credits handle the mixed case. */
-        const courtesy = w.c === undefined ? 'Courtesy the artist' : w.c;
-        const spec = [w.m, w.s].filter(Boolean).join(', ');
-        const cap = [
-          `${esc(a.name)}, <em>${esc(w.t)}</em>${w.d ? ', ' + esc(String(w.d)) : ''}.`,
-          spec ? esc(spec) + '.' : '',
-          courtesy ? esc(courtesy) + '.' : '',
-          (!mixed && credits.length === 1) ? 'Photo : ' + esc(credits[0]) + '.' : '',
-        ].filter(Boolean).join(' ');
+          : `<div class="work-plate"><img src="../../images/placeholder.png" alt="${baseAlt}"${plateAttrs()}></div>
+        <p class="work-cap">${workCap(w, '')}</p>`;
         return `<div class="work-item">
         ${plates}
-        <p class="work-cap">${cap}</p>
         <a class="work-inquire" href="#" data-t="${esc(w.t)}" data-d="${esc(w.d)}" data-s="${esc(w.s)}">Demander la fiche →</a>
       </div>`;
       }).join('\n      ')}
