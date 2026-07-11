@@ -21,6 +21,19 @@ const ARTIST_IMG = eval('(' + ((html.match(/const ARTIST_IMG=(\{[\s\S]*?\});/) |
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+/* work-title → URL-fragment slug, for stable VisualArtwork @ids (referenced from
+   the home ExhibitionEvent.workFeatured — keep both sides using this one helper) */
+const slugify = s => stripDiacritics(String(s))
+  .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+/* Gallery detail fields shared by the embedded GALLERY node (below) and the
+   hand-authored home-page ArtGallery node in index.html — keep the two in sync. */
+const LOGO = `${SITE}/images/kramer_wordmark.png`;
+const MAP_URL = 'https://www.google.com/maps/search/?api=1&query=132%20Bd%20de%20Magenta%2C%2075010%20Paris';
+const GALLERY_DESC = "Galerie d'art contemporain à Paris (10e) — galerie d'appartement, registre d'expositions.";
+/* Geocoded from the postal address, not a verified rooftop pin — sanity-check before relying on it. */
+const GEO = { '@type': 'GeoCoordinates', latitude: 48.8788, longitude: 2.3561 };
+
 /* Mechanical name variants for entity disambiguation (people search with and
    without diacritics). Derived only: diacritics stripped + German/Nordic
    transliteration, applied to the display name AND any hand-supplied a.alt
@@ -38,8 +51,9 @@ const nameVariants = a => {
 const GALLERY_ID = `${SITE}/#gallery`;
 const GALLERY = {
   '@type': 'ArtGallery', '@id': GALLERY_ID, name: 'Kramer', url: `${SITE}/`,
-  image: `${SITE}/images/kramer_wordmark.png`,
+  image: LOGO, logo: LOGO, description: GALLERY_DESC,
   address: { '@type': 'PostalAddress', streetAddress: '132 Bd de Magenta', postalCode: '75010', addressLocality: 'Paris', addressCountry: 'FR' },
+  geo: GEO, hasMap: MAP_URL,
   sameAs: ['https://www.instagram.com/galeriekramer/'],
 };
 
@@ -71,7 +85,17 @@ function page(a, i) {
   const webpage = {
     '@type': 'WebPage', '@id': url, url, name: titleTxt, description: descTxt,
     inLanguage: 'fr', mainEntity: { '@id': personId },
-    isPartOf: { '@type': 'WebSite', name: 'Kramer', url: `${SITE}/` },
+    isPartOf: { '@type': 'WebSite', '@id': `${SITE}/#website`, name: 'Kramer', url: `${SITE}/` },
+    breadcrumb: { '@id': `${url}#breadcrumb` },
+  };
+  /* Mirrors the visible crumb (Accueil › Registre des artistes › Name) rendered below */
+  const breadcrumb = {
+    '@type': 'BreadcrumbList', '@id': `${url}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Accueil', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Registre des artistes', item: `${SITE}/#section-artistes` },
+      { '@type': 'ListItem', position: 3, name: a.name, item: url },
+    ],
   };
   const person = {
     '@type': 'Person', '@id': personId, name: a.name,
@@ -83,6 +107,7 @@ function page(a, i) {
     ...(birthPlace ? { birthPlace: { '@type': 'Place', name: birthPlace } } : {}),
     ...(a.nat ? { nationality: { '@type': 'Country', name: a.nat } } : {}),
     ...(a.based ? { homeLocation: { '@type': 'Place', name: a.based } } : {}),
+    ...(a.g === 'f' ? { gender: 'https://schema.org/Female' } : a.g === 'm' ? { gender: 'https://schema.org/Male' } : {}),
     affiliation: { '@id': GALLERY_ID },
     ...(a.links && a.links.length ? { sameAs: a.links } : {}),
   };
@@ -93,13 +118,17 @@ function page(a, i) {
     ...(w.i ? [{ f: w.i, ph: w.ph || '' }] : []),
     ...(w.views || []).map(v => typeof v === 'string' ? { f: v, ph: w.ph || '' } : { f: v.f, ph: v.ph || w.ph || '' }),
   ];
+  /* each plate → ImageObject so its per-plate photographer credit (workImgs sets `ph`)
+     rides along as creditText; bare-URL images lose that credit */
+  const toImg = im => ({ '@type': 'ImageObject', contentUrl: `${SITE}/images/works/${im.f}`, ...(im.ph ? { creditText: im.ph } : {}) });
   const artworks = a.works.map(w => {
     const imgs = workImgs(w);
     /* "130 × 97 cm" | "30 × 40 × 5 cm" → height × width (× depth), gallery convention;
        non-numeric sizes ("dimensions variables") are skipped */
     const dims = (w.s || '').match(/^([\d.]+)\s*×\s*([\d.]+)(?:\s*×\s*([\d.]+))?\s*cm$/);
     return {
-      '@type': 'VisualArtwork', name: w.t, creator: { '@id': personId }, url,
+      '@type': 'VisualArtwork', '@id': `${url}#oeuvre-${slugify(w.t)}`,
+      name: w.t, creator: { '@id': personId }, url,
       ...(w.d ? { dateCreated: String(w.d) } : {}),
       ...(primaryMedium ? { artform: primaryMedium } : {}),
       ...(w.m ? { artMedium: w.m } : {}),
@@ -108,10 +137,10 @@ function page(a, i) {
         width: { '@type': 'Distance', name: `${dims[2]} cm` },
         ...(dims[3] ? { depth: { '@type': 'Distance', name: `${dims[3]} cm` } } : {}),
       } : {}),
-      ...(imgs.length ? { image: imgs.length === 1 ? `${SITE}/images/works/${imgs[0].f}` : imgs.map(im => `${SITE}/images/works/${im.f}`) } : {}),
+      ...(imgs.length ? { image: imgs.length === 1 ? toImg(imgs[0]) : imgs.map(toImg) } : {}),
     };
   });
-  const jsonld = JSON.stringify({ '@context': 'https://schema.org', '@graph': [webpage, person, GALLERY, ...artworks] });
+  const jsonld = JSON.stringify({ '@context': 'https://schema.org', '@graph': [webpage, breadcrumb, person, GALLERY, ...artworks] });
 
   const bornLbl = a.g === 'f' ? 'Née' : a.g === 'm' ? 'Né' : 'Né(e)';
   const fields = [
@@ -276,7 +305,19 @@ ${urls.map(u => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join(
 `;
 writeFileSync(join(WEB, 'sitemap.xml'), sitemap);
 
-console.log(`Generated ${count} artist pages + sitemap (${urls.length} urls).`);
+/* Home ExhibitionEvent.workFeatured: link every consigned work into « La Bride ».
+   Each stub references the full VisualArtwork @id emitted on the artist page (same
+   slugify), mirroring how the performer stubs resolve to the full Person. Only the
+   delimited "workFeatured" array in index.html is rewritten — idempotent, and the
+   hand-authored ARTISTS array + rest of the LD block are never touched. */
+const wfItems = ARTISTS.flatMap(a => a.works.map(w =>
+  `{"@type":"VisualArtwork","@id":"${SITE}/artistes/${a.slug}/#oeuvre-${slugify(w.t)}","name":${JSON.stringify(w.t)},"url":"${SITE}/artistes/${a.slug}/"}`));
+const wfBlock = `"workFeatured":[\n        ${wfItems.join(',\n        ')}\n      ]`;
+const wfRe = /"workFeatured":\[[\s\S]*?\]/;
+if (!wfRe.test(html)) throw new Error('index.html: no "workFeatured":[…] region to fill — add the placeholder to the ExhibitionEvent node.');
+writeFileSync(join(WEB, 'index.html'), html.replace(wfRe, () => wfBlock));
+
+console.log(`Generated ${count} artist pages + sitemap (${urls.length} urls) + ${wfItems.length} workFeatured links.`);
 
 /* drift check: warn if the ARTISTS array and the fiches disagree (no-op when the vault is absent) */
 try { await import('./check-fiches.mjs'); } catch (e) { console.warn('check-fiches skipped:', e.message); }
