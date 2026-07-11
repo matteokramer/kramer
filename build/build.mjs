@@ -140,7 +140,10 @@ function page(a, i) {
     courtesy(w) ? esc(courtesy(w)) + '.' : '',
     credit(ph) ? credit(ph) + '.' : '',
   ].filter(Boolean).join(' ');
-  const instCap = ph => `«La Bride», vue d'installation, KRAMER, Paris, 2026.${credit(ph) ? ' ' + credit(ph) + '.' : ''}`;
+  /* Installation shots always carry an explicit "Photo :" prefix (even for the
+     gallery's own Kramer shots) — unlike work plates, where "Kramer" stands bare. */
+  const instCredit = ph => !ph ? '' : 'Photo : ' + (/^(matteo\s+)?kramer$/i.test(ph) ? 'Kramer' : esc(ph));
+  const instCap = ph => `«La Bride», vue d'installation, KRAMER, Paris, 2026.${instCredit(ph) ? ' ' + instCredit(ph) + '.' : ''}`;
   const inquire = w => `<a class="work-inquire" href="#" data-t="${esc(w.t)}" data-d="${esc(w.d)}" data-s="${esc(w.s)}">Demander la fiche →</a>`;
   const works = a.works.length ? `
     <h2 class="s-head">Œuvres — ${a.works.length} entrée${a.works.length > 1 ? 's' : ''}</h2>
