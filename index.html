@@ -120,8 +120,21 @@
         {"@type":"Person","name":"Jennifer Reeder"},
         {"@type":"Person","name":"Josefin Arnell"},
         {"@type":"Person","name":"Mike Hoolboom"},
-        {"@type":"Person","name":"Moritz Stumm & Stefan Neuberger"},
+        {"@type":"Person","name":"Moritz Stumm"},
+        {"@type":"Person","name":"Stefan Neuberger"},
         {"@type":"Person","name":"Rhona Mühlebach"}
+      ],
+      "workPresented":[
+        {"@type":"Movie","name":"The Cavalry","copyrightYear":2024,"duration":"PT17M","director":{"@type":"Person","name":"Alina Orlov"}},
+        {"@type":"Movie","name":"Germaxxing","copyrightYear":2026,"duration":"PT14M","director":{"@type":"Person","name":"Arvin Arta"}},
+        {"@type":"Movie","name":"The Horse Raised by Spheres","copyrightYear":2014,"duration":"PT3M","director":{"@type":"Person","name":"David O'Reilly"}},
+        {"@type":"Movie","name":"The 4 Postapocalyptic Horses: Equus Simulatus und Hippospirulina Libica","duration":"PT10M","director":{"@type":"Person","name":"Elisa Jule Braun"}},
+        {"@type":"Movie","name":"Demarcation","copyrightYear":2023,"duration":"PT17M","director":{"@type":"Person","name":"Hsu Che-Yu"}},
+        {"@type":"Movie","name":"The Secret History","copyrightYear":2002,"duration":"PT5M","director":{"@type":"Person","name":"Jennifer Reeder"}},
+        {"@type":"Movie","name":"Beast and Feast","copyrightYear":2023,"duration":"PT25M","director":{"@type":"Person","name":"Josefin Arnell"}},
+        {"@type":"Movie","name":"3 Dreams of Horses","copyrightYear":2018,"duration":"PT5M","director":{"@type":"Person","name":"Mike Hoolboom"}},
+        {"@type":"Movie","name":"Kontrolle","copyrightYear":2024,"duration":"PT33M","director":[{"@type":"Person","name":"Moritz Stumm"},{"@type":"Person","name":"Stefan Neuberger"}]},
+        {"@type":"Movie","name":"The River, the Horse, & the Woman","copyrightYear":2019,"duration":"PT8M","director":{"@type":"Person","name":"Rhona Mühlebach"}}
       ],
       "subEvent":{"@id":"https://kramer.paris/#horses-in-motion-dinner"},
       "description":"Cycle de projections, commissariat Rahel Jung — programme « Horses in Motion »."
@@ -129,14 +142,14 @@
     {
       "@type":"FoodEvent",
       "@id":"https://kramer.paris/#horses-in-motion-dinner",
-      "name":"TV Dinner — Hadya",
+      "name":"TV Dinner — Alex et Hadya",
       "startDate":"2026-08-29T19:00:00+02:00",
       "eventStatus":"https://schema.org/EventScheduled",
       "eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode",
       "location":{"@id":"https://kramer.paris/#gallery"},
       "organizer":{"@id":"https://kramer.paris/#gallery"},
       "superEvent":{"@id":"https://kramer.paris/#horses-in-motion"},
-      "description":"TV Dinner par Hadya. Sur réservation avant le 27 août 2026."
+      "description":"TV Dinner par Alex et Hadya. Sur réservation avant le 27 août 2026."
     }
   ]
 }
@@ -344,6 +357,13 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 /* Actualité / news */
 .news-block{padding:0 10px 8px}
 
+/* Programme de projection — one entry per work: réalisateur (body) + fiche
+   technique (9px muted), same register as the artist list. */
+.prog-list{list-style:none;padding:0;margin:16px 0 0;border-top:1px solid #222;padding-top:10px}
+.prog-item{padding:0 0 10px}
+.prog-name{display:block;font-size:13px;line-height:20px}
+.prog-work{display:block;font-size:9px;line-height:14px;letter-spacing:.03em;color:rgba(0,0,0,.6)}
+
 /* Artist list */
 .artist-list{list-style:none;padding:0 10px 20px}
 .artist-item{padding:2px 0}
@@ -512,9 +532,25 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
         <p class="tag-encours">Projection</p>
         <p class="ac-big"><em>Horses in Motion</em> — 29 août 2026, 12h–18h</p>
         <p style="font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:4px">Commissariat · Rahel Jung</p>
-        <p style="font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:2px">Avec Alina Orlov, Arvin Arta, David O'Reilly, Elisa Jule Braun, Hsu Che-Yu, Jennifer Reeder, Josefin Arnell, Mike Hoolboom, Moritz Stumm &amp; Stefan Neuberger, Rhona Mühlebach</p>
         <p style="font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:8px">132 Bd de Magenta · 75010 Paris</p>
-        <p style="font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:2px">TV Dinner — Hadya, à partir de 19h · sur réservation avant le 27.8</p>
+        <p style="font-size:13px;line-height:20px;margin-top:10px;max-width:68ch">Dix œuvres vidéo présentées le temps d'un après-midi, suivies d'un dîner.</p>
+
+        <!-- Programme — ten video works, in the order given on the invitation.
+             Titles/years/durations verbatim from Matteo's programme (2026-08-23). -->
+        <ul class="prog-list">
+          <li class="prog-item"><span class="prog-name">Alina Orlov</span><span class="prog-work"><em>The Cavalry</em>, 2024 · 17 min</span></li>
+          <li class="prog-item"><span class="prog-name">Arvin Arta</span><span class="prog-work"><em>Germaxxing</em>, 2026 · 14 min</span></li>
+          <li class="prog-item"><span class="prog-name">David O'Reilly</span><span class="prog-work"><em>The Horse Raised by Spheres</em>, 2014 · 3 min</span></li>
+          <li class="prog-item"><span class="prog-name">Elisa Jule Braun</span><span class="prog-work"><em>The 4 Postapocalyptic Horses: Equus Simulatus und Hippospirulina Libica</em>, 2024/25 · 2 × 5 min</span></li>
+          <li class="prog-item"><span class="prog-name">Hsu Che-Yu</span><span class="prog-work"><em>Demarcation</em>, 2023 · 17 min</span></li>
+          <li class="prog-item"><span class="prog-name">Jennifer Reeder</span><span class="prog-work"><em>The Secret History</em>, 2002 · 5 min</span></li>
+          <li class="prog-item"><span class="prog-name">Josefin Arnell</span><span class="prog-work"><em>Beast and Feast</em>, 2023 · 25 min</span></li>
+          <li class="prog-item"><span class="prog-name">Mike Hoolboom</span><span class="prog-work"><em>3 Dreams of Horses</em>, 2018 · 5 min</span></li>
+          <li class="prog-item"><span class="prog-name">Moritz Stumm &amp; Stefan Neuberger</span><span class="prog-work"><em>Kontrolle</em>, 2024 · 33 min</span></li>
+          <li class="prog-item"><span class="prog-name">Rhona Mühlebach</span><span class="prog-work"><em>The River, the Horse, &amp; the Woman</em>, 2019 · 8 min</span></li>
+        </ul>
+
+        <p style="font-size:13px;line-height:20px;margin-top:10px;max-width:68ch">Le TV Dinner sera préparé par Alex et Hadya, à partir de 19h. Il y aura peut-être du poisson, peut-être autre chose. Réservation avant le 27 août.</p>
         <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn" onclick="downloadIcal()">Ajouter au calendrier</button>
           <a class="btn" href="#" onclick="goTo('form-rsvp');return false">Réserver le dîner →</a>
@@ -624,7 +660,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
           <div class="ff"><label>Adresse e-mail</label><input type="email" name="email" required></div>
           <div class="ff"><label>Affiliation (facultatif)</label><input type="text" name="affiliation"></div>
           <div class="ff">
-            <label class="fcheck"><input type="checkbox" name="horses-in-motion-dinner" value="oui"> TV Dinner — Hadya, 29 août 19h (réservation avant le 27.8)</label>
+            <label class="fcheck"><input type="checkbox" name="horses-in-motion-dinner" value="oui"> TV Dinner — Alex et Hadya, 29 août 19h (réservation avant le 27.8)</label>
             <label class="fcheck"><input type="checkbox" name="rendez-vous" value="oui"> Demander un rendez-vous</label>
             <label class="fcheck"><input type="checkbox" name="newsletter" value="oui"> S'inscrire à la newsletter</label>
           </div>
@@ -1025,9 +1061,9 @@ function downloadIcal(){
     'END:VEVENT',
     'BEGIN:VEVENT',
     'DTSTART;TZID=Europe/Paris:20260829T190000',
-    'SUMMARY:TV Dinner — Hadya · Kramer',
+    'SUMMARY:TV Dinner — Alex et Hadya · Kramer',
     'LOCATION:132 Bd de Magenta\\\, 75010 Paris',
-    'DESCRIPTION:TV Dinner par Hadya. Sur réservation avant le 27 août 2026 — kramer.paris/rsvp',
+    'DESCRIPTION:TV Dinner par Alex et Hadya. Sur réservation avant le 27 août 2026 — kramer.paris/rsvp',
     'URL:https://kramer.paris/rsvp',
     'END:VEVENT',
     'END:VCALENDAR'
