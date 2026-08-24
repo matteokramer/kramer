@@ -1114,6 +1114,8 @@ renderArtistList();
 tick();
 if(window.location.hash==='#mentions-legales')openLegal();
 if(window.location.hash==='#section-acces')goTo('section-acces');
+/* newsletter deep link — the « Exposition en cours » block links straight to the views */
+if(window.location.hash==='#section-exposition')goTo('section-exposition');
 /* /rsvp landing — the redirect page sends visitors here to land on the form */
 if(window.location.hash==='#form-rsvp')goTo('form-rsvp');
 </script>
