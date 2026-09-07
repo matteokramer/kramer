@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kramer — galerie d'art contemporain · Paris 10e</title>
-<meta name="description" content="Kramer — galerie d'art contemporain, Paris 10e. Galerie d'appartement. Exposition « La Bride » (KR/01), 25 juin–5 septembre 2026 : dix artistes internationaux.">
+<meta name="description" content="Kramer — galerie d'art contemporain, Paris 10e. Galerie d'appartement. Exposition « La Bride » (KR/01), 25 juin–29 août 2026 : dix artistes internationaux.">
 <link rel="canonical" href="https://kramer.paris/">
 <link rel="icon" href="images/edelweiss.svg">
 <!-- Share preview = the Kramer wordmark. Export a 1200x630 PNG of the wordmark on
      white (real Acumin) and save it as images/kramer_wordmark.png — see note in chat. -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Kramer">
-<meta property="og:description" content="Exposition « La Bride » · 25 juin–5 septembre 2026 · galerie d'art contemporain, Paris 10e">
+<meta property="og:description" content="Exposition « La Bride » · 25 juin–29 août 2026 · galerie d'art contemporain, Paris 10e">
 <meta property="og:url" content="https://kramer.paris/">
 <meta property="og:image" content="https://kramer.paris/images/kramer_wordmark.png">
 <meta property="og:image:width" content="1200">
@@ -19,7 +19,7 @@
 <meta property="og:image:alt" content="Kramer">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Kramer">
-<meta name="twitter:description" content="Exposition « La Bride » · 25 juin–5 septembre 2026 · galerie d'art contemporain, Paris 10e">
+<meta name="twitter:description" content="Exposition « La Bride » · 25 juin–29 août 2026 · galerie d'art contemporain, Paris 10e">
 <meta name="twitter:image" content="https://kramer.paris/images/kramer_wordmark.png">
 <!-- Structured data: gallery + exhibition. Artist Persons carry name only
      (no fabricated birth data). Email omitted to preserve the JS obfuscation. -->
@@ -54,10 +54,10 @@
       "@type":"ExhibitionEvent",
       "@id":"https://kramer.paris/#la-bride",
       "name":"La Bride",
-      "description":"« La Bride » (KR/01) — exposition collective de dix artistes internationaux, du 25 juin au 5 septembre 2026.",
+      "description":"« La Bride » (KR/01) — exposition collective de dix artistes internationaux, du 25 juin au 29 août 2026.",
       "url":"https://kramer.paris/",
       "startDate":"2026-06-25",
-      "endDate":"2026-09-05",
+      "endDate":"2026-08-29",
       "eventStatus":"https://schema.org/EventScheduled",
       "eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode",
       "image":"https://kramer.paris/images/kramer_wordmark.png",
@@ -97,7 +97,26 @@
         {"@type":"Person","@id":"https://kramer.paris/artistes/padyn-humble/#person","name":"Padyn Humble","url":"https://kramer.paris/artistes/padyn-humble/"},
         {"@type":"Person","@id":"https://kramer.paris/artistes/signe-ralkov/#person","name":"Signe Ralkov","url":"https://kramer.paris/artistes/signe-ralkov/"},
         {"@type":"Person","@id":"https://kramer.paris/artistes/tekla-kighuradze/#person","name":"Tekla Kighuradze","url":"https://kramer.paris/artistes/tekla-kighuradze/"}
+      ],
+      "subEvent":[
+        {"@id":"https://kramer.paris/#la-bride-vernissage"},
+        {"@id":"https://kramer.paris/#horses-in-motion"},
+        {"@id":"https://kramer.paris/#horses-in-motion-dinner"}
       ]
+    },
+    {
+      "@type":"SocialEvent",
+      "@id":"https://kramer.paris/#la-bride-vernissage",
+      "name":"Vernissage — La Bride",
+      "startDate":"2026-06-25T17:00:00+02:00",
+      "endDate":"2026-06-25T21:00:00+02:00",
+      "eventStatus":"https://schema.org/EventScheduled",
+      "eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode",
+      "image":"https://kramer.paris/images/kramer_wordmark.png",
+      "location":{"@id":"https://kramer.paris/#gallery"},
+      "organizer":{"@id":"https://kramer.paris/#gallery"},
+      "superEvent":{"@id":"https://kramer.paris/#la-bride"},
+      "description":"Ouverture de l'exposition « La Bride » (KR/01), dix artistes internationaux."
     },
     {
       "@type":"ScreeningEvent",
@@ -136,6 +155,7 @@
         {"@type":"Movie","name":"Kontrolle","copyrightYear":2024,"duration":"PT33M","director":[{"@type":"Person","name":"Moritz Stumm"},{"@type":"Person","name":"Stefan Neuberger"}]},
         {"@type":"Movie","name":"The River, the Horse, & the Woman","copyrightYear":2019,"duration":"PT8M","director":{"@type":"Person","name":"Rhona Mühlebach"}}
       ],
+      "superEvent":{"@id":"https://kramer.paris/#la-bride"},
       "subEvent":{"@id":"https://kramer.paris/#horses-in-motion-dinner"},
       "description":"Cycle de projections, commissariat Rahel Jung — programme « Horses in Motion »."
     },
@@ -149,7 +169,7 @@
       "location":{"@id":"https://kramer.paris/#gallery"},
       "organizer":{"@id":"https://kramer.paris/#gallery"},
       "superEvent":{"@id":"https://kramer.paris/#horses-in-motion"},
-      "description":"TV Dinner par Hadya. Sur réservation avant le 27 août 2026."
+      "description":"TV Dinner par Hadya — clôture de l'exposition « La Bride »."
     }
   ]
 }
@@ -364,6 +384,15 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 .prog-name{display:block;font-size:13px;line-height:20px}
 .prog-work{display:block;font-size:9px;line-height:14px;letter-spacing:.03em;color:rgba(0,0,0,.6)}
 
+/* Registre des événements — past events. Entries are records, not announcements:
+   no .tag-encours display tag (that stays reserved for the live Actualité slot);
+   each entry opens on a 9px muted reference line (.exh-ref). */
+.ev-list{list-style:none;padding:0 10px}
+.ev-item{border-top:1px solid #222;padding:12px 0 28px}
+.ev-item:first-child{border-top:none}   /* .section>.s-head already draws one */
+.ev-meta{font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:4px}
+.ev-note{font-size:13px;line-height:20px;margin-top:10px;max-width:68ch}
+
 /* Artist list */
 .artist-list{list-style:none;padding:0 10px 20px}
 .artist-item{padding:2px 0}
@@ -514,7 +543,11 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
             </a></li>
             <li class="cb-item"><a class="cb-link" onclick="goTo('section-exposition');return false" href="#">
               <div class="cb-box" id="cb-exposition"></div>
-              <span class="cb-txt">L'<strong>exposition en cours</strong></span>
+              <span class="cb-txt">L'<strong>exposition</strong></span>
+            </a></li>
+            <li class="cb-item"><a class="cb-link" onclick="goTo('section-archive');return false" href="#">
+              <div class="cb-box" id="cb-archive"></div>
+              <span class="cb-txt">Le <strong>registre des événements</strong></span>
             </a></li>
             <li class="cb-item"><a class="cb-link" onclick="goTo('section-acces');return false" href="#">
               <div class="cb-box" id="cb-acces"></div>
@@ -525,35 +558,13 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
       </div>
     </div>
 
-    <!-- ACTUALITÉ -->
+    <!-- ACTUALITÉ — holding state. « Horses in Motion » + the TV Dinner moved to the
+         Registre des événements on 2026-09-07, once they had passed. The slot stays
+         (with its nav item) for the next announcement. -->
     <div class="section" id="section-news" style="padding-top:20px">
       <p class="s-head">Actualité</p>
       <div class="news-block">
-        <p class="tag-encours">Projection</p>
-        <p class="ac-big"><em>Horses in Motion</em> — 29 août 2026, 12h–18h</p>
-        <p style="font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:4px">Commissariat · Rahel Jung</p>
-        <p style="font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:8px">132 Bd de Magenta · 75010 Paris</p>
-        <p style="font-size:13px;line-height:20px;margin-top:10px;max-width:68ch">Dix œuvres vidéo présentées le temps d'un après-midi, suivies d'un dîner.</p>
-
-        <!-- Programme — ten video works, in the order given on the invitation.
-             Titles/years/durations verbatim from Matteo's programme (2026-08-23). -->
-        <ul class="prog-list">
-          <li class="prog-item"><span class="prog-name">Alina Orlov</span><span class="prog-work"><em>The Cavalry</em>, 2024 · 17 min</span></li>
-          <li class="prog-item"><span class="prog-name">Arvin Arta</span><span class="prog-work"><em>Germaxxing</em>, 2026 · 14 min</span></li>
-          <li class="prog-item"><span class="prog-name">David O'Reilly</span><span class="prog-work"><em>The Horse Raised by Spheres</em>, 2014 · 3 min</span></li>
-          <li class="prog-item"><span class="prog-name">Elisa Jule Braun</span><span class="prog-work"><em>The 4 Postapocalyptic Horses: Equus Simulatus und Hippospirulina Libica</em>, 2024/25 · 2 × 5 min</span></li>
-          <li class="prog-item"><span class="prog-name">Hsu Che-Yu</span><span class="prog-work"><em>Demarcation</em>, 2023 · 17 min</span></li>
-          <li class="prog-item"><span class="prog-name">Jennifer Reeder</span><span class="prog-work"><em>The Secret History</em>, 2002 · 5 min</span></li>
-          <li class="prog-item"><span class="prog-name">Josefin Arnell</span><span class="prog-work"><em>Beast and Feast</em>, 2023 · 25 min</span></li>
-          <li class="prog-item"><span class="prog-name">Mike Hoolboom</span><span class="prog-work"><em>3 Dreams of Horses</em>, 2018 · 5 min</span></li>
-          <li class="prog-item"><span class="prog-name">Moritz Stumm &amp; Stefan Neuberger</span><span class="prog-work"><em>Kontrolle</em>, 2024 · 33 min</span></li>
-          <li class="prog-item"><span class="prog-name">Rhona Mühlebach</span><span class="prog-work"><em>The River, the Horse, &amp; the Woman</em>, 2019 · 8 min</span></li>
-        </ul>
-
-        <p style="font-size:13px;line-height:20px;margin-top:10px;max-width:68ch">Le TV Dinner sera préparé par Hadya, à partir de 19h. Il y aura peut-être du poisson, peut-être autre chose. Réservation avant le 27 août.</p>
-        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn" onclick="downloadIcal()">Ajouter au calendrier</button>
-        </div>
+        <p class="ev-note" style="margin-top:0">Aucune annonce en cours. La prochaine entrée sera inscrite au registre.</p>
       </div>
     </div>
 
@@ -580,9 +591,9 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
     <!-- EXPOSITION EN COURS -->
     <div class="section" id="section-exposition">
       <div class="exh-hero">
-        <p class="exh-ref">exposition en cours</p>
+        <p class="exh-ref">exposition passée</p>
         <h2 class="exh-title">La Bride</h2>
-        <p class="exh-dates">25 juin – 5 septembre 2026 · 132 Bd de Magenta, Paris</p>
+        <p class="exh-dates">25 juin – 29 août 2026 · 132 Bd de Magenta, Paris</p>
         <p class="lang-toggle">Texte · <a href="#" id="lt-fr" class="on" onclick="setProseLang('fr');return false">FR</a> / <a href="#" id="lt-en" onclick="setProseLang('en');return false">EN</a></p>
         <div class="prose" id="prose-fr" lang="fr">
           <p>Le déclencheur de cette exposition, c'est, pour l'essentiel, que le cheval préféré de mon frère a récemment été transformé en salami. Repose en paix, Brown Beauty. La seconde raison, la vraie, c'est que Gustav et Leon, de bendingwords, me prêtent leur bureau. Merci.</p>
@@ -621,6 +632,50 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
         <div class="view-item"><div class="view-img"><img src="images/installation/kr01-inst-08-kaiser-del-santo.jpg" class="plate-img" alt="Vue d'installation de «La Bride», KRAMER — œuvres de Nanna Kaiser et Gaia Del Santo" loading="lazy" decoding="async"></div><p class="view-cap">«La Bride», vue d'installation, KRAMER, Paris, 2026. Photo : Kramer.</p></div>
         <div class="view-item"><div class="view-img"><img src="images/installation/kr01-inst-09-baumann-del-santo.jpg" class="plate-img" alt="Vue d'installation de «La Bride», KRAMER — œuvres de Jürgen Baumann et Gaia Del Santo" loading="lazy" decoding="async"></div><p class="view-cap">«La Bride», vue d'installation, KRAMER, Paris, 2026. Photo : Kramer.</p></div>
       </div>
+    </div>
+
+    <!-- REGISTRE DES ÉVÉNEMENTS — archive of past events, newest first.
+         Records, not announcements: no .tag-encours display tag, each entry opens
+         on a 9px muted reference line. KR/01·V is the registry code of the
+         moving-image strand; the vernissage carries no sub-code. -->
+    <div class="section" id="section-archive">
+      <p class="s-head">Registre des événements — 2 entrées · KR/01</p>
+      <ul class="ev-list">
+
+        <li class="ev-item">
+          <p class="exh-ref">Projection · KR/01·V</p>
+          <p class="ac-big"><em>Horses in Motion</em> — 29 août 2026, 12h–18h</p>
+          <p class="ev-meta">Commissariat · Rahel Jung</p>
+          <p class="ev-meta" style="margin-top:8px">132 Bd de Magenta · 75010 Paris</p>
+          <p class="ev-note">Dix œuvres vidéo présentées le temps d'un après-midi, suivies d'un dîner.</p>
+
+          <!-- Programme — ten video works, in the order given on the invitation.
+               Titles/years/durations verbatim from Matteo's programme (2026-08-23). -->
+          <ul class="prog-list">
+            <li class="prog-item"><span class="prog-name">Alina Orlov</span><span class="prog-work"><em>The Cavalry</em>, 2024 · 17 min</span></li>
+            <li class="prog-item"><span class="prog-name">Arvin Arta</span><span class="prog-work"><em>Germaxxing</em>, 2026 · 14 min</span></li>
+            <li class="prog-item"><span class="prog-name">David O'Reilly</span><span class="prog-work"><em>The Horse Raised by Spheres</em>, 2014 · 3 min</span></li>
+            <li class="prog-item"><span class="prog-name">Elisa Jule Braun</span><span class="prog-work"><em>The 4 Postapocalyptic Horses: Equus Simulatus und Hippospirulina Libica</em>, 2024/25 · 2 × 5 min</span></li>
+            <li class="prog-item"><span class="prog-name">Hsu Che-Yu</span><span class="prog-work"><em>Demarcation</em>, 2023 · 17 min</span></li>
+            <li class="prog-item"><span class="prog-name">Jennifer Reeder</span><span class="prog-work"><em>The Secret History</em>, 2002 · 5 min</span></li>
+            <li class="prog-item"><span class="prog-name">Josefin Arnell</span><span class="prog-work"><em>Beast and Feast</em>, 2023 · 25 min</span></li>
+            <li class="prog-item"><span class="prog-name">Mike Hoolboom</span><span class="prog-work"><em>3 Dreams of Horses</em>, 2018 · 5 min</span></li>
+            <li class="prog-item"><span class="prog-name">Moritz Stumm &amp; Stefan Neuberger</span><span class="prog-work"><em>Kontrolle</em>, 2024 · 33 min</span></li>
+            <li class="prog-item"><span class="prog-name">Rhona Mühlebach</span><span class="prog-work"><em>The River, the Horse, &amp; the Woman</em>, 2019 · 8 min</span></li>
+          </ul>
+
+          <p class="ev-note">Le TV Dinner a été préparé par Hadya, à partir de 19h. Le dîner a clos l'exposition « La Bride ».</p>
+        </li>
+
+        <li class="ev-item">
+          <p class="exh-ref">Vernissage · KR/01</p>
+          <p class="ac-big">La Bride — 25 juin 2026, 17h–21h</p>
+          <p class="ev-meta">Sur présentation au registre</p>
+          <p class="ev-meta" style="margin-top:8px">132 Bd de Magenta · 75010 Paris</p>
+          <p class="ev-note">Ouverture de l'exposition « La Bride », dix artistes internationaux.</p>
+        </li>
+
+      </ul>
     </div>
 
     <!-- BUREAU D'ACCÈS -->
@@ -848,8 +903,8 @@ function goTo(id){
   sc.scrollTo({top,behavior:'smooth'});
   const map={
     'section-news':'cb-news','section-artistes':'cb-artistes',
-    'section-exposition':'cb-exposition','section-acces':'cb-acces',
-    'form-rsvp':'cb-acces'
+    'section-exposition':'cb-exposition','section-archive':'cb-archive',
+    'section-acces':'cb-acces','form-rsvp':'cb-acces'
   };
   document.querySelectorAll('.cb-box').forEach(b=>b.classList.remove('on'));
   const cid=map[id];if(cid){const c=document.getElementById(cid);if(c)c.classList.add('on');}
@@ -1040,42 +1095,9 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&document.getElementById('legal').classList.contains('open'))closeLegal();
 });
 
-/* ================================================================
-   iCAL DOWNLOAD — Horses in Motion (Projection, 29 août 2026)
-================================================================ */
-function downloadIcal(){
-  const lines=[
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//Kramer//kramer.paris//FR',
-    'CALSCALE:GREGORIAN',
-    'BEGIN:VEVENT',
-    'DTSTART;TZID=Europe/Paris:20260829T120000',
-    'DTEND;TZID=Europe/Paris:20260829T180000',
-    'SUMMARY:Horses in Motion — Projection · Kramer',
-    'LOCATION:132 Bd de Magenta\\\, 75010 Paris',
-    'DESCRIPTION:Cycle de projections\\\, commissariat Rahel Jung · Galerie Kramer',
-    'URL:https://kramer.paris/',
-    'END:VEVENT',
-    'BEGIN:VEVENT',
-    'DTSTART;TZID=Europe/Paris:20260829T190000',
-    'SUMMARY:TV Dinner — Hadya · Kramer',
-    'LOCATION:132 Bd de Magenta\\\, 75010 Paris',
-    'DESCRIPTION:TV Dinner par Hadya. Sur réservation avant le 27 août 2026 — kramer.paris/rsvp',
-    'URL:https://kramer.paris/rsvp',
-    'END:VEVENT',
-    'END:VCALENDAR'
-  ];
-  const ics=lines.join('\r\n');
-  const blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download='horses-in-motion.ics';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
-}
+/* downloadIcal() removed 2026-09-07 with the Horses in Motion announcement — the
+   projection and its dinner are now archive entries, nothing left to add to a calendar. */
+
 /* ================================================================
    EMAIL + ADDRESS OBFUSCATION — assembled in JS so crawlers can't harvest
 ================================================================ */
