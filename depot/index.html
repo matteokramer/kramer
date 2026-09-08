@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     KRAMER — Artist Information Form / Fiche de dépôt
+     The single intake form an artist completes before works are
+     received. On screen it is a web form that posts to Formspree;
+     printed (⌘P) it is the A4 deposit sheet, signed in two
+     originals at hand-over.
+
+     It is Schedule 1 of the Art Exhibition Loan and Limited Sales
+     Intermediation Agreement: Clause 12 lists eighteen mandatory
+     items (a–r) that must be supplied THROUGH THIS FORM before the
+     Host Organizer receives any work, and Clause 9 allows receipt
+     to be refused without a completed form. Every one of a–r has a
+     field here — see the coverage comment above section 03.
+
+     TWO REGISTERED DIVERGENCES from the rest of CI/DOCUMENTS:
+       1. This is the first sheet in the set built on real form
+          controls (<input>/<textarea>) rather than
+          .sheet[contenteditable] + .fill[data-ph]. A contenteditable
+          span is not a form control and never reaches Formspree.
+       2. This is the first sheet that is ENGLISH-FIRST. The artists
+          are international and the Agreement it annexes is English.
+          French follows in italic (.fr) — the mirror image of the
+          .en pattern used everywhere else in the set.
+
+     SELF-CONTAINED BY DESIGN — no <link> to kramer-doc.css. That
+     file is not served from kramer.paris, and copying it into WEB/
+     would publish its EB Garamond @import onto the website, which
+     CLAUDE.md forbids. The tokens below are copied from it with
+     --body set to var(--pro), the all-Acumin escape hatch its own
+     header documents. Self-containment also lets this file be sent
+     as an email attachment and filled from file://.
+
+     PUBLISHED COPY: WEB/depot/index.html must stay byte-identical.
+       diff CI/DOCUMENTS/fiche-depot-artiste.html WEB/depot/index.html
+============================================================ -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,follow">
+<title>Kramer — Artist Information Form</title>
+<link rel="canonical" href="https://kramer.paris/depot/">
+<link rel="stylesheet" href="https://use.typekit.net/svm4vfk.css">
+<style>
+/* ---- 1 · tokens — copied from kramer-doc.css :root, --body → --pro ---- */
+:root{
+  --ink:#000;
+  --ground:#fff;
+  --rule:#000;                /* print hairlines */
+  --hair:#222;                /* structural 1px rules, as on the site */
+  --label:rgba(0,0,0,.55);    /* the site's 9px label grey */
+  --muted:#555;               /* secondary content */
+  --chrome:#B8B8B8;           /* screen chrome bars */
+  --field:#f1f4ff;            /* editable blanks — the site's form blue */
+  --guide:#9aa7c4;            /* placeholder text */
+  --link:#0000EE;
+  --pro:'acumin-pro',Arial,Helvetica,sans-serif;
+  --ec:'acumin-pro-extra-condensed',Arial,sans-serif;
+  --body:var(--pro);          /* all-Acumin: no Garamond, no Google Fonts */
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#e9e9e9;}
+body{
+  padding:28px 0 22px;
+  font-family:var(--body);font-weight:400;font-size:13px;line-height:20px;
+  color:var(--ink);font-variant-numeric:tabular-nums;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+::selection{background:#000;color:#fff}
+button:focus-visible{outline:2px solid #000;outline-offset:2px}
+
+/* ---- 2 · screen chrome ---- */
+.chrome{
+  position:fixed;left:0;right:0;z-index:10;background:var(--chrome);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 8px;user-select:none;font-family:var(--pro);
+}
+.chrome.ct{top:0;height:28px;border-bottom:1px solid var(--hair)}
+.chrome.cb{bottom:0;height:22px;border-top:1px solid var(--hair)}
+.c9{font-size:9px;line-height:14px;letter-spacing:.03em}
+.c9i{font-size:9px;line-height:14px;letter-spacing:.03em;font-style:italic}
+.ct-right{display:flex;align-items:center;gap:12px}
+@media(max-width:700px){.hsm{display:none}}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--hair);border-radius:2px;
+  padding:0 10px;height:30px;
+  background:linear-gradient(0deg,#949494,#EAEAEA 50%);
+  color:#000;cursor:pointer;font-family:var(--pro);font-size:11px;
+  text-decoration:none;white-space:nowrap;
+}
+.btn:hover{background:linear-gradient(0deg,#999,#F1F1F1 50%);text-decoration:none}
+.btn:active{background:linear-gradient(180deg,#949494 50%,#EAEAEA)}
+.btn.sm{height:20px;padding:0 8px;font-size:9px;letter-spacing:.03em}
+.btn[disabled]{opacity:.55;cursor:default}
+
+/* ---- 3 · the A4 sheet ---- */
+.sheet{
+  position:relative;width:210mm;min-height:297mm;margin:18px auto;
+  padding:24mm 26mm 22mm;background:var(--ground);
+  box-shadow:0 1px 14px rgba(0,0,0,.16);
+}
+.run-head,.run-foot{
+  position:absolute;left:26mm;right:26mm;
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:var(--pro);
+}
+.run-head{top:11mm}
+.run-foot{bottom:11mm}
+.rh-l{font-size:9px;letter-spacing:.03em;color:var(--label)}
+.rh-page{font-size:9px;letter-spacing:.03em;font-style:italic;color:var(--label)}
+.rf-l{font-size:9px;letter-spacing:.03em;font-style:italic;color:var(--label)}
+.rf-r{font-size:9px;letter-spacing:.03em;color:var(--ink)}
+.fold-tick{position:absolute;left:0;top:105mm;width:9mm;border-top:.6pt solid var(--ink)}
+
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:30px;margin-bottom:14mm}
+.wordmark{display:block;font-family:var(--ec);font-weight:800;font-size:42px;line-height:.80;letter-spacing:-.018em;color:var(--ink)}
+.wm-addr{display:block;font-family:var(--pro);font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:6px}
+.contact{font-family:var(--pro);text-align:right;font-size:9px;line-height:14px;letter-spacing:.03em;white-space:nowrap;padding-top:3px;color:var(--ink)}
+
+.doc-title{font-family:var(--pro);font-weight:700;font-size:36px;line-height:.9;margin:0 0 4px}
+.doc-sub{font-family:var(--pro);font-size:9px;line-height:14px;letter-spacing:.03em;color:var(--label);margin:0 0 9mm}
+
+/* ---- 4 · the 9px label voice.
+   .fr = French sub-label — this file's mirror of the set's .en ---- */
+.fr{font-style:italic;color:rgba(0,0,0,.4)}
+.en{font-style:italic;color:rgba(0,0,0,.4)}
+
+.sec{font-family:var(--pro);font-size:9px;line-height:14px;letter-spacing:.03em;
+     color:var(--label);margin:11mm 0 2px;border-bottom:.6pt solid var(--rule);padding-bottom:4px}
+.sec .n{color:var(--ink);margin-right:10px}
+.sec.first{margin-top:7mm}
+.lead{font-family:var(--body);font-size:12.5px;line-height:18px;color:var(--ink);margin:6px 0 2mm}
+.lead .tr{display:block;color:var(--muted)}
+
+.field{border-top:.6pt solid var(--rule);padding:8px 0 11px}
+.field.tight{padding-bottom:8px}
+.field .lab{display:block;font-family:var(--pro);font-size:9px;line-height:14px;
+            letter-spacing:.03em;font-weight:400;color:var(--label);margin-bottom:5px}
+.field .val{display:block;font-family:var(--pro);font-size:13px;line-height:20px;min-height:20px}
+.row{display:flex;gap:22px}
+.row>.field{flex:1}
+.row>.field.narrow{flex:0 0 34mm}
+
+.note{font-family:var(--pro);font-size:9px;line-height:14px;letter-spacing:.02em;color:var(--muted);margin-top:6mm}
+.note strong{font-weight:700;color:var(--ink)}
+
+.signs{display:flex;gap:30px;margin-top:12mm}
+.signs .sig{flex:1}
+.signs .sig .line{border-top:.6pt solid var(--rule);padding-top:6px}
+.signs .sig .lab{font-family:var(--pro);font-size:9px;line-height:14px;letter-spacing:.03em;font-weight:400;color:var(--label)}
+.signs .sig .place{font-family:var(--pro);font-size:10px;color:var(--muted);margin-top:30px}
+
+/* ---- 5 · recapitulative works table (Schedule 1 at a glance) ---- */
+table.dep{width:100%;border-collapse:collapse;font-family:var(--pro);font-size:12px;margin-top:2mm}
+table.dep tr{break-inside:avoid}
+table.dep th{
+  text-align:left;font-size:9px;line-height:12px;letter-spacing:.03em;
+  font-weight:400;color:var(--label);
+  border-bottom:.6pt solid var(--rule);padding:0 8px 5px 0;vertical-align:bottom;
+}
+table.dep th .fr{display:block}
+table.dep th.r,table.dep td.r{text-align:right;padding-right:0;padding-left:10px;white-space:nowrap}
+table.dep td{padding:8px 8px 8px 0;border-bottom:.4pt solid var(--chrome);vertical-align:top;line-height:16px}
+table.dep td.n{color:var(--muted);font-size:10px}
+table.dep td .sub{display:block;font-size:10px;line-height:14px;color:var(--muted)}
+table.dep tr.sum td{border-bottom:none;padding-top:8px}
+table.dep tr.sum.total td{border-top:.8pt solid var(--rule);font-weight:700}
+table.dep col.c-n{width:8mm}
+table.dep col.c-y{width:15mm}
+table.dep col.c-v{width:32mm}
+table.dep col.c-p{width:30mm}
+.dep-empty{font-family:var(--pro);font-size:11px;color:var(--muted);padding:8px 0}
+
+/* ---- 6 · flow table — reserves print head/foot bands on every page ---- */
+table.flow{width:100%;border-collapse:collapse}
+table.flow td{padding:0;vertical-align:top}
+.flow-head,.flow-foot{height:0}
+.foot-clear{height:16mm}
+
+/* ---- 7 · screen form layer — copied from WEB/index.html ---- */
+.ff{margin-bottom:10px}
+.ff label,.lbl{display:block;font-family:var(--pro);font-size:9px;line-height:14px;letter-spacing:.03em;color:var(--label);margin-bottom:3px}
+.ff input,.ff textarea{
+  width:100%;border:1px solid var(--hair);border-radius:0;
+  background:var(--field);
+  font-family:var(--pro);font-size:13px;line-height:20px;padding:3px 8px;color:#000;
+}
+.ff input{height:28px}
+.ff textarea{padding:4px 8px;resize:vertical;overflow:hidden}
+.ff input:focus,.ff textarea:focus{outline:none;background:#e8efff}
+.ff input:focus-visible,.ff textarea:focus-visible{outline:2px solid #000;outline-offset:0}
+.ff input[readonly]{background:#f6f6f6;color:var(--muted)}
+.ff input.err,.ff textarea.err{border-color:#a00;background:#fff4f4}
+.ff.req>label::after{content:' *';color:var(--muted)}
+.hint{font-family:var(--pro);font-size:9px;line-height:13px;letter-spacing:.03em;color:rgba(0,0,0,.45);margin:3px 0 0}
+.hint.warn{color:#a00}
+.counter{font-family:var(--pro);font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.45);float:right}
+.errmsg{font-family:var(--pro);font-size:9px;line-height:13px;letter-spacing:.03em;color:#a00;margin:3px 0 0}
+
+/* checkbox / radio — the doc system's .cbx tick, driven by :checked, no JS */
+.opt{display:flex;align-items:flex-start;gap:0;margin-bottom:4px;cursor:pointer;
+     font-family:var(--pro);font-size:13px;line-height:19px}
+.opt input{position:absolute;opacity:0;width:0;height:0}
+.cbx{display:inline-block;width:13px;height:13px;flex-shrink:0;
+     border:1px solid var(--hair);background:var(--field);
+     position:relative;margin-right:8px;margin-top:3px}
+.opt input:checked + .cbx{background:#000}
+.opt input:checked + .cbx::after{content:'';position:absolute;top:2px;left:2px;width:7px;height:7px;background:#fff}
+.opt input:focus-visible + .cbx{outline:2px solid #000;outline-offset:1px}
+.optgroup{margin:2px 0 4px}
+
+/* ---- 8 · works ---- */
+.work{border-top:.6pt solid var(--rule);padding:12px 0 4px;margin-top:10px}
+.work-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.work-n{font-family:var(--pro);font-size:9px;letter-spacing:.03em;color:var(--label)}
+.work-n b{color:var(--ink);font-weight:400;margin-right:8px}
+.subhead{font-family:var(--pro);font-size:9px;line-height:14px;letter-spacing:.03em;
+         color:var(--label);margin:14px 0 5px;border-top:.4pt solid var(--chrome);padding-top:8px}
+.tools{margin:14px 0 0;display:flex;gap:10px;align-items:center}
+
+/* print mirror for textareas — a textarea prints only its visible box */
+.paper{display:none}
+
+/* print-only regions and hand-filled blanks */
+.print-only{display:none}
+.blank{display:inline-block;min-width:38mm;border-bottom:.6pt solid var(--rule);
+       height:16px;vertical-align:-3px}
+.blank.w{min-width:64mm}
+
+/* ---- 9 · screen ---- */
+@media screen{
+  .sheet{max-width:100%}
+  @media(max-width:820px){
+    .sheet{width:auto;margin:8px;padding:16px 14px 24px}
+    .row{flex-direction:column;gap:0}
+    .row>.field.narrow{flex:1}
+    .wordmark{font-size:34px}
+    .doc-title{font-size:28px}
+    .head{flex-direction:column;gap:10px;margin-bottom:8mm}
+    .contact{text-align:left}
+    .run-head,.run-foot,.fold-tick{display:none}
+  }
+}
+
+/* ============================================================
+   PRINT — the A4 deposit sheet
+============================================================ */
+@page{size:A4;margin:0}
+@media print{
+  html,body{background:#fff}
+  body{padding:0}
+  .sheet{width:auto;min-height:auto;margin:0;padding:6mm 26mm 6mm;box-shadow:none}
+  .flow-head{height:18mm}          /* + 6mm sheet padding = 24mm head band */
+  .flow-foot{height:16mm}          /* + 6mm sheet padding = 22mm foot band */
+  .run-head{position:fixed;top:11mm}
+  .run-foot{position:fixed;bottom:11mm}
+  .foot-clear{height:0}
+  .no-print{display:none !important}
+  .print-only{display:block}
+  .page-break{break-before:page}
+
+  /* form controls → typed on paper. The underline STAYS: on a signed
+     insurance document a filled line must read as filled and an empty
+     one as still available. */
+  .ff input,.ff textarea{
+    -webkit-appearance:none;appearance:none;
+    background:none !important;border:0;border-bottom:.6pt solid var(--rule);
+    border-radius:0;padding:0 0 1px;margin:0;box-shadow:none;height:auto;
+    color:var(--ink);font-family:var(--pro);font-size:13px;line-height:20px;width:100%;
+  }
+  .ff input::placeholder,.ff textarea::placeholder{color:transparent}
+  .ff input[readonly]{color:var(--ink)}
+
+  /* a textarea prints only its visible box — print the mirror instead */
+  .ff textarea{display:none}
+  .paper{
+    display:block;white-space:pre-wrap;font-family:var(--pro);
+    font-size:13px;line-height:20px;min-height:20px;
+    border-bottom:.6pt solid var(--rule);
+  }
+
+  .cbx{background:#fff}            /* ticked boxes stay black (:checked wins) */
+  .opt{page-break-inside:avoid}
+  .work,.field,.signs,.sec,.optgroup,table.dep tr,tbody.sums{break-inside:avoid}
+  .sec{break-after:avoid}
+  .hint,.counter,.errmsg{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="no-print chrome ct">
+  <span class="c9">Répertoire&nbsp;: K › Kr › Artist Information Form</span>
+  <span class="ct-right">
+    <span class="c9i hsm">Complete · submit · then print, sign and bring both originals with the works</span>
+    <button class="btn sm" type="button" onclick="window.print()">Print / PDF</button>
+  </span>
+</div>
+
+<div class="sheet">
+
+  <div class="run-head">
+    <span class="rh-l">Répertoire&nbsp;: K › Kr</span>
+    <span class="rh-page">Artist Information Form · Fiche de dépôt</span>
+  </div>
+  <div class="fold-tick"></div>
+  <div class="run-foot">
+    <span class="rf-l">Galerie KRAMER · Registre des expositions</span>
+    <span class="rf-r">kramer.paris</span>
+  </div>
+
+  <!-- flow table — thead/tfoot reserve the head/foot bands on every printed page -->
+  <table class="flow">
+  <thead><tr><td class="flow-head"></td></tr></thead>
+  <tbody><tr><td>
+
+  <div class="head">
+    <div>
+      <span class="wordmark">Kramer</span>
+      <span class="wm-addr">132 Bd de Magenta · 75010 Paris</span>
+    </div>
+    <div class="contact">
+      <span id="c-mail"></span><br>
+      <a href="https://kramer.paris">kramer.paris</a>
+    </div>
+  </div>
+
+  <h1 class="doc-title">Artist Information Form</h1>
+  <p class="doc-sub">Fiche de dépôt · Schedule 1 — works entrusted to the gallery</p>
+
+  <div class="row">
+    <div class="field tight">
+      <span class="lab">Exhibition <span class="fr" lang="fr">/ Exposition</span></span>
+      <span class="val" id="v-show">—</span>
+    </div>
+    <div class="field tight">
+      <span class="lab">Venue <span class="fr" lang="fr">/ Lieu</span></span>
+      <span class="val" id="v-venue">—</span>
+    </div>
+  </div>
+  <div class="field tight">
+    <span class="lab">Organizers <span class="fr" lang="fr">/ Organisateurs</span></span>
+    <span class="val" id="v-org">—</span>
+  </div>
+  <div class="row" id="deadlines">
+    <div class="field tight">
+      <span class="lab">Delivery deadline <span class="fr" lang="fr">/ Date limite de livraison</span></span>
+      <span class="val" id="v-delivery">—</span>
+    </div>
+    <div class="field tight">
+      <span class="lab">Collection deadline <span class="fr" lang="fr">/ Date limite de reprise</span></span>
+      <span class="val" id="v-collection">—</span>
+    </div>
+  </div>
+
+  <!-- gallery-assigned at hand-over — meaningless on screen -->
+  <div class="print-only">
+    <div class="row">
+      <div class="field tight">
+        <span class="lab">Ref. <span class="fr" lang="fr">/ Réf.</span></span>
+        <span class="val"><span class="blank"></span></span>
+      </div>
+      <div class="field tight">
+        <span class="lab">Date of deposit <span class="fr" lang="fr">/ Date du dépôt</span></span>
+        <span class="val"><span class="blank"></span></span>
+      </div>
+    </div>
+  </div>
+
+  <p class="no-print hint" style="margin-top:14px">
+    This form is Schedule 1 of the loan agreement. Clause 12 requires it to be complete
+    before any work is received; Clause 9 allows receipt to be refused without it.
+    Required fields are marked&nbsp;*. Your entries are saved in this browser as you type.
+  </p>
+
+  <form id="depot" action="https://formspree.io/f/REPLACE_WITH_NEW_FORMSPREE_ID" method="POST" novalidate>
+
+  <!-- Honeypot: invisible to humans, silently traps bots. Formspree drops any
+       submission where _gotcha is filled. Do not remove the inline hiding. -->
+  <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+  <input type="hidden" name="exhibition" id="f-exhibition">
+  <input type="hidden" name="_subject" id="f-subject">
+  <input type="hidden" name="recap" id="f-recap">
+  <input type="hidden" name="works-count" id="f-count">
+  <input type="hidden" name="insurance-total" id="f-instotal">
+
+  <!-- ═══ 01 · THE ARTIST ═══ Clause 12(a) -->
+  <p class="sec first"><span class="n">01</span>The artist <span class="fr" lang="fr">/ L’artiste</span></p>
+  <p class="no-print hint">
+    Sections 01 and 03–05 are contractual and are <strong>not published</strong>.
+    Only section 02 appears on kramer.paris.
+  </p>
+
+  <div class="ff req">
+    <label for="i-namepub">Name as published <span class="fr" lang="fr">/ Nom d’artiste publié</span></label>
+    <input type="text" id="i-namepub" name="name-published" required autocomplete="off">
+    <p class="hint">The spelling that appears on your page, in the catalogue and on labels.</p>
+  </div>
+  <div class="ff req">
+    <label for="i-namelegal">Full legal name <span class="fr" lang="fr">/ Nom légal complet</span></label>
+    <input type="text" id="i-namelegal" name="name-legal" required autocomplete="off">
+    <p class="hint">For the contract and the insurance schedule. Only if different from the above.</p>
+  </div>
+  <div class="ff">
+    <label for="i-variants">Other spellings you actually use <span class="fr" lang="fr">/ Autres orthographes réellement employées</span></label>
+    <input type="text" id="i-variants" name="name-variants" autocomplete="off">
+    <p class="hint">Birth name, or a transliteration you use yourself — separate with commas.
+      Do not enter the unaccented version of your name; it is generated automatically.</p>
+  </div>
+
+  <div class="row">
+    <div class="ff req" style="flex:1">
+      <label for="i-email">E-mail</label>
+      <input type="email" id="i-email" name="email" required autocomplete="email">
+    </div>
+    <div class="ff req" style="flex:1">
+      <label for="i-phone">Phone <span class="fr" lang="fr">/ Téléphone</span></label>
+      <input type="tel" id="i-phone" name="phone" required autocomplete="tel">
+    </div>
+  </div>
+
+  <div class="ff req">
+    <label for="i-address">Full postal address <span class="fr" lang="fr">/ Adresse postale complète</span></label>
+    <textarea id="i-address" name="address" rows="2" required></textarea>
+    <div class="paper" data-for="address"></div>
+  </div>
+
+  <div class="row">
+    <div class="ff req" style="flex:1">
+      <label for="i-city">City where you live and work <span class="fr" lang="fr">/ Ville de résidence et de travail</span></label>
+      <input type="text" id="i-city" name="city-based" required autocomplete="off">
+    </div>
+    <div class="ff req" style="flex:1">
+      <label for="i-country">Country of residence <span class="fr" lang="fr">/ Pays de résidence</span></label>
+      <input type="text" id="i-country" name="country" required autocomplete="off">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="ff req" style="flex:1">
+      <label for="i-byear">Year of birth <span class="fr" lang="fr">/ Année de naissance</span></label>
+      <input type="text" id="i-byear" name="birth-year" required inputmode="numeric" placeholder="1997" autocomplete="off">
+    </div>
+    <div class="ff req" style="flex:1">
+      <label for="i-bplace">Place of birth <span class="fr" lang="fr">/ Lieu de naissance</span></label>
+      <input type="text" id="i-bplace" name="birth-place" required placeholder="Roskilde" autocomplete="off">
+    </div>
+    <div class="ff req" style="flex:1">
+      <label for="i-nat">Nationality <span class="fr" lang="fr">/ Nationalité</span></label>
+      <input type="text" id="i-nat" name="nationality" required autocomplete="off">
+    </div>
+  </div>
+
+  <div class="ff req">
+    <span class="lbl">On your page, French writes “born” as <span class="fr" lang="fr">/ Sur votre page, l’accord français</span></span>
+    <div class="optgroup">
+      <label class="opt"><input type="radio" name="agreement-fr" value="f" required><span class="cbx"></span>Née — feminine</label>
+      <label class="opt"><input type="radio" name="agreement-fr" value="m"><span class="cbx"></span>Né — masculine</label>
+      <label class="opt"><input type="radio" name="agreement-fr" value=""><span class="cbx"></span>Né(e) — neither / prefer not to say</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="ff" style="flex:1">
+      <label for="i-siret">SIRET, if applicable <span class="fr" lang="fr">/ SIRET, le cas échéant</span></label>
+      <input type="text" id="i-siret" name="siret" autocomplete="off">
+    </div>
+    <div class="ff" style="flex:1">
+      <label for="i-vat">VAT number, if applicable <span class="fr" lang="fr">/ Nº TVA, le cas échéant</span></label>
+      <input type="text" id="i-vat" name="vat" autocomplete="off">
+    </div>
+  </div>
+
+  <!-- NIR — PRINT ONLY, AND DELIBERATELY WITHOUT A name ATTRIBUTE.
+       The numéro de sécurité sociale des artistes-auteurs is separately
+       regulated in France (art. L. 115 CSS; décret n° 2019-341) and is
+       needed at payment, not at deposit. No name attribute means no
+       browser can serialise it into FormData — this is the enforcement,
+       not a policy note. Do not add a name, and do not make it required. -->
+  <div class="print-only">
+    <div class="field tight">
+      <span class="lab">Artist social-security no., if applicable — paper original only
+        <span class="fr" lang="fr">/ Nº de sécurité sociale des artistes-auteurs — exemplaire papier uniquement</span></span>
+      <span class="val"><span class="blank w"></span></span>
+    </div>
+  </div>
+
+  <!-- ═══ 02 · PUBLIC RECORD ═══ -->
+  <p class="sec"><span class="n">02</span>Public record <span class="fr" lang="fr">/ Registre public</span></p>
+  <p class="lead">This section forms your entry in the gallery’s artist register at kramer.paris.
+    Everything here is intended for publication.
+    <span class="tr" lang="fr">Cette section constitue votre entrée au registre des artistes de kramer.paris.
+    Tout ce qui y figure est destiné à être publié.</span></p>
+
+  <div class="ff req">
+    <label for="i-medium">Medium(s), <strong>in French</strong>, comma-separated <span class="fr" lang="fr">/ Technique(s), en français, séparées par des virgules</span></label>
+    <input type="text" id="i-medium" name="medium-fr" required placeholder="Peinture, dessin, sérigraphie" autocomplete="off">
+    <p class="hint">The first item appears in your page title. French, because the register is French.</p>
+  </div>
+
+  <div class="row">
+    <div class="ff" style="flex:1">
+      <label for="i-web">Personal website <span class="fr" lang="fr">/ Site web personnel</span></label>
+      <input type="url" id="i-web" name="website" placeholder="https://" autocomplete="off">
+    </div>
+    <div class="ff" style="flex:1">
+      <label for="i-insta">Instagram</label>
+      <input type="text" id="i-insta" name="instagram" placeholder="@handle" autocomplete="off">
+    </div>
+  </div>
+  <div class="ff">
+    <label for="i-links">Other authoritative profiles — one per line <span class="fr" lang="fr">/ Autres profils faisant autorité — un par ligne</span></label>
+    <textarea id="i-links" name="other-links" rows="2"></textarea>
+    <div class="paper" data-for="other-links"></div>
+  </div>
+
+  <div class="ff req">
+    <label for="i-bio"><span class="counter" id="bio-count"></span>Biographical note <span class="fr" lang="fr">/ Notice biographique</span></label>
+    <textarea id="i-bio" name="bio" rows="6" required minlength="200"></textarea>
+    <div class="paper" data-for="bio"></div>
+    <p class="hint">Three to six sentences, written in the third person.
+      <strong>Leave a blank line between paragraphs</strong> — that is how they are set on the page.
+      This is the most-read part of your record.</p>
+  </div>
+
+  <div class="ff">
+    <label for="i-solo">Solo exhibitions — one per line <span class="fr" lang="fr">/ Expositions personnelles — une par ligne</span></label>
+    <textarea id="i-solo" name="cv-solo" rows="4" placeholder="2025 — Casting Days, Burned Out, Basel&#10;2024 — Acme Studios, marytwo, Lucerne"></textarea>
+    <div class="paper" data-for="cv-solo"></div>
+    <p class="hint">Format: <code>YYYY — Title, Venue, City</code>. Undated entries are fine.</p>
+  </div>
+  <div class="ff">
+    <label for="i-group">Group exhibitions — one per line <span class="fr" lang="fr">/ Expositions collectives — une par ligne</span></label>
+    <textarea id="i-group" name="cv-group" rows="4"></textarea>
+    <div class="paper" data-for="cv-group"></div>
+  </div>
+  <div class="ff">
+    <label for="i-edu">Education — one per line <span class="fr" lang="fr">/ Formation — une par ligne</span></label>
+    <textarea id="i-edu" name="cv-education" rows="3"></textarea>
+    <div class="paper" data-for="cv-education"></div>
+  </div>
+  <div class="ff">
+    <label for="i-other">Residencies, prizes, publications, curating, talks <span class="fr" lang="fr">/ Résidences, prix, publications, commissariat, conférences</span></label>
+    <textarea id="i-other" name="cv-other" rows="4" placeholder="Residencies&#10;2025 — …&#10;&#10;Grants &amp; prizes&#10;2024 — …"></textarea>
+    <div class="paper" data-for="cv-other"></div>
+    <p class="hint">Prefix each block with its heading, as above.</p>
+  </div>
+
+  <!-- ═══ 03 · SELECTED WORKS ═══
+       Clause 12 coverage, per work:
+         (b) title · (c) year · (d) medium · (e) dimensions · (f) weight
+         (g) edition · (h) insurance value · (i) sale price
+         (j) photographs — per-work override; global link in section 04
+         (k) condition statement · (l) component list · (m) packing
+         (n) handling · (o) installation · (p) fragility/conservation
+         (r) sales status + named prospective buyer
+       (a) is section 01, (q) is section 05. -->
+  <p class="sec"><span class="n">03</span>Selected works <span class="fr" lang="fr">/ Œuvres déposées</span></p>
+  <p class="lead">One block per work. Everything here is required by Clause 12 of the Agreement
+    before the work can be received.
+    <span class="tr" lang="fr">Un bloc par œuvre. Ces informations sont exigées par l’article 12
+    du contrat avant réception de l’œuvre.</span></p>
+
+  <div id="works"></div>
+
+  <div class="tools no-print">
+    <button class="btn sm" type="button" id="add-work">Add a work</button>
+    <span class="hint" id="work-limit" style="margin:0"></span>
+  </div>
+
+  <!-- Schedule 1 at a glance — built live from the blocks above -->
+  <p class="subhead">Summary <span class="fr" lang="fr">/ Récapitulatif</span></p>
+  <table class="dep">
+    <colgroup><col class="c-n"><col><col class="c-y"><col class="c-v"><col class="c-p"></colgroup>
+    <thead>
+      <tr>
+        <th>Nº</th>
+        <th>Title · medium · dimensions <span class="fr" lang="fr">/ Titre · technique · dimensions</span></th>
+        <th>Year <span class="fr" lang="fr">/ Année</span></th>
+        <th class="r">Insured value <span class="fr" lang="fr">/ Valeur d’assurance</span></th>
+        <th class="r">Sale price <span class="fr" lang="fr">/ Prix de vente</span></th>
+      </tr>
+    </thead>
+    <tbody id="dep-rows"></tbody>
+    <tbody class="sums" id="dep-sums"></tbody>
+  </table>
+
+  <!-- ═══ 04 · PHOTOGRAPHS ═══ Clause 12(j) -->
+  <p class="sec"><span class="n">04</span>Photographs <span class="fr" lang="fr">/ Photographies</span></p>
+  <p class="lead">Clause 12(j) requires recent dated photographs supplied as a permanent,
+    non-expiring shared link.
+    <span class="tr" lang="fr">L’article 12(j) exige des photographies récentes et datées,
+    fournies sous forme de lien partagé permanent et sans expiration.</span></p>
+
+  <div class="ff req">
+    <label for="i-photos">Permanent shared link <span class="fr" lang="fr">/ Lien partagé permanent</span></label>
+    <input type="url" id="i-photos" name="photos-link" required placeholder="https://" autocomplete="off">
+    <p class="hint">Dropbox, Google Drive or equivalent. One folder covering all works is fine —
+      a per-work link in section 03 overrides it for that work. Please check the link opens
+      for someone who is not signed in.</p>
+  </div>
+  <div class="ff req">
+    <div class="optgroup">
+      <label class="opt"><input type="checkbox" name="photos-ack" value="yes" required><span class="cbx"></span>
+        <span>I will keep this link accessible for the duration of the Agreement and for
+          <strong>12 months</strong> after it ends.</span></label>
+    </div>
+  </div>
+  <div class="ff">
+    <label for="i-photonote">Notes on the photographs <span class="fr" lang="fr">/ Remarques sur les photographies</span></label>
+    <textarea id="i-photonote" name="photos-note" rows="2"></textarea>
+    <div class="paper" data-for="photos-note"></div>
+  </div>
+
+  <!-- ═══ 05 · DECLARATIONS ═══ Clause 12(q), 10, 11 -->
+  <p class="sec"><span class="n">05</span>Declarations <span class="fr" lang="fr">/ Déclarations</span></p>
+
+  <div class="ff req">
+    <span class="lbl">Ownership or authority to consign <span class="fr" lang="fr">/ Propriété ou autorité de dépôt</span></span>
+    <div class="optgroup">
+      <label class="opt"><input type="radio" name="ownership" value="confirmed" required><span class="cbx"></span>
+        <span>I confirm I am the author and sole owner of the works, or have authority to consign and exhibit them.</span></label>
+      <label class="opt"><input type="radio" name="ownership" value="separately"><span class="cbx"></span>
+        <span>I will confirm separately in writing.</span></label>
+    </div>
+  </div>
+
+  <div class="ff req">
+    <div class="optgroup">
+      <label class="opt"><input type="checkbox" name="values-true" value="yes" required><span class="cbx"></span>
+        <span>The declared insurance values in section 03 are accurate and current.</span></label>
+      <label class="opt"><input type="checkbox" name="packaging-ack" value="yes" required><span class="cbx"></span>
+        <span>I am responsible for packaging each work appropriately for delivery and collection,
+          and understand receipt may be refused if packaging is unsuitable (Clause 10).</span></label>
+      <label class="opt"><input type="checkbox" name="publication" value="yes" required><span class="cbx"></span>
+        <span>I authorise KRAMER to publish the section 02 data — biography, exhibition history,
+          links — on kramer.paris and in its documents. Revocable at any time.</span></label>
+      <label class="opt"><input type="checkbox" name="rgpd" value="yes" required><span class="cbx"></span>
+        <span>I have read the data-processing notice below.</span></label>
+    </div>
+  </div>
+
+  <div class="ff">
+    <label for="i-notes">Additional notes <span class="fr" lang="fr">/ Notes complémentaires</span></label>
+    <textarea id="i-notes" name="notes" rows="3"></textarea>
+    <div class="paper" data-for="notes"></div>
+  </div>
+
+  <div class="no-print" id="submit-zone" style="margin-top:18px">
+    <p class="errmsg" id="form-err" hidden></p>
+    <button class="btn" type="submit" id="submit-btn">Send</button>
+    <p class="form-note hint" style="margin-top:8px">
+      After sending, print this page (⌘P / Ctrl+P), sign both originals,
+      and bring them with the works.
+    </p>
+  </div>
+
+  </form>
+
+  <p class="note">
+    <strong>Data processing.</strong> Controller: KRAMER (Matteo Kramer), 132 Bd de Magenta, 75010 Paris.
+    Sections 01 and 03–05 are processed to draw up the deposit sheet and the loan agreement and to
+    insure the works — legal basis: pre-contractual and contractual measures (art. 6.1.b GDPR).
+    Section 02 is published on kramer.paris on the basis of your consent, given above and revocable
+    at any time. Postal address and telephone number are never published. The artist social-security
+    number is not collected online. Form routing is handled by Formspree Inc. (United States).
+    Entries you type are held as a draft in your own browser only and are not transmitted until you
+    send. Records are kept for the duration of the deposit and then for ten years, for accounting
+    and provenance. To access, correct or erase your data, write to the address above.
+    <span class="fr" lang="fr">Version française sur demande.</span>
+  </p>
+
+  <!-- ═══ 06 · SIGNATURES ═══ print only -->
+  <div class="print-only">
+    <p class="sec"><span class="n">06</span>Deposit and signatures <span class="fr" lang="fr">/ Dépôt et signatures</span></p>
+
+    <div class="field">
+      <span class="lab">Depositary — gallery <span class="fr" lang="fr">/ Dépositaire — galerie</span></span>
+      <span class="val">Matteo Kramer, entrepreneur individuel (enseigne KRAMER) · SIRET 104 030 820 00013 ·
+        siège : 9 Rue Larrey, 75005 Paris · galerie : 132 Bd de Magenta, 75010 Paris · kramer.paris</span>
+    </div>
+
+    <div class="row">
+      <div class="field tight">
+        <span class="lab">Works held from <span class="fr" lang="fr">/ Œuvres déposées du</span></span>
+        <span class="val"><span class="blank"></span></span>
+      </div>
+      <div class="field tight">
+        <span class="lab">to <span class="fr" lang="fr">/ au</span></span>
+        <span class="val"><span class="blank"></span></span>
+      </div>
+    </div>
+
+    <p class="lead">In witness whereof the parties have signed in two&nbsp;(2) originals.
+      <span class="tr" lang="fr">En foi de quoi les parties ont signé en deux&nbsp;(2) originaux.</span></p>
+
+    <div class="signs">
+      <div class="sig">
+        <div class="place">Done at <span class="blank" style="min-width:26mm"></span>, on <span class="blank" style="min-width:26mm"></span></div>
+        <div class="line"><span class="lab">The artist — depositor <span class="fr" lang="fr">/ L’artiste — déposant</span></span></div>
+      </div>
+      <div class="sig">
+        <div class="place">&nbsp;</div>
+        <div class="line"><span class="lab">For KRAMER — stamp <span class="fr" lang="fr">/ Pour la Galerie KRAMER — cachet</span></span></div>
+      </div>
+    </div>
+
+    <p class="note">
+      The works remain the property of the depositor throughout the deposit. The insurance values
+      above are declared by the artist and form the basis of the nail-to-nail cover under Clause 10.
+      Transport to and from the venue is at the artist’s risk. Information submitted through this
+      form becomes part of <strong>Schedule 1</strong> once confirmed in writing by the Organizers;
+      in case of any discrepancy between this form and the Agreement, <strong>the Agreement
+      prevails</strong>. Image rights are governed by Clause 13 of the Agreement.
+      Sale terms, where applicable, are set by the separate consignment agreement.<br>
+      Matteo Kramer, entrepreneur individuel (enseigne KRAMER) · Siège : 9 Rue Larrey, 75005 Paris ·
+      Galerie : 132 Bd de Magenta, 75010 Paris · SIRET 104 030 820 00013 · RCS Paris 104 030 820.
+    </p>
+  </div>
+
+  <div class="foot-clear"></div>
+
+  </td></tr></tbody>
+  <tfoot><tr><td class="flow-foot"></td></tr></tfoot>
+  </table>
+</div>
+
+<div class="no-print chrome cb">
+  <span class="c9i">Système de documents · v1.2<span class="hsm"> — ⌘P → PDF · A4 · marges par défaut · graphiques d’arrière-plan activés · en-têtes/pieds de page désactivés</span></span>
+  <span class="c9">kramer.paris</span>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     One work block. __N__ is rewritten to 1, 2, 3 … by renumber().
+════════════════════════════════════════════════════════════ -->
+<template id="tpl-work">
+<div class="work">
+  <div class="work-head">
+    <span class="work-n"><b class="work-idx">01</b>Work <span class="fr" lang="fr">/ Œuvre</span></span>
+    <button class="btn sm no-print work-remove" type="button">Remove</button>
+  </div>
+
+  <div class="ff req">
+    <label for="w__N__-title">Title <span class="fr" lang="fr">/ Titre</span></label>
+    <input type="text" id="w__N__-title" name="work-__N__-title" required autocomplete="off">
+  </div>
+
+  <div class="row">
+    <div class="ff req" style="flex:1">
+      <label for="w__N__-year">Year <span class="fr" lang="fr">/ Année</span></label>
+      <input type="text" id="w__N__-year" name="work-__N__-year" required inputmode="numeric" placeholder="2026" autocomplete="off">
+    </div>
+    <div class="ff" style="flex:1">
+      <label for="w__N__-weight">Weight (kg), where relevant <span class="fr" lang="fr">/ Poids (kg), le cas échéant</span></label>
+      <input type="text" id="w__N__-weight" name="work-__N__-weight" inputmode="decimal" autocomplete="off">
+    </div>
+    <div class="ff" style="flex:1">
+      <label for="w__N__-edition">Edition, if applicable <span class="fr" lang="fr">/ Édition, le cas échéant</span></label>
+      <input type="text" id="w__N__-edition" name="work-__N__-edition" placeholder="Unique / 3 of 5 / AP 1/2" autocomplete="off">
+    </div>
+  </div>
+
+  <div class="ff req">
+    <label for="w__N__-medium">Medium and materials, <strong>in French</strong> <span class="fr" lang="fr">/ Technique et matériaux, en français</span></label>
+    <input type="text" id="w__N__-medium" name="work-__N__-medium" required placeholder="Huile sur toile" autocomplete="off">
+  </div>
+
+  <div class="row">
+    <div class="ff req narrow" style="flex:1">
+      <label for="w__N__-h">Height (cm) <span class="fr" lang="fr">/ Hauteur</span></label>
+      <input type="text" id="w__N__-h" name="work-__N__-h" inputmode="decimal" required autocomplete="off">
+    </div>
+    <div class="ff req narrow" style="flex:1">
+      <label for="w__N__-w">Width (cm) <span class="fr" lang="fr">/ Largeur</span></label>
+      <input type="text" id="w__N__-w" name="work-__N__-w" inputmode="decimal" required autocomplete="off">
+    </div>
+    <div class="ff narrow" style="flex:1">
+      <label for="w__N__-d">Depth (cm) <span class="fr" lang="fr">/ Profondeur</span></label>
+      <input type="text" id="w__N__-d" name="work-__N__-d" inputmode="decimal" autocomplete="off">
+    </div>
+    <div class="ff" style="flex:1">
+      <label for="w__N__-dims">As recorded <span class="fr" lang="fr">/ Tel qu’enregistré</span></label>
+      <input type="text" id="w__N__-dims" name="work-__N__-dims" readonly tabindex="-1">
+    </div>
+  </div>
+  <div class="ff">
+    <div class="optgroup">
+      <label class="opt"><input type="checkbox" name="work-__N__-dimvar" value="yes" class="dimvar"><span class="cbx"></span>
+        <span>Variable dimensions — describe them in the component list or notes below</span></label>
+    </div>
+  </div>
+  <input type="hidden" name="work-__N__-s" class="w-size">
+
+  <div class="row">
+    <div class="ff req" style="flex:1">
+      <label for="w__N__-value">Declared insurance value (EUR) <span class="fr" lang="fr">/ Valeur d’assurance déclarée</span></label>
+      <input type="text" id="w__N__-value" name="work-__N__-value" inputmode="decimal" required placeholder="1000" autocomplete="off">
+    </div>
+    <div class="ff req" style="flex:1">
+      <label for="w__N__-price">Sale price (EUR) <span class="fr" lang="fr">/ Prix de vente</span></label>
+      <input type="text" id="w__N__-price" name="work-__N__-price" inputmode="decimal" required placeholder="1000" autocomplete="off">
+    </div>
+  </div>
+
+  <div class="ff">
+    <label for="w__N__-photos">Photographs — permanent link for this work only <span class="fr" lang="fr">/ Lien permanent propre à cette œuvre</span></label>
+    <input type="url" id="w__N__-photos" name="work-__N__-photos" placeholder="https://" autocomplete="off">
+    <p class="hint">Leave blank to use the general link in section 04.</p>
+  </div>
+
+  <div class="ff req">
+    <span class="lbl">Sales status <span class="fr" lang="fr">/ Statut commercial</span></span>
+    <div class="optgroup">
+      <label class="opt"><input type="radio" name="work-__N__-status" value="available" required class="w-status"><span class="cbx"></span>Available <span class="fr" lang="fr">&nbsp;/ Disponible</span></label>
+      <label class="opt"><input type="radio" name="work-__N__-status" value="reserved" class="w-status"><span class="cbx"></span>Reserved <span class="fr" lang="fr">&nbsp;/ Réservée</span></label>
+      <label class="opt"><input type="radio" name="work-__N__-status" value="negotiation" class="w-status"><span class="cbx"></span>Under active negotiation <span class="fr" lang="fr">&nbsp;/ En cours de négociation</span></label>
+      <label class="opt"><input type="radio" name="work-__N__-status" value="sold" class="w-status"><span class="cbx"></span>Sold, not yet delivered <span class="fr" lang="fr">&nbsp;/ Vendue, non encore livrée</span></label>
+    </div>
+  </div>
+  <div class="ff w-buyer" hidden>
+    <label for="w__N__-buyer">Name of the prospective buyer <span class="fr" lang="fr">/ Nom de l’acquéreur pressenti</span></label>
+    <input type="text" id="w__N__-buyer" name="work-__N__-buyer" autocomplete="off">
+    <p class="hint">Required by Clause 12(r) when a work is reserved or under negotiation.</p>
+  </div>
+
+  <p class="subhead">Condition and components <span class="fr" lang="fr">/ État et composants</span></p>
+
+  <div class="ff req">
+    <label for="w__N__-condition">Written condition statement <span class="fr" lang="fr">/ Constat d’état écrit</span></label>
+    <textarea id="w__N__-condition" name="work-__N__-condition" rows="3" required></textarea>
+    <div class="paper" data-for="work-__N__-condition"></div>
+    <p class="hint">Enough to identify the work and any visible existing defects (Clause 11).</p>
+  </div>
+
+  <div class="ff">
+    <div class="optgroup">
+      <label class="opt"><input type="checkbox" name="work-__N__-multipart" value="yes" class="multipart"><span class="cbx"></span>
+        <span>This work has several components</span></label>
+    </div>
+  </div>
+  <div class="ff w-components" hidden>
+    <label for="w__N__-components">Component list — one per line, with dimensions <span class="fr" lang="fr">/ Liste des composants — un par ligne, avec dimensions</span></label>
+    <textarea id="w__N__-components" name="work-__N__-components" rows="3"></textarea>
+    <div class="paper" data-for="work-__N__-components"></div>
+  </div>
+
+  <p class="subhead">Packing, handling, installation <span class="fr" lang="fr">/ Emballage, manutention, installation</span></p>
+
+  <div class="ff req">
+    <label for="w__N__-packing">Packing instructions <span class="fr" lang="fr">/ Instructions d’emballage</span></label>
+    <textarea id="w__N__-packing" name="work-__N__-packing" rows="2" required></textarea>
+    <div class="paper" data-for="work-__N__-packing"></div>
+  </div>
+  <div class="ff req">
+    <label for="w__N__-handling">Handling instructions <span class="fr" lang="fr">/ Instructions de manutention</span></label>
+    <textarea id="w__N__-handling" name="work-__N__-handling" rows="2" required></textarea>
+    <div class="paper" data-for="work-__N__-handling"></div>
+  </div>
+  <div class="ff req">
+    <label for="w__N__-install">Installation instructions <span class="fr" lang="fr">/ Instructions d’installation</span></label>
+    <textarea id="w__N__-install" name="work-__N__-install" rows="2" required></textarea>
+    <div class="paper" data-for="work-__N__-install"></div>
+    <p class="hint">Hanging, mounting, clearances, and any material or hardware you supply.</p>
+  </div>
+  <div class="ff req">
+    <label for="w__N__-conservation">Fragility, prior restoration, unstable materials, conservation issues <span class="fr" lang="fr">/ Fragilité, restauration antérieure, matériaux instables, conservation</span></label>
+    <textarea id="w__N__-conservation" name="work-__N__-conservation" rows="2" required placeholder="Write “None” if there are none."></textarea>
+    <div class="paper" data-for="work-__N__-conservation"></div>
+  </div>
+
+  <div class="print-only">
+    <div class="field tight">
+      <span class="lab">Gallery ref. <span class="fr" lang="fr">/ Réf. galerie</span></span>
+      <span class="val"><span class="blank"></span></span>
+    </div>
+  </div>
+</div>
+</template>
+
+<script>
+/* ============================================================
+   KRAMER — Artist Information Form
+============================================================ */
+
+/* ---- Formspree endpoint --------------------------------------------------
+   REPLACE the id in the <form action> before sending this to anyone.
+   Do NOT reuse xzdqvpbg — that is the visitor RSVP form, and its payload
+   shape also feeds the Brevo newsletter worker on the home page. Create a
+   separate form so deposit entries stay out of the RSVP export. */
+var FORM_PLACEHOLDER = 'REPLACE_WITH_NEW_FORMSPREE_ID';
+
+/* ---- Show configuration --------------------------------------------------
+   Registry spelling is KR01/KR02/KR03 — no slash (vault rule, 2026-09-08).
+   Pick a show with ?x=KR03. Empty strings render as “to be confirmed”. */
+var SHOWS = {
+  KR03: {
+    code: 'KR03',
+    title: '',
+    dates: '8–30 October 2026',
+    venue: 'KRAMER, 132 Bd de Magenta, 75010 Paris',
+    organizers: 'Matteo Kramer (KRAMER) & Katya Quelish (Erratum)',
+    delivery: '',        /* Clause 4 delivery deadline — fill when set */
+    collection: ''       /* Clause 4 collection deadline — fill when set */
+  },
+  KR02: {
+    code: 'KR02',
+    title: '',
+    dates: 'late September 2026',
+    venue: 'KRAMER, 132 Bd de Magenta, 75010 Paris',
+    organizers: 'Matteo Kramer (KRAMER)',
+    delivery: '',
+    collection: ''
+  }
+};
+
+var MAX_WORKS = 12;
+var DRAFT_KEY = 'kramer-depot-v1';
+
+var q = function (s, r) { return (r || document).querySelector(s); };
+var qa = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
+
+/* ---- show ---------------------------------------------------------------- */
+var SHOW = SHOWS[(new URLSearchParams(location.search).get('x') || '').toUpperCase()] || SHOWS.KR03;
+
+(function paintShow() {
+  var label = SHOW.code + (SHOW.title ? ' · « ' + SHOW.title + ' »' : '') + ' · ' + SHOW.dates;
+  q('#v-show').textContent = label;
+  q('#v-venue').textContent = SHOW.venue;
+  q('#v-org').textContent = SHOW.organizers;
+  q('#v-delivery').textContent = SHOW.delivery || 'to be confirmed';
+  q('#v-collection').textContent = SHOW.collection || 'to be confirmed';
+  q('#f-exhibition').value = label;
+  document.title = 'Kramer — Artist Information Form · ' + SHOW.code;
+})();
+
+/* ---- contact address, assembled at runtime so the published page
+        carries no harvestable string -------------------------------------- */
+(function mail() {
+  var a = 'contact' + '@' + 'kramer' + String.fromCharCode(46) + 'paris';
+  var el = q('#c-mail');
+  el.innerHTML = '<a href="mailto:' + a + '">' + a + '</a>';
+})();
+
+/* ---- numbers ------------------------------------------------------------- */
+/* Money and dimensions are type=text, never type=number: a French artist
+   typing "1 200,50" into a number input produces an EMPTY value, which
+   would silently blank an insurance figure. */
+function num(v) {
+  return String(v == null ? '' : v).trim().replace(/\s/g, '').replace(',', '.');
+}
+function toNum(v) {
+  var n = parseFloat(num(v));
+  return isFinite(n) ? n : 0;
+}
+function eur(n) {
+  return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+
+/* Size string. build.mjs parses w.s with
+     /^([\d.]+)\s*×\s*([\d.]+)(?:\s*×\s*([\d.]+))?\s*cm$/
+   so this assembler is deliberately STRICTER — a single U+00D7 with single
+   spaces — and anything it produces is guaranteed to parse there. */
+var SIZE_RE = /^([\d.]+) × ([\d.]+)(?: × ([\d.]+))? cm$/;
+function sizeStr(h, w, d) {
+  var parts = [h, w, d].filter(function (v) { return String(v || '').trim() !== ''; }).map(num);
+  if (parts.length < 2) return '';
+  return parts.join(' × ') + ' cm';
+}
+
+/* ---- textarea → print mirror + autogrow ---------------------------------- */
+/* A textarea prints only its visible box; overflow is silently lost. Every
+   textarea therefore has a sibling .paper div that carries its text onto
+   paper. Losing this breaks most of Clause 12 on the signed original. */
+function syncPaper(el) {
+  var mirror = el.parentNode.querySelector('.paper[data-for="' + el.name + '"]');
+  if (mirror) mirror.textContent = el.value;
+  el.style.height = 'auto';
+  el.style.height = (el.scrollHeight + 2) + 'px';
+}
+function syncAllPapers() { qa('textarea').forEach(syncPaper); }
+
+/* ---- works --------------------------------------------------------------- */
+function workBlocks() { return qa('#works .work'); }
+
+function addWork() {
+  if (workBlocks().length >= MAX_WORKS) return;
+  var frag = q('#tpl-work').content.cloneNode(true);
+  q('#works').appendChild(frag);
+  renumber();
+  recompute();
+}
+
+function removeWork(block) {
+  if (workBlocks().length < 2) return;
+  block.parentNode.removeChild(block);
+  renumber();
+  recompute();
+}
+
+/* Renumbering is always contiguous: removing work 2 of 4 re-indexes the rest
+   to 1–3. Formspree's CSV columns are keyed by field name, so a sparse
+   work-1 / work-3 set reads as data loss in the export. */
+function renumber() {
+  workBlocks().forEach(function (b, k) {
+    var n = String(k + 1);
+    qa('[name],[id],[for],[data-for]', b).forEach(function (el) {
+      ['name', 'id', 'for', 'data-for'].forEach(function (attr) {
+        var v = el.getAttribute(attr);
+        if (!v) return;
+        el.setAttribute(attr, v.replace(/__N__/g, n).replace(/(work-|^w)(\d+)/g, '$1' + n));
+      });
+    });
+    var idx = q('.work-idx', b);
+    if (idx) idx.textContent = (k + 1 < 10 ? '0' : '') + (k + 1);
+  });
+  var only = workBlocks().length < 2;
+  qa('.work-remove').forEach(function (btn) { btn.hidden = only; });
+  var atMax = workBlocks().length >= MAX_WORKS;
+  q('#add-work').disabled = atMax;
+  q('#work-limit').textContent = atMax ? 'Maximum ' + MAX_WORKS + ' works per form.' : '';
+}
+
+/* ---- live summary + totals ----------------------------------------------- */
+function readWork(b) {
+  var g = function (suffix) {
+    var el = b.querySelector('[name$="-' + suffix + '"]');
+    return el ? el.value.trim() : '';
+  };
+  var status = b.querySelector('.w-status:checked');
+  return {
+    title: g('title'), year: g('year'), medium: g('medium'),
+    h: g('h'), w: g('w'), d: g('d'),
+    weight: g('weight'), edition: g('edition'),
+    value: g('value'), price: g('price'),
+    photos: g('photos'), buyer: g('buyer'),
+    condition: g('condition'), components: g('components'),
+    packing: g('packing'), handling: g('handling'),
+    install: g('install'), conservation: g('conservation'),
+    dimvar: !!b.querySelector('.dimvar:checked'),
+    status: status ? status.parentNode.textContent.trim().split('/')[0].trim() : ''
+  };
+}
+
+function recompute() {
+  var rows = [], sumV = 0, sumP = 0, recap = [];
+
+  workBlocks().forEach(function (b, k) {
+    var w = readWork(b);
+    var size = w.dimvar ? 'Variable dimensions' : sizeStr(w.h, w.w, w.d);
+
+    /* mirror the assembled size into the readonly display + the hidden field
+       that eventually becomes ARTISTS[].works[].s */
+    var disp = b.querySelector('[name$="-dims"]');
+    var hid = b.querySelector('.w-size');
+    if (disp) disp.value = size;
+    if (hid) hid.value = size;
+
+    var v = toNum(w.value), p = toNum(w.price);
+    sumV += v; sumP += p;
+
+    rows.push(
+      '<tr><td class="n">' + (k + 1 < 10 ? '0' : '') + (k + 1) + '</td>' +
+      '<td>' + esc(w.title || '—') +
+      '<span class="sub">' + esc([w.medium, size, w.weight ? w.weight + ' kg' : '', w.edition]
+        .filter(Boolean).join(' · ')) + '</span></td>' +
+      '<td>' + esc(w.year) + '</td>' +
+      '<td class="r">' + (v ? eur(v) : '—') + '</td>' +
+      '<td class="r">' + (p ? eur(p) : '—') + '</td></tr>'
+    );
+
+    recap.push(
+      (k + 1 < 10 ? '0' : '') + (k + 1) + ' · ' + w.title + ' (' + w.year + ')\n' +
+      '     ' + [w.medium, size, w.weight ? w.weight + ' kg' : '', w.edition].filter(Boolean).join(' · ') + '\n' +
+      '     Insurance ' + (v ? eur(v) : '—') + ' · Price ' + (p ? eur(p) : '—') +
+      ' · ' + w.status + (w.buyer ? ' (' + w.buyer + ')' : '') + '\n' +
+      (w.photos ? '     Photographs: ' + w.photos + '\n' : '') +
+      '     Condition: ' + w.condition + '\n' +
+      (w.components ? '     Components: ' + w.components + '\n' : '') +
+      '     Packing: ' + w.packing + '\n' +
+      '     Handling: ' + w.handling + '\n' +
+      '     Install: ' + w.install + '\n' +
+      '     Conservation: ' + w.conservation
+    );
+  });
+
+  q('#dep-rows').innerHTML = rows.join('') ||
+    '<tr><td colspan="5" class="dep-empty">No work entered yet.</td></tr>';
+
+  q('#dep-sums').innerHTML = workBlocks().length
+    ? '<tr class="sum"><td></td><td colspan="2">Total number of works ' +
+      '<span class="fr" lang="fr">/ Nombre total d’œuvres</span></td>' +
+      '<td class="r">' + workBlocks().length + '</td><td class="r"></td></tr>' +
+      '<tr class="sum total"><td></td><td colspan="2">Total insured value ' +
+      '<span class="fr" lang="fr">/ Valeur globale d’assurance</span></td>' +
+      '<td class="r">' + eur(sumV) + '</td><td class="r"></td></tr>'
+    : '';
+
+  q('#f-count').value = String(workBlocks().length);
+  q('#f-instotal').value = eur(sumV);
+  q('#f-recap').value = recap.join('\n\n');
+  q('#f-subject').value = 'Deposit — ' + (q('#i-namepub').value || 'unnamed') +
+    ' — ' + workBlocks().length + ' work(s) — ' + SHOW.code;
+}
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* ---- conditional fields --------------------------------------------------- */
+function syncConditionals(b) {
+  var status = b.querySelector('.w-status:checked');
+  var needsBuyer = status && (status.value === 'reserved' || status.value === 'negotiation');
+  var buyerBox = b.querySelector('.w-buyer');
+  buyerBox.hidden = !needsBuyer;
+  buyerBox.querySelector('input').required = !!needsBuyer;
+
+  var multi = b.querySelector('.multipart').checked;
+  var compBox = b.querySelector('.w-components');
+  compBox.hidden = !multi;
+  compBox.querySelector('textarea').required = !!multi;
+
+  var dimvar = b.querySelector('.dimvar').checked;
+  ['-h', '-w', '-d'].forEach(function (sfx) {
+    var el = b.querySelector('[name$="' + sfx + '"]');
+    if (el && el.type === 'text') el.required = (!dimvar && sfx !== '-d');
+  });
+}
+function syncAllConditionals() { workBlocks().forEach(syncConditionals); }
+
+/* ---- bio counter ---------------------------------------------------------- */
+function bioCount() {
+  var v = q('#i-bio').value.trim();
+  var el = q('#bio-count');
+  el.textContent = v.length + ' / 200 min';
+  el.style.color = v.length >= 200 ? 'rgba(0,0,0,.45)' : '#a00';
+}
+
+/* ---- draft ---------------------------------------------------------------- */
+var draftTimer = null;
+function saveDraft() {
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(function () {
+    try {
+      var data = { n: workBlocks().length, f: {} };
+      qa('#depot input, #depot textarea').forEach(function (el) {
+        if (!el.name || el.name === '_gotcha') return;
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          if (el.checked) data.f[el.name + '::' + el.value] = 1;
+        } else if (el.value) {
+          data.f[el.name] = el.value;
+        }
+      });
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ t: Date.now(), d: data }));
+    } catch (e) { /* private window, blocked storage — draft is a convenience only */ }
+  }, 400);
+}
+
+function loadDraft() {
+  var raw;
+  try { raw = localStorage.getItem(DRAFT_KEY); } catch (e) { return false; }
+  if (!raw) return false;
+  var saved;
+  try { saved = JSON.parse(raw); } catch (e) { return false; }
+  var data = saved && saved.d;
+  if (!data) return false;
+
+  while (workBlocks().length < Math.max(1, data.n || 1)) addWork();
+
+  Object.keys(data.f).forEach(function (key) {
+    var parts = key.split('::');
+    if (parts.length === 2) {
+      var box = q('#depot [name="' + parts[0] + '"][value="' + parts[1] + '"]');
+      if (box) box.checked = true;
+    } else {
+      var el = q('#depot [name="' + key + '"]');
+      if (el) el.value = data.f[key];
+    }
+  });
+
+  var when = new Date(saved.t);
+  var bar = document.createElement('p');
+  bar.className = 'hint no-print';
+  bar.innerHTML = 'Draft restored — ' +
+    when.toLocaleDateString() + ' ' +
+    when.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) +
+    ' · <a href="#" id="clear-draft">clear it</a>';
+  q('#depot').insertBefore(bar, q('#depot').firstChild);
+  q('#clear-draft').addEventListener('click', function (e) {
+    e.preventDefault();
+    try { localStorage.removeItem(DRAFT_KEY); } catch (_) {}
+    location.reload();
+  });
+  return true;
+}
+
+/* ---- validation ----------------------------------------------------------- */
+function stripDiacritics(s) {
+  /* [\u0300-\u036f] via constructor: keeps the source pure ASCII so an
+     editor cannot mangle the literal combining marks. */
+  return String(s).normalize('NFD').replace(new RegExp('[\\u0300-\\u036f]', 'g'), '');
+}
+
+function validate() {
+  var problems = [];
+  qa('.err').forEach(function (el) { el.classList.remove('err'); });
+
+  /* years — same shape build.mjs looks for in `born` */
+  qa('#depot [name$="-year"], #i-byear').forEach(function (el) {
+    if (el.value && !/^(18|19|20)\d{2}$/.test(el.value.trim())) {
+      el.classList.add('err');
+      problems.push('“' + el.value + '” is not a four-digit year.');
+    }
+  });
+
+  /* alternate spellings — the build already derives the unaccented form */
+  var pub = q('#i-namepub').value.trim();
+  var vars = q('#i-variants').value.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+  if (pub && vars.some(function (v) { return v && v === stripDiacritics(pub) && v !== pub; })) {
+    q('#i-variants').classList.add('err');
+    problems.push('The unaccented form of your name is generated automatically — no need to enter it.');
+  }
+
+  /* sizes must satisfy the build's parser */
+  workBlocks().forEach(function (b, k) {
+    if (b.querySelector('.dimvar').checked) return;
+    var s = b.querySelector('.w-size').value;
+    if (s && !SIZE_RE.test(s)) {
+      b.querySelector('[name$="-h"]').classList.add('err');
+      problems.push('Work ' + (k + 1) + ': check the dimensions — use numbers only, e.g. 59,4.');
+    }
+  });
+
+  if (!workBlocks().length) problems.push('Add at least one work.');
+  return problems;
+}
+
+/* ---- submit ---------------------------------------------------------------
+   Modelled on rsvpSubmit() in WEB/index.html, with ONE DELIBERATE DIVERGENCE:
+   there is no form.reset() on success. The RSVP form resets after 2400 ms,
+   which is right for five fields; wiping a 40-minute deposit form is hostile,
+   and the artist still has to print and sign this page. Do not "fix" this to
+   match the RSVP. There is also no Brevo call — an artist is not a signup. */
+var sent = false;
+
+async function submitForm(e) {
+  e.preventDefault();
+  var form = q('#depot'), btn = q('#submit-btn'), errBox = q('#form-err');
+  errBox.hidden = true;
+
+  recompute();
+  syncAllPapers();
+
+  if (form.action.indexOf(FORM_PLACEHOLDER) !== -1) {
+    errBox.textContent = 'This form is not connected yet — the Formspree endpoint is still a placeholder.';
+    errBox.hidden = false;
+    return false;
+  }
+
+  if (!form.reportValidity()) return false;
+
+  var problems = validate();
+  if (problems.length) {
+    errBox.innerHTML = problems.map(esc).join('<br>');
+    errBox.hidden = false;
+    var first = q('.err');
+    if (first) first.focus();
+    return false;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  try {
+    var r = await fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (r.ok) {
+      sent = true;
+      try { localStorage.removeItem(DRAFT_KEY); } catch (_) {}
+      q('#submit-zone').innerHTML =
+        '<p class="note" style="margin-top:0"><strong>Received.</strong> ' +
+        'Now print this page (⌘P / Ctrl+P), sign both originals, and bring them with the works. ' +
+        'Your entries are still on screen — nothing has been cleared.</p>' +
+        '<button class="btn" type="button" onclick="window.print()">Print / PDF</button>';
+    } else {
+      /* surface Formspree's real reason in the console for diagnosis */
+      var detail = '';
+      try {
+        var j = await r.clone().json();
+        detail = (j.errors && j.errors.map(function (x) { return x.message; }).join('; ')) || j.error || '';
+      } catch (_) {}
+      console.error('[kramer] Formspree rejected the submission:', r.status, detail);
+      errBox.textContent = 'Could not send' + (detail ? ' — ' + detail : '') + '. Please try again.';
+      errBox.hidden = false;
+      btn.textContent = 'Send';
+      btn.disabled = false;
+    }
+  } catch (err) {
+    console.error('[kramer] Formspree request failed:', err);
+    errBox.textContent = 'Could not send — check your connection and try again.';
+    errBox.hidden = false;
+    btn.textContent = 'Send';
+    btn.disabled = false;
+  }
+  return false;
+}
+
+/* ---- wiring --------------------------------------------------------------- */
+q('#add-work').addEventListener('click', addWork);
+
+document.addEventListener('click', function (e) {
+  var rm = e.target.closest && e.target.closest('.work-remove');
+  if (rm) removeWork(rm.closest('.work'));
+});
+
+document.addEventListener('input', function (e) {
+  var el = e.target;
+  if (el.tagName === 'TEXTAREA') syncPaper(el);
+  if (el.id === 'i-bio') bioCount();
+  if (el.closest && el.closest('#works')) recompute();
+  if (el.id === 'i-namepub') recompute();
+  saveDraft();
+});
+
+document.addEventListener('change', function (e) {
+  var b = e.target.closest && e.target.closest('.work');
+  if (b) { syncConditionals(b); recompute(); }
+  saveDraft();
+});
+
+q('#depot').addEventListener('submit', submitForm);
+
+/* Placeholders must not reach paper. color:transparent only hides them —
+   the glyphs stay in the PDF and come back out of any text extractor, so a
+   blank deposit sheet would carry "Huile sur toile" and "Roskilde" as
+   invisible ink. Strip the attributes for the duration of the print. */
+var phStash = [];
+window.addEventListener('beforeprint', function () {
+  phStash = qa('#depot [placeholder]');
+  phStash.forEach(function (el) {
+    el.setAttribute('data-ph-print', el.getAttribute('placeholder'));
+    el.setAttribute('placeholder', '');
+  });
+});
+window.addEventListener('afterprint', function () {
+  phStash.forEach(function (el) {
+    el.setAttribute('placeholder', el.getAttribute('data-ph-print') || '');
+    el.removeAttribute('data-ph-print');
+  });
+  phStash = [];
+});
+
+window.addEventListener('beforeunload', function (e) {
+  if (sent) return;
+  var dirty = qa('#depot input, #depot textarea').some(function (el) {
+    return el.name && el.name !== '_gotcha' && el.type !== 'hidden' &&
+           (el.type === 'checkbox' || el.type === 'radio' ? el.checked : el.value);
+  });
+  if (dirty) { e.preventDefault(); e.returnValue = ''; }
+});
+
+/* ---- boot ----------------------------------------------------------------- */
+if (!loadDraft()) addWork();
+renumber();
+syncAllConditionals();
+syncAllPapers();
+bioCount();
+recompute();
+
+if (q('#depot').action.indexOf(FORM_PLACEHOLDER) !== -1) {
+  console.warn('[kramer] Formspree endpoint is still the placeholder — this form cannot be sent.');
+}
+</script>
+
+</body>
+</html>
