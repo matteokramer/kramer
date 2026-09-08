@@ -1,7 +1,7 @@
 /* ============================================================
    KRAMER — fiche/site drift detector (warn-only)
    Cross-checks the ARTISTS array in index.html against the
-   authoritative fiches in ../EXHIBITIONS/KR01_LA-BRIDE/ARTISTS/
+   authoritative fiches in ../ARTISTS/
    (vault root, OUTSIDE this public repo — the script degrades
    gracefully when the fiches are absent, e.g. in CI).
 
@@ -20,7 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const WEB = join(dirname(fileURLToPath(import.meta.url)), '..');
-const FICHES = join(WEB, '..', 'EXHIBITIONS', 'KR01_LA-BRIDE', 'ARTISTS');
+const FICHES = join(WEB, '..', 'ARTISTS');
 
 /* fiche sections that are public record (checked) vs never published (skipped) */
 const INCLUDE = /exhibition|solo|group|education|formation|performance|grant|award|prize|publication|curat|studio|project|talk|archive|collection|recognition|acquisition|consigned|collaboration|residenc|interview/i;
