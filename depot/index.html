@@ -694,6 +694,14 @@ table.flow td{padding:0;vertical-align:top}
         siège : 9 Rue Larrey, 75005 Paris · galerie : 132 Bd de Magenta, 75010 Paris · kramer.paris</span>
     </div>
 
+    <!-- Filled per show from SHOW.coOrganizer, and hidden entirely on a single-organizer show
+         (e.g. KR02) — see paintShow(). Visibility toggled with an inline style, not [hidden],
+         so one line of JS governs it regardless of the ancestor .print-only's own screen/print state. -->
+    <div class="field" id="co-organizer-field">
+      <span class="lab">Co-organizer <span class="fr" lang="fr">/ Co-organisateur</span></span>
+      <span class="val" id="v-coorg"></span>
+    </div>
+
     <div class="row">
       <div class="field tight">
         <span class="lab">Works held from <span class="fr" lang="fr">/ Œuvres déposées du</span></span>
@@ -914,7 +922,13 @@ var SHOWS = {
     title: '',
     dates: '8–30 October 2026',
     venue: 'KRAMER, 132 Bd de Magenta, 75010 Paris',
-    organizers: 'Matteo Kramer (KRAMER) & Katya Quelish (Erratum)',
+    /* Name corrected 2026-09-08: "Katya Quel", per the Agreement's own definition of the
+       Co-Organizer party (below) — supersedes the earlier "Katya Quelish" from the Schedule 1
+       form header, which was evidently informal. */
+    organizers: 'Matteo Kramer (KRAMER) & Katya Quel (Erratum)',
+    coOrganizer: 'Erratum, entrepreneur individuel · siège : 29 Voie de la Résistance, ' +
+      '93500 Pantin, France · SIREN 989 127 865 (SIRET 989 127 865 00016) · ' +
+      'represented by Katya Quel · partyquel@gmail.com · +33 7 83 47 87 16',
     delivery: '',        /* Clause 4 delivery deadline — fill when set */
     collection: ''       /* Clause 4 collection deadline — fill when set */
   },
@@ -947,6 +961,14 @@ var SHOW = SHOWS[(new URLSearchParams(location.search).get('x') || '').toUpperCa
   q('#v-collection').textContent = SHOW.collection || 'to be confirmed';
   q('#f-exhibition').value = label;
   document.title = 'Kramer — Artist Information Form · ' + SHOW.code;
+
+  var coEl = q('#co-organizer-field');
+  if (SHOW.coOrganizer) {
+    q('#v-coorg').textContent = SHOW.coOrganizer;
+    coEl.style.display = '';        /* let the ancestor .print-only govern screen/print */
+  } else {
+    coEl.style.display = 'none';    /* no co-organizer on this show — inline style always wins */
+  }
 })();
 
 /* ---- contact address, assembled at runtime so the published page
