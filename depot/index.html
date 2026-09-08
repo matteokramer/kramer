@@ -379,7 +379,7 @@ table.flow td{padding:0;vertical-align:top}
     Required fields are marked&nbsp;*. Your entries are saved in this browser as you type.
   </p>
 
-  <form id="depot" action="https://formspree.io/f/REPLACE_WITH_NEW_FORMSPREE_ID" method="POST" novalidate>
+  <form id="depot" action="https://formspree.io/f/mrpgynja" method="POST" novalidate>
 
   <!-- Honeypot: invisible to humans, silently traps bots. Formspree drops any
        submission where _gotcha is filled. Do not remove the inline hiding. -->
@@ -889,10 +889,12 @@ table.flow td{padding:0;vertical-align:top}
 ============================================================ */
 
 /* ---- Formspree endpoint --------------------------------------------------
-   REPLACE the id in the <form action> before sending this to anyone.
-   Do NOT reuse xzdqvpbg — that is the visitor RSVP form, and its payload
-   shape also feeds the Brevo newsletter worker on the home page. Create a
-   separate form so deposit entries stay out of the RSVP export. */
+   Live: https://formspree.io/f/mrpgynja — a dedicated form, deliberately
+   NOT xzdqvpbg (the visitor RSVP form, whose payload shape also feeds the
+   Brevo newsletter worker on the home page), so deposit entries stay out
+   of the RSVP export. This constant is a standing tripwire: if the action
+   is ever reset to a placeholder, submission blocks again rather than
+   failing silently against a dead endpoint. */
 var FORM_PLACEHOLDER = 'REPLACE_WITH_NEW_FORMSPREE_ID';
 
 /* ---- Show configuration --------------------------------------------------
