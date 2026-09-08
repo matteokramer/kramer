@@ -59,7 +59,7 @@ const GALLERY = {
 
 function page(a, i) {
   const entry = String(i + 1).padStart(3, '0');
-  const ref = 'KR/01·' + a.code;
+  const ref = 'KR01' + a.code;
   const url = `${SITE}/artistes/${a.slug}/`;
 
   /* --- SEO-derived values (only from on-file data) --- */
@@ -78,7 +78,7 @@ function page(a, i) {
      + a VisualArtwork per consigned work */
   const personId = `${url}#person`;
   const titleTxt = `${a.name}${titleMedium} · La Bride · Kramer, Paris`;
-  const descTxt = `${a.name}${descMedium}${descBased} — exposition « La Bride » (KR/01), registre des artistes. Kramer, galerie d'art contemporain, Paris 10e.`;
+  const descTxt = `${a.name}${descMedium}${descBased} — exposition « La Bride » (KR01), registre des artistes. Kramer, galerie d'art contemporain, Paris 10e.`;
   const variants = nameVariants(a);
   const heroImg = ARTIST_IMG[a.slug] ? `${SITE}/${ARTIST_IMG[a.slug]}`
     : (a.works[0] && a.works[0].i ? `${SITE}/images/works/${a.works[0].i}` : '');
@@ -146,7 +146,7 @@ function page(a, i) {
   const fields = [
     a.born ? `<div class="a-field"><span class="a-lbl">${bornLbl}</span><span class="a-val">${esc(a.born)}</span></div>` : '',
     a.based ? `<div class="a-field"><span class="a-lbl">Résidence</span><span class="a-val">${esc(a.based)}</span></div>` : '',
-    `<div class="a-field"><span class="a-lbl">Au registre</span><span class="a-val">La Bride · KR/01</span></div>`,
+    `<div class="a-field"><span class="a-lbl">Au registre</span><span class="a-val">La Bride · KR01</span></div>`,
   ].join('\n      ');
 
   /* first plate is the likely LCP → eager; everything after lazy-loads */
