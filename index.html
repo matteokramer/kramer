@@ -334,7 +334,9 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
    SECTIONS — spacing only, NO border rules between sections
    Single typeface: Acumin Pro throughout
 ============================================================ */
-.s-head{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.45);padding:0 10px 8px}
+/* font-weight pinned because .s-head sits on <h2> (real heading outline) — the reset above
+   zeroes margins but not weight, so an unpinned h2 would render bold. Same pin as kramer.css. */
+.s-head{font-size:9px;font-weight:400;letter-spacing:.03em;color:rgba(0,0,0,.45);padding:0 10px 8px}
 .section{padding-top:40px}
 /* Single hairline tied to each section label — divides registers without boxing them */
 .section>.s-head{border-top:1px solid #222;padding-top:8px}
@@ -515,8 +517,11 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
       <div class="slide-cursor" id="slide-cursor">→</div>
       <div class="slide-area">
         <a class="slide-plate" id="slide-link" href="#" aria-label="Voir la fiche de l'artiste">
-          <img src="images/placeholder.png" class="plate-img" id="slide-img" alt="">
-          <span class="slide-counter" id="slide-counter">1 / 10</span>
+          <!-- Transparent 1×1 initial src: showSlide() sets the real image on init, so a
+               real file here would be a full download the visitor never sees (it was
+               images/placeholder.png — 495 KB fetched and discarded on every load). -->
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="plate-img" id="slide-img" alt="">
+          <span class="slide-counter" id="slide-counter"></span><!-- set by showSlide() on init; left empty so the count can't go stale (it read "1 / 10" while SLIDES held 18) -->
         </a>
       </div>
       <div class="slide-caption">
@@ -562,7 +567,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
          Registre des événements on 2026-09-07, once they had passed. The slot stays
          (with its nav item) for the next announcement. -->
     <div class="section" id="section-news" style="padding-top:20px">
-      <p class="s-head">Actualité</p>
+      <h2 class="s-head">Actualité</h2>
       <div class="news-block">
         <p class="ev-note" style="margin-top:0">Aucune annonce en cours. La prochaine entrée sera inscrite au registre.</p>
       </div>
@@ -570,7 +575,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 
     <!-- REGISTRE DES ARTISTES -->
     <div class="section" id="section-artistes">
-      <p class="s-head">Registre des artistes — 10 entrées · KR01</p>
+      <h2 class="s-head">Registre des artistes — 10 entrées · KR01</h2>
       <ul class="artist-list" id="artist-list"></ul>
       <noscript>
         <ul class="artist-list">
@@ -639,7 +644,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
          on a 9px muted reference line. KR01V is the registry code of the
          moving-image strand; the vernissage carries no sub-code. -->
     <div class="section" id="section-archive">
-      <p class="s-head">Registre des événements — 2 entrées · KR01</p>
+      <h2 class="s-head">Registre des événements — 2 entrées · KR01</h2>
       <ul class="ev-list">
 
         <li class="ev-item">
@@ -705,19 +710,22 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
       </div>
 
       <div id="form-rsvp" style="padding:0 10px 12px">
-        <p class="s-head" style="padding-left:0;margin-bottom:12px">Formulaire de contact</p>
+        <h2 class="s-head" style="padding-left:0;margin-bottom:12px">Formulaire de contact</h2>
         <form class="rsvp" action="https://formspree.io/f/xzdqvpbg" method="POST" onsubmit="return rsvpSubmit(event)">
           <!-- Honeypot: invisible to humans, silently traps bots. Formspree drops any
                submission where _gotcha is filled. Do not remove the inline hiding. -->
           <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
-          <div class="ff"><label>Nom</label><input type="text" name="nom" required></div>
-          <div class="ff"><label>Adresse e-mail</label><input type="email" name="email" required></div>
-          <div class="ff"><label>Affiliation (facultatif)</label><input type="text" name="affiliation"></div>
+          <!-- for/id on every field: the label is a sibling, not a wrapper, so without it
+               screen readers announce these as unlabelled. .ff label is display:block, so
+               this is purely semantic — nothing moves. -->
+          <div class="ff"><label for="f-nom">Nom</label><input type="text" id="f-nom" name="nom" required></div>
+          <div class="ff"><label for="f-email">Adresse e-mail</label><input type="email" id="f-email" name="email" required></div>
+          <div class="ff"><label for="f-affiliation">Affiliation (facultatif)</label><input type="text" id="f-affiliation" name="affiliation"></div>
           <div class="ff">
             <label class="fcheck"><input type="checkbox" name="rendez-vous" value="oui"> Demander un rendez-vous</label>
             <label class="fcheck"><input type="checkbox" name="newsletter" value="oui"> S'inscrire à la newsletter</label>
           </div>
-          <div class="ff"><label>Note (facultatif)</label><textarea name="note" rows="2"></textarea></div>
+          <div class="ff"><label for="f-note">Note (facultatif)</label><textarea id="f-note" name="note" rows="2"></textarea></div>
           <button class="btn" type="submit">Envoyer</button>
         </form>
       </div>
@@ -961,7 +969,7 @@ function showSlide(n){
   document.getElementById('slide-detail').textContent=s.cap;
 }
 function initSlider(){
-  showSlide(Math.floor(Math.random()*ARTISTS.length)); /* random opening artist so later ones also get seen */
+  showSlide(Math.floor(Math.random()*SLIDES.length)); /* random opening slide so later ones also get seen — SLIDES, not ARTISTS: the list is per-work now, so dividing by ARTISTS.length would lock the opener to the first 10 of 18 */
   const wrap=document.querySelector('.slider-wrap');
   const cur=document.getElementById('slide-cursor');
   cur.style.opacity='0'; /* inline 0 beats the CSS :hover rule — no corner flash before first move */
