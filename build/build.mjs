@@ -31,8 +31,9 @@ const slugify = s => stripDiacritics(String(s))
 const LOGO = `${SITE}/images/kramer_wordmark.png`;
 const MAP_URL = 'https://www.google.com/maps/search/?api=1&query=132%20Bd%20de%20Magenta%2C%2075010%20Paris';
 const GALLERY_DESC = "Galerie d'art contemporain à Paris (10e) — galerie d'appartement, registre d'expositions.";
-/* Geocoded from the postal address, not a verified rooftop pin — sanity-check before relying on it. */
-const GEO = { '@type': 'GeoCoordinates', latitude: 48.8788, longitude: 2.3561 };
+/* Verified 2026-09-15 against the French national address database (api-adresse.data.gouv.fr,
+   confidence 0.979) and OpenStreetMap Nominatim, both agreeing to 4 decimal places. */
+const GEO = { '@type': 'GeoCoordinates', latitude: 48.880867, longitude: 2.352205 };
 
 /* Mechanical name variants for entity disambiguation (people search with and
    without diacritics). Derived only: diacritics stripped + German/Nordic
