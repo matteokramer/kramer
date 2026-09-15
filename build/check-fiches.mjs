@@ -32,6 +32,7 @@ const ALLOW = [
   /per research notes/i,       // Henri: Art Brussels / Dior Castle are provisional research notes
   /co-curateur|co-curator/i,   // Jürgen: translated summary line of the fiche's curation paragraph
   /geisterschrank (ii|iii|iv)/i, // Jürgen: I–IV are itemised in the fiche but shown as one combined entry on the site (deliberate)
+  /^vendu\b/i,                 // Tekla: bold sale annotations inline in the consigned-works block (VENDU DD.MM.YYYY), not separate work titles — TASKS.md #14
 ];
 /* bold "keys" in fiches that are labels, not entries */
 const KEY_STOP = /^(conservation|price discrepancy|title note|dimension note|name spelling|status|note)/i;
