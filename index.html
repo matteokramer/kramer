@@ -170,6 +170,43 @@
       "organizer":{"@id":"https://kramer.paris/#gallery"},
       "superEvent":{"@id":"https://kramer.paris/#horses-in-motion"},
       "description":"TV Dinner par Hadya — clôture de l'exposition « La Bride »."
+    },
+    {
+      "@type":"ExhibitionEvent",
+      "@id":"https://kramer.paris/#self",
+      "name":"SELF™",
+      "description":"« SELF™ » (KR02) — exposition collective de six artistes, commissariat Shelly Lea Reich & Claire Koron Elat (Angels), du 28 septembre au 1er octobre 2026.",
+      "url":"https://kramer.paris/",
+      "startDate":"2026-09-28",
+      "endDate":"2026-10-01",
+      "eventStatus":"https://schema.org/EventScheduled",
+      "eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode",
+      "image":"https://kramer.paris/images/kramer_wordmark.png",
+      "location":{"@id":"https://kramer.paris/#gallery"},
+      "organizer":[{"@id":"https://kramer.paris/#gallery"},{"@type":"Organization","name":"Angels"}],
+      "performer":[
+        {"@type":"Person","name":"F1LTHY"},
+        {"@type":"Person","name":"Kristoffer Borgli"},
+        {"@type":"Person","name":"Sonny Hall"},
+        {"@type":"Person","name":"Pouria Khojastehpay"},
+        {"@type":"Person","name":"Noémie Ninot"},
+        {"@type":"Person","name":"Yury Belyavskiy"}
+      ],
+      "subEvent":{"@id":"https://kramer.paris/#self-vernissage"}
+    },
+    {
+      "@type":"SocialEvent",
+      "@id":"https://kramer.paris/#self-vernissage",
+      "name":"Vernissage — SELF™",
+      "startDate":"2026-09-28T18:00:00+02:00",
+      "endDate":"2026-09-28T21:00:00+02:00",
+      "eventStatus":"https://schema.org/EventScheduled",
+      "eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode",
+      "image":"https://kramer.paris/images/kramer_wordmark.png",
+      "location":{"@id":"https://kramer.paris/#gallery"},
+      "organizer":{"@id":"https://kramer.paris/#gallery"},
+      "superEvent":{"@id":"https://kramer.paris/#self"},
+      "description":"Ouverture de l'exposition « SELF™ » (KR02)."
     }
   ]
 }
@@ -563,13 +600,21 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
       </div>
     </div>
 
-    <!-- ACTUALITÉ — holding state. « Horses in Motion » + the TV Dinner moved to the
-         Registre des événements on 2026-09-07, once they had passed. The slot stays
-         (with its nav item) for the next announcement. -->
+    <!-- ACTUALITÉ — KR02 « SELF™ », announced 2026-09-16 (TASKS #93). After the show
+         closes (1 Oct), move it to the Registre des événements / archive and put the
+         holding line back: «Aucune annonce en cours. La prochaine entrée sera inscrite
+         au registre.» No prices, no RSVP link. -->
     <div class="section" id="section-news" style="padding-top:20px">
       <h2 class="s-head">Actualité</h2>
       <div class="news-block">
-        <p class="ev-note" style="margin-top:0">Aucune annonce en cours. La prochaine entrée sera inscrite au registre.</p>
+        <span class="tag-encours">Exposition à venir</span>
+        <p class="exh-ref">KR02</p>
+        <p class="ev-note" style="margin-top:0"><strong>« SELF™ »</strong></p>
+        <p class="ev-meta">Commissariat · Shelly Lea Reich &amp; Claire Koron Elat (Angels)</p>
+        <p class="ev-note">Du 28 septembre au 1er octobre 2026, 11h–18h.<br>
+          Vernissage le lundi 28 septembre, 18h–21h.<br>
+          132 Bd de Magenta, 75010 Paris · 4e étage.</p>
+        <p class="ev-note">Avec F1LTHY, Kristoffer Borgli, Sonny Hall, Pouria Khojastehpay, Noémie Ninot et Yury Belyavskiy.</p>
       </div>
     </div>
 
