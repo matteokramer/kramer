@@ -119,9 +119,35 @@ function page(a, i) {
     ...(w.i ? [{ f: w.i, ph: w.ph || '' }] : []),
     ...(w.views || []).map(v => typeof v === 'string' ? { f: v, ph: w.ph || '' } : { f: v.f, ph: v.ph || w.ph || '' }),
   ];
+  /* filename convention shared with the caption logic further down (isInst there) —
+     duplicated here because toImg needs it before that block is defined */
+  const isInstFile = f => /inst-\d/i.test(f);
+  /* Google's Image Metadata structured data (the "Licensable" badge) wants license,
+     copyrightNotice, creator and acquireLicensePage on every ImageObject — added
+     2026-09-17 from GSC's "Image Metadata" report. All four are derived from facts
+     already on file, not new policy: the Mentions légales overlay already states the
+     reproduction-rights position ("Toute reproduction… est interdite sans autorisation
+     préalable"), so it doubles as the license URL; the access section is where that
+     authorization is actually requested, so it's the acquireLicensePage; copyright of
+     a photographed artwork sits with the artist per that same Mentions légales text
+     (an install view, showing the show rather than one artist's piece, is credited to
+     KRAMER instead); creator resolves the photographer (`ph`) to the artist's own
+     Person node when they shot their own work, an Organization for the gallery's own
+     shots, or a plain Person for a named third party (e.g. marytwo.one). */
+  const LICENSE_URL = `${SITE}/#mentions-legales`;
+  const ACQUIRE_LICENSE_URL = `${SITE}/#section-acces`;
+  const imgCreator = ph => !ph ? undefined
+    : /^(matteo\s+)?kramer$/i.test(ph) ? { '@type': 'Organization', name: 'Kramer', url: `${SITE}/` }
+    : ph === a.name ? { '@id': personId }
+    : { '@type': 'Person', name: ph };
   /* each plate → ImageObject so its per-plate photographer credit (workImgs sets `ph`)
      rides along as creditText; bare-URL images lose that credit */
-  const toImg = im => ({ '@type': 'ImageObject', contentUrl: `${SITE}/images/works/${im.f}`, ...(im.ph ? { creditText: im.ph } : {}) });
+  const toImg = im => ({
+    '@type': 'ImageObject', contentUrl: `${SITE}/images/works/${im.f}`,
+    ...(im.ph ? { creditText: im.ph, creator: imgCreator(im.ph) } : {}),
+    copyrightNotice: isInstFile(im.f) ? '© KRAMER' : `© ${a.name}`,
+    license: LICENSE_URL, acquireLicensePage: ACQUIRE_LICENSE_URL,
+  });
   const artworks = a.works.map(w => {
     const imgs = workImgs(w);
     /* "130 × 97 cm" | "30 × 40 × 5 cm" → height × width (× depth), gallery convention;
