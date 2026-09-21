@@ -1,6 +1,7 @@
 /* ============================================================
    KRAMER — shared styles for the dedicated record pages
-   (artist pages under /artistes/<slug>/). One typeface: Acumin.
+   (artist pages under /artistes/<slug>/, show pages under
+   /expositions/<slug>/, and the two registers). One typeface: Acumin.
    The home page (index.html) keeps its own inline styles; this
    sheet covers the standalone pages only.
 ============================================================ */
@@ -18,7 +19,7 @@ body{
 a{color:inherit;text-decoration:none}
 ::selection{background:#000;color:#fff}
 a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid #000;outline-offset:2px}
-:root{--ec:'acumin-pro-extra-condensed',Arial,sans-serif}
+:root{--ec:'acumin-pro-extra-condensed',Arial,sans-serif;--link:#0000EE}
 
 /* Chrome bars — grey gradient, matches the home page; pinned (fixed) on all pages */
 .chrome{
@@ -81,3 +82,68 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .cv-section{font-size:9px;font-weight:400;letter-spacing:.03em;color:rgba(0,0,0,.55);margin:12px 0 4px}
 .cv-row{display:flex;gap:12px;font-size:13px;line-height:20px}
 .cv-yr{font-size:9px;letter-spacing:.03em;min-width:64px;line-height:20px;color:rgba(0,0,0,.55)} /* wide enough for year ranges (2004–2012) so columns stay aligned */
+
+/* Press rows link out — classic hyperlink blue, like the home page's navigation links */
+.cv-row a{color:var(--link)}
+.cv-row a:hover{text-decoration:underline}
+
+/* ------------------------------------------------------------
+   Show pages and registers — ported from the home page's inline
+   styles. Muted greys are .55 here, as in the rest of this sheet.
+------------------------------------------------------------ */
+
+/* Statement, with the FR / EN toggle (a registry field, not a widget: the active
+   language is plain ink and inert, the other a classic-blue link) */
+.show-prose{padding:0 10px 20px}
+.prose{font-size:14px;line-height:22px}
+.prose p{margin-bottom:.75em;max-width:68ch}
+.prose p:last-child{margin-bottom:0}
+.prose em{font-style:italic}
+.lang-toggle{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.6);margin-bottom:12px}
+.lang-toggle a{color:var(--link)}
+.lang-toggle a:hover{text-decoration:underline}
+.lang-toggle a.on{color:#000;pointer-events:none}
+
+/* Registers — one entry per show or event: a 9px reference line, then the entry */
+.ev-list{list-style:none;padding:0 10px}
+.ev-item{border-top:1px solid #222;padding:12px 0 28px}
+.ev-item:first-child{border-top:none}   /* .s-head above already draws one */
+.exh-ref{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55);margin-bottom:3px}
+.ac-big{font-size:clamp(16px,2.2vw,20px);font-weight:400;line-height:1.3}
+.ev-item .ac-big a{color:var(--link)}
+.ev-item .ac-big a:hover{text-decoration:underline}
+.ev-meta{font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:4px}
+.ev-note{font-size:13px;line-height:20px;margin-top:10px;max-width:68ch}
+
+/* Screening programme — one entry per work: director (body) + fiche technique (9px muted) */
+.prog-list{list-style:none;margin:16px 0 0;border-top:1px solid #222;padding-top:10px}
+.prog-item{padding:0 0 10px}
+.prog-name{display:block;font-size:13px;line-height:20px}
+.prog-work{display:block;font-size:9px;line-height:14px;letter-spacing:.03em;color:rgba(0,0,0,.6)}
+
+/* Artist list — the checkbox motif of the home page's step menu. A name with no
+   record page is plain text; its box stays invisible so the names keep one column. */
+.artist-list{list-style:none;padding:0 10px 20px}
+.artist-item{padding:2px 0}
+.artist-link{display:inline-flex;align-items:flex-start;color:#000}
+a.artist-link:hover .artist-nm{text-decoration:underline}
+.cb-box{border:1px solid #222;width:13px;height:13px;background:#f1f4ff;flex-shrink:0;margin-top:3px}
+.artist-item.plain .cb-box{visibility:hidden}
+.artist-nm{padding-left:8px;font-size:13px;line-height:20px}
+.artist-nm em{font-size:9px;letter-spacing:.03em;font-style:normal;color:rgba(0,0,0,.55)}
+
+/* Installation views — one large plate per row, caption centred below */
+.view-grid{display:flex;flex-direction:column;padding-top:12px}
+.view-item{width:100%;padding-bottom:48px}
+.view-img{height:clamp(240px,60vh,600px);margin:0 0 8px;position:relative;overflow:hidden}
+.view-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
+.view-cap{font-size:9px;line-height:16px;letter-spacing:.03em;color:rgba(0,0,0,.55);padding:0 10px;text-align:center}
+
+/* How to ask about a work */
+.reg-note{padding:8px 10px 16px}
+.reg-note a{color:var(--link)}
+.reg-note a:hover{text-decoration:underline}
+
+/* Footer line: the events register + legal, the same line as the home page's */
+.page-foot{border-top:1px solid #222;margin:8px 10px 0;padding:8px 0 24px;font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55)}
+.page-foot a:hover{text-decoration:underline}

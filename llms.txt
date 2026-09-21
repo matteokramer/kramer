@@ -6,16 +6,19 @@
 > des vernissages. Territoire thématique : humains/technologie, humains/nature, diaspora,
 > altérité, classe.
 
-## Exposition
-- **KR02 — « SELF™ »** — 28 septembre–1er octobre 2026, 12h–18h (à venir).
+## Registre des expositions
+- **KR02 — « SELF™ »** — 28 septembre–1er octobre 2026, 11h–18h (à venir).
   Commissariat Shelly Lea Reich & Claire Koron Elat (Angels). Avec F1LTHY, Kristoffer Borgli,
   Sonny Hall, Pouria Khojastehpay, Noémie Ninot et Yury Belyavskiy.
   Vernissage le lundi 28 septembre 2026, 18h–21h. 132 Bd de Magenta, 75010 Paris, 4e étage.
-- **KR01 — « La Bride »** — 25 juin–29 août 2026 (terminée). Dix artistes internationaux.
-- Page : https://kramer.paris/
+  Page : https://kramer.paris/expositions/kr02-self/
+- **KR01 — « La Bride »** — 25 juin–29 août 2026 (terminée). Dix artistes internationaux :
+  texte de l'exposition (français / anglais), vues d'installation, événements.
+  Page : https://kramer.paris/expositions/kr01-la-bride/
+- Registre complet : https://kramer.paris/expositions/
 
 ## Registre des événements (passés)
-- **Vernissage — « La Bride »** — jeudi 25 juin 2026, 17h–21h.
+- **Vernissage — « La Bride » (KR01)** — jeudi 25 juin 2026, 17h–21h.
   Ouverture de l'exposition, sur présentation au registre. 132 Bd de Magenta, 75010 Paris.
 - **Projection — « Horses in Motion » (KR01V)** — samedi 29 août 2026, 12h–18h.
   Commissariat : Rahel Jung. Dix œuvres vidéo présentées le temps d'un après-midi,
@@ -32,7 +35,11 @@
 - Rhona Mühlebach — *The River, the Horse, & the Woman*, 2019, 8 min
 - Suivi d'un **TV Dinner préparé par Hadya**, à partir de 19h. Le dîner a clos l'exposition « La Bride ».
 
-## Registre des artistes (La Bride · KR01)
+## Registre des artistes
+Toutes les entrées — artistes exposés et programmes vidéo, une liste alphabétique avec le code de l'exposition :
+https://kramer.paris/artistes/
+
+Artistes de La Bride (KR01), avec leur page :
 - [Annael Shavit — peinture](https://kramer.paris/artistes/annael-shavit/) · Paris
 - [Gaia Del Santo — collage, sérigraphie, impression](https://kramer.paris/artistes/gaia-del-santo/) · Zürich / Lausanne
 - [Henri Chetaille — bois, sculpture](https://kramer.paris/artistes/henri-chetaille/) · Paris
@@ -48,9 +55,10 @@
 - Galerie : 132 Bd de Magenta, 75010 Paris — 4e étage (ascenseur)
 - Horaires : samedi 12h–18h, et sur rendez-vous
 - Instagram : @galeriekramer
-- E-mail : voir la section « Bureau d'accès » sur https://kramer.paris/
+- E-mail : voir la section « L'accès » sur https://kramer.paris/
   (adresse volontairement non publiée en clair pour limiter le harvesting)
 
 ## Notes
-- Site mono-page (front-desk) + une page-registre statique par artiste (canonique, indexable).
+- Page d'accueil (https://kramer.paris/), un registre des expositions et une page par exposition,
+  un registre des artistes et une page-registre statique par artiste (canoniques, indexables).
 - Sitemap : https://kramer.paris/sitemap.xml
