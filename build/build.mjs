@@ -494,10 +494,13 @@ function page(a, i) {
       }).join('\n      ')}
     </div>` : '';
 
-  /* bio: optional data field (Matteo-written, per-artist) — paragraphs split on blank lines.
-     Absent field keeps the empty placeholder; never generated. */
+  /* bio: optional data field — paragraphs split on blank lines. Either Matteo's own text or
+     the artist's own, supplied through /depot/ section 02 with publication consent; the fiche
+     records which. Absent field keeps the empty placeholder; never generated.
+     bioLang: set it when the text is not in the page's French, so the markup says so — an
+     artist's own words are recorded as they state them rather than translated. */
   const bio = a.bio
-    ? `<div class="a-bio">${a.bio.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join('')}</div>`
+    ? `<div class="a-bio"${a.bioLang ? ` lang="${a.bioLang}"` : ''}>${a.bio.split(/\n\s*\n/).map(p => `<p>${esc(p.trim())}</p>`).join('')}</div>`
     : `<div class="a-bio"><!-- bio à venir --></div>`;
 
   const cvBlock = (label, rows) => rows.length ? `
