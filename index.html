@@ -112,6 +112,32 @@
           "name": "Angels"
         }
       ],
+      "workFeatured": [
+        {
+          "@type": "VisualArtwork",
+          "@id": "https://kramer.paris/artistes/noemie-ninot/#oeuvre-kim-kardashian-s-remains",
+          "name": "Kim Kardashian’s Remains",
+          "url": "https://kramer.paris/artistes/noemie-ninot/"
+        },
+        {
+          "@type": "VisualArtwork",
+          "@id": "https://kramer.paris/artistes/noemie-ninot/#oeuvre-berceau-ii",
+          "name": "Berceau II",
+          "url": "https://kramer.paris/artistes/noemie-ninot/"
+        },
+        {
+          "@type": "VisualArtwork",
+          "@id": "https://kramer.paris/artistes/yury-belyavskiy/#oeuvre-positive-results",
+          "name": "Positive Results",
+          "url": "https://kramer.paris/artistes/yury-belyavskiy/"
+        },
+        {
+          "@type": "VisualArtwork",
+          "@id": "https://kramer.paris/artistes/yury-belyavskiy/#oeuvre-lift-me",
+          "name": "Lift me",
+          "url": "https://kramer.paris/artistes/yury-belyavskiy/"
+        }
+      ],
       "performer": [
         {
           "@type": "Person",
@@ -131,11 +157,15 @@
         },
         {
           "@type": "Person",
-          "name": "Noémie Ninot"
+          "@id": "https://kramer.paris/artistes/noemie-ninot/#person",
+          "name": "Noémie Ninot",
+          "url": "https://kramer.paris/artistes/noemie-ninot/"
         },
         {
           "@type": "Person",
-          "name": "Yury Belyavskiy"
+          "@id": "https://kramer.paris/artistes/yury-belyavskiy/#person",
+          "name": "Yury Belyavskiy",
+          "url": "https://kramer.paris/artistes/yury-belyavskiy/"
         }
       ],
       "subEvent": [
@@ -571,17 +601,17 @@ a.artist-link:hover .artist-nm{text-decoration:underline}
             <span class="artist-nm">Pouria Khojastehpay</span>
           </div>
         </li>
-        <li class="artist-item plain">
-          <div class="artist-link">
+        <li class="artist-item">
+          <a class="artist-link" href="artistes/noemie-ninot/">
             <div class="cb-box"></div>
             <span class="artist-nm">Noémie Ninot</span>
-          </div>
+          </a>
         </li>
-        <li class="artist-item plain">
-          <div class="artist-link">
+        <li class="artist-item">
+          <a class="artist-link" href="artistes/yury-belyavskiy/">
             <div class="cb-box"></div>
             <span class="artist-nm">Yury Belyavskiy</span>
-          </div>
+          </a>
         </li>
       </ul>
       <h3 class="s-head sub">Précédemment · KR01 — 10 entrées</h3>
@@ -883,6 +913,14 @@ const ARTISTS=[
     {l:'Awards & residencies',rows:[['2026','Styrian Government Residency, Budapest'],['2025','Emerging Artist Award for Fine Arts Carinthia (3rd Prize)'],['2023','Emanuel und Sofie Fohn Stipendium'],['2023','Simacek Award (1st Prize)'],['2022','Cité internationale des arts, Paris']]},
     {l:'Talks',rows:[['2025','Peak Season, Halle für Kunst, Graz']]},
     {l:'Archive',rows:[['','Austrian National Library — Webarchiv (nannakaiser.info)']]}]},
+  {slug:'noemie-ninot',name:'Noémie Ninot',born:'1999, Évry-Courcouronnes',based:'Paris',nat:'France',medium:'Technique mixte, PLA',code:'NN',g:'f',links:['https://noemieninot.com','https://www.instagram.com/noemieninot/'],
+   works:[{t:'Kim Kardashian’s Remains',d:'2024',m:'Mixed media',s:'200 × 40 × 90 cm'},{t:'Berceau II',d:'2026',m:'PLA (Polylactic acid)',s:'141 × 74 × 84 cm'}],
+   solo:[['2026','Title to be announced, ALO Gallery, Paris'],['2026','Title to be announced, Librairie 7L, Paris (commissariat Coralie Gauthier)'],['2026','Title to be announced, Villa Noailles, Hyères (commissariat Magalie Guérin)'],['2025','22 Loggerstraat Zaandam, Pavillon Gallery, Paris (commissariat Suzie Crespin Thirode)']],
+   group:[['2025','40e Festival International de Mode, de Photographie et d’Accessoires de Hyères, Villa Noailles, Hyères (commissariat Magalie Guérin)'],['2025','Exhibition 01, Race Imboden Company, Fondazione Sozzani, Paris (commissariat Nogoflani Fofana)'],['2024','Burning Womxn Festival, La Bellevilloise, Paris (commissariat RVB Project)'],['2024','Untitled, Le Sample, Bagnolet (commissariat Roxane Sauvage)'],['2024','Exposition Collective n°2, Dover Street Market, Paris (commissariat Ambre Chambon)']],
+   extra:[
+    {l:'Formation',rows:[['2025','Master Photographie & Vidéo, École nationale supérieure des Arts Décoratifs (ENSAD), Paris'],['','Mode et Image, École Duperré, Paris']]},
+    {l:'Prix',rows:[['2025','Grand Prix du Jury Photographie, 40e Festival International de Mode, de Photographie et d’Accessoires, Villa Noailles, Hyères']]},
+    {l:'Foires',rows:[['2026','Art Genève, avec l’ENSAD, Palexpo, Genève']]}]},
   {slug:'padyn-humble',name:'Padyn Humble',born:'Montana, USA',based:'Berlin',medium:'Sculpture, installation, vidéo',code:'PH',g:'m',links:['https://padynhumble.com','https://www.instagram.com/padyn/'],
    works:[{t:'Empty Prayers',d:'2026',m:'Denim Wrangler, boucle de ceinture, papier mâché, peinture acrylique',s:'88 × 50 × 30 cm',i:'padyn-humble--empty-prayers--obj-1.jpg',ph:'Matteo Kramer',views:['padyn-humble--kighuradze-inst-1.jpg','padyn-humble--empty-prayers--inst-3.jpg']}],
    solo:[['2024','it could be a valentine, Number 1 Main Road, Berlin'],['2022','Baby Blue, Too, Granite City Art and Design District, St. Louis'],['2022','MFA Thesis Exhibition, Surplus Gallery, Carbondale'],['2022','A Dove is Just a White Pigeon, Roy G BIV, Columbus (à deux)'],['2021','Barn Dance, Dream Clinic Project Space, Columbus'],['2020','In the Garden is Good, Surplus Gallery, Carbondale'],['2020','Sporting Goods, Ogden Museum of Southern Art, New Orleans'],['2019','For Sport, Bunker Projects, Pittsburgh'],['2018','Giddy, Frontier Space Gallery, Missoula'],['2018','Pink Charles, The Seltzer Gallery, Great Falls'],['2017','Home/Homme, The Foundry, Bozeman']],
@@ -900,7 +938,14 @@ const ARTISTS=[
   {slug:'tekla-kighuradze',name:'Tekla Kighuradze',born:'2000, Tbilisi',based:'Tbilisi',medium:'Technique mixte, peinture',code:'TK',g:'f',links:['https://teklakighuradze.com','https://www.instagram.com/goldrugon/'],
    works:[{t:'A Loaded Gun',d:'2024',m:'Technique mixte sur toile',s:'90 × 110 × 3 cm',i:'tekla-kighuradze--a-loaded-gun.jpg',views:[{f:'tekla-kighuradze--a-loaded-gun--obj-2.jpg',ph:'Matteo Kramer'},{f:'tekla-kighuradze--a-loaded-gun--det-1.jpg',ph:'Matteo Kramer'},{f:'tekla-kighuradze--shavit-inst-2.jpg',ph:'Matteo Kramer'}]},{t:'Disappear / Appear',d:'2024',m:'Technique mixte, bois',s:'30 × 40 × 5 cm',i:'tekla-kighuradze--disappear-appear--obj-1.jpg',ph:'Matteo Kramer',views:['tekla-kighuradze--disappear-appear--det-1.jpg','tekla-kighuradze--ralkov-inst-2.jpg']}],
    solo:[['2023','I Hide Myself Within My Flower (avec Nodo Ugulava), duo-show'],['2022','Hidden Sparks, The Why Not Gallery, Tbilisi']],
-   group:[['2025','Red Dot, or: A Pseudo-Archive of Repression (avec Nodo Ugulava), Mzetopshop, Tbilisi'],['2024','Here at Home, While You Make Your Way (installation DIGITAL SPIRITUALITY, avec Nodo Ugulava), Art Villa Garikula, Garikula (Géorgie)']]}
+   group:[['2025','Red Dot, or: A Pseudo-Archive of Repression (avec Nodo Ugulava), Mzetopshop, Tbilisi'],['2024','Here at Home, While You Make Your Way (installation DIGITAL SPIRITUALITY, avec Nodo Ugulava), Art Villa Garikula, Garikula (Géorgie)']]},
+  {slug:'yury-belyavskiy',name:'Yury Belyavskiy',alt:['Iurii Beliavskii'],born:'2003, Moscou',based:'Berlin',nat:'Germany',medium:'Sculpture, silicone, acier inoxydable',code:'YB',g:'m',links:['https://www.instagram.com/yurybelyavskiy/'],
+   works:[{t:'Positive Results',d:'2024',m:'Résine époxydique, acier inoxydable',s:'50 × 50 × 10 cm'},{t:'Lift me',d:'2026',m:'Résine époxydique, acier inoxydable',s:'40 × 40 × 14 cm'}],
+   solo:[],
+   group:[['2026','Rundgang Klasse Bonvicini, Berlin'],['2026','Non Beautiful, Never Ugly, 3CA, Berlin'],['2025','On Persona, Villa Heike, Berlin']],
+   extra:[
+    {l:'Formation',rows:[['2024–2029','Universität der Künste Berlin — Bildende Kunst, classe de Monica Bonvicini']]},
+    {l:'Presse',rows:[['2026','UdK Rundgang 2026: Inside Berlin’s Young Art Scene, Sleek Magazine'],['','the selfie issue, Basta Magazine']]}]},
 ];
 
 /* Assembled at runtime so the literal address stays out of the static source (same logic as the contact obfuscation below) */
