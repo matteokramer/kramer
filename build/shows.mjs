@@ -43,7 +43,39 @@ const U1 = `${SITE}/expositions/kr01-la-bride/`;
 const U2 = `${SITE}/expositions/kr02-self/`;
 
 export const SHOWS = [
-  /* KR03 — add when TASKS.md #79 clears. Copy the KR02 entry below as the template. */
+  {
+    code: 'KR03', slug: 'kr03-magenta-made-me-hardcore', title: 'Magenta Made Me Hardcore',
+    from: '2026-10-08', to: '2026-10-30',
+    dates: '8 – 30 octobre 2026', hours: 'Samedi 12h–18h, et sur rendez-vous',
+    cur: 'Kramer & Erratum',
+    desc: '« Magenta Made Me Hardcore » (KR03) — exposition collective de sept artistes, commissariat Kramer & Erratum, du 8 au 30 octobre 2026.',
+    org: [{ '@type': 'Organization', name: 'Erratum' }],
+    artists: ['Alexis Puget', 'Caroline Ventura', 'Enam Granoth', 'Hyewon Mia Lee', 'Luka Naujoks', 'Nicole', 'Yeva Khrapova'],
+    prose: {
+      fr: `
+          <p>Le parfum du maïs grillé se mêle à la sirène d'une ambulance. Je descends faire du lèche-vitrines. Je me demande si ces costumes en vitrine seront portés pour une occasion heureuse ou triste, quand un bout de maïs brûlé se coince entre mes dents.</p>
+          <p>Toujours autant d'agitation boulevard de Magenta. Je préférerais remonter regarder le chahut depuis le balcon. Comment peut-on laisser entrer tous ces stimuli ? De quoi devenir fou, ou du moins hardcore.</p>
+          <p>Les artistes Alexis Puget, Caroline Ventura, Enam Granoth, Hyewon Mia Lee, Luka Naujoks, Nicole et Yeva Khrapova ont pourtant, allez savoir comment, chacun choisi la douceur.</p>
+          <p>Kramer × Erratum</p>
+`,
+      en: `
+          <p>The smell of roasted corn mingles with the siren of an ambulance. I go downstairs and do some window-licking. While I wonder whether these suits in the window will be worn for a happy or a sad occasion, a piece of burnt corn gets stuck between my teeth.</p>
+          <p>Always so much trouble on Boulevard de Magenta. I would rather go back up and watch the commotion from the balcony. How can anyone let all these stimuli in? You'd go mad, or at least hardcore.</p>
+          <p>The artists Alexis Puget, Caroline Ventura, Enam Granoth, Hyewon Mia Lee, Luka Naujoks, Nicole, Yeva Khrapova, however, each somehow decided on softness.</p>
+          <p>Kramer × Erratum</p>
+`,
+    },
+    views: [],
+    events: [
+      { kind: 'Vernissage', code: 'KR03', day: '2026-10-08',
+        title: 'Magenta Made Me Hardcore — 8 octobre 2026, 18h–21h',
+        note: "Ouverture de l'exposition « Magenta Made Me Hardcore ».",
+        ld: [{ '@type': 'SocialEvent', '@id': `${SITE}/expositions/kr03-magenta-made-me-hardcore/#vernissage`, name: 'Vernissage — Magenta Made Me Hardcore',
+          startDate: '2026-10-08T18:00:00+02:00', endDate: '2026-10-08T21:00:00+02:00',
+          description: "Ouverture de l'exposition « Magenta Made Me Hardcore » (KR03)." }] },
+    ],
+    press: [], docs: [],
+  },
   {
     code: 'KR02', slug: 'kr02-self', title: 'SELF™',
     from: '2026-09-28', to: '2026-10-01',

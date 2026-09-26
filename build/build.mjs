@@ -44,6 +44,10 @@ const warn = m => { warnings.push(m); console.warn('⚠ ' + m); };
    each show's ExhibitionEvent.workFeatured — keep both sides using this one helper) */
 const slugify = s => stripDiacritics(String(s))
   .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+/* an artist with several works under one title (Luka Naujoks' three «Bouquets») gets the
+   year appended to those ids; every other work keeps the plain title slug */
+const workSlug = (a, w) => a.works.filter(x => slugify(x.t) === slugify(w.t)).length > 1
+  ? `${slugify(w.t)}-${slugify(w.d)}` : slugify(w.t);
 
 /* ------------------------------------------------------------
    THE REGISTER OF SHOWS — status is derived here, never stored.
@@ -302,7 +306,7 @@ const performers = s => s.artists.map(n => {
 });
 /* each consigned work → a stub matching the VisualArtwork @id on the artist's page */
 const workStubs = s => ARTISTS.flatMap(a => a.works.filter(w => showOfWork(a, w) === s).map(w =>
-  ({ '@type': 'VisualArtwork', '@id': `${SITE}/artistes/${a.slug}/#oeuvre-${slugify(w.t)}`, name: w.t, url: `${SITE}/artistes/${a.slug}/` })));
+  ({ '@type': 'VisualArtwork', '@id': `${SITE}/artistes/${a.slug}/#oeuvre-${workSlug(a, w)}`, name: w.t, url: `${SITE}/artistes/${a.slug}/` })));
 
 const exhibitionNode = s => {
   const works = workStubs(s), evs = eventNodes(s);
@@ -414,7 +418,7 @@ function page(a, i) {
        non-numeric sizes ("dimensions variables") are skipped */
     const dims = (w.s || '').match(/^([\d.]+)\s*×\s*([\d.]+)(?:\s*×\s*([\d.]+))?\s*cm$/);
     return {
-      '@type': 'VisualArtwork', '@id': `${url}#oeuvre-${slugify(w.t)}`,
+      '@type': 'VisualArtwork', '@id': `${url}#oeuvre-${workSlug(a, w)}`,
       name: w.t, creator: { '@id': personId }, url,
       ...(w.d ? { dateCreated: String(w.d) } : {}),
       ...(primaryMedium ? { artform: primaryMedium } : {}),
@@ -452,7 +456,7 @@ function page(a, i) {
   /* det = true for detail shots (filename …det-N…) → title gets a "(détail)" marker */
   const workCap = (w, ph, det) => [
     `${esc(a.name)}, <em>${esc(w.t)}</em>${det ? ' (détail)' : ''}${w.d ? ', ' + esc(String(w.d)) : ''}.`,
-    [w.m, w.s].filter(Boolean).map(esc).join(', ') ? [w.m, w.s].filter(Boolean).map(esc).join(', ') + '.' : '',
+    [w.m, w.s, w.e].filter(Boolean).map(esc).join(', ') ? [w.m, w.s, w.e].filter(Boolean).map(esc).join(', ') + '.' : '',
     courtesy(w) ? esc(courtesy(w)) + '.' : '',
     credit(ph) ? credit(ph) + '.' : '',
   ].filter(Boolean).join(' ');
