@@ -472,8 +472,8 @@ function page(a, i) {
         const show = showOfWork(a, w);
         const imgs = workImgs(w);
         const baseAlt = esc(w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : ''));
+        /* no photograph yet → caption only; never a stand-in image */
         if (!imgs.length) return `<div class="work-item">
-        <div class="work-plate"><img src="../../images/placeholder.png" alt="${baseAlt}"${plateAttrs()}></div>
         <p class="work-cap">${workCap(w, '', false)}</p>
         ${inquire(w)}
       </div>`;
