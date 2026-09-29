@@ -92,9 +92,9 @@ export const SHOWS = [
     artists: ['F1LTHY', 'Kristoffer Borgli', 'Sonny Hall', 'Pouria Khojastehpay', 'Noémie Ninot', 'Yury Belyavskiy'],
     views: [
     { f: "kr02-inst-01-ninot.jpg", ph: 'Matteo Kramer', car: 1, alt: "Vue d'installation de «SELF™», KRAMER — œuvre de Noémie Ninot" },
-    { f: "kr02-inst-02-ninot-belyavskiy.jpg", ph: 'Matteo Kramer', car: 1, alt: "Vue d'installation de «SELF™», KRAMER — œuvres de Noémie Ninot et Yury Belyavskiy" },
+    { f: "kr02-inst-02-ninot-belyavskiy.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «SELF™», KRAMER — œuvres de Noémie Ninot et Yury Belyavskiy" },
     { f: "kr02-inst-03-ninot-belyavskiy.jpg", ph: 'Matteo Kramer', car: 1, alt: "Vue d'installation de «SELF™», KRAMER — œuvres de Noémie Ninot et Yury Belyavskiy" },
-    { f: "kr02-inst-04-ninot-hall.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «SELF™», KRAMER — œuvres de Noémie Ninot et Sonny Hall" },
+    { f: "kr02-inst-04-ninot-hall.jpg", ph: 'Matteo Kramer', car: 1, alt: "Vue d'installation de «SELF™», KRAMER — œuvres de Noémie Ninot et Sonny Hall" },
     ],
     workSlides: [
     { artist: 'sonny-hall', f: 'sonny-hall--eating-kisses--obj-2.jpg' },
