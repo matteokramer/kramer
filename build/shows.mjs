@@ -26,6 +26,12 @@
      views [{f, alt, car}]   installation views, files in images/installation/.
                              car:1 puts a view in the home-page carousel while the
                              show is the current one
+     workSlides [{artist, f}] optional: individual work plates (images/works/) added to
+                             the home-page carousel while the show is the current one,
+                             after any car:1 installation views. artist is an ARTISTS
+                             slug, f one of that work's image filenames (its own tombstone
+                             caption — artist, title, date, medium, size, credit — becomes
+                             the slide's alt text)
      events [...]            vernissage, screening, dinner… see the entries below.
                              Once their day has passed they also fill the home
                              page's Registre des événements
@@ -79,7 +85,7 @@ export const SHOWS = [
   {
     code: 'KR02', slug: 'kr02-self', title: 'SELF™',
     from: '2026-09-28', to: '2026-10-01',
-    dates: '28 septembre – 1er octobre 2026', hours: '11h–18h',
+    dates: '28 septembre – 1er octobre 2026', hours: 'Sur rendez-vous',
     cur: 'Shelly Lea Reich & Claire Koron Elat (Angels)',
     desc: '« SELF™ » (KR02) — exposition collective de six artistes, commissariat Shelly Lea Reich & Claire Koron Elat (Angels), du 28 septembre au 1er octobre 2026.',
     org: [{ '@type': 'Organization', name: 'Angels' }],
@@ -89,6 +95,11 @@ export const SHOWS = [
     { f: "kr02-inst-02-ninot-belyavskiy.jpg", ph: 'Matteo Kramer', car: 1, alt: "Vue d'installation de «SELF™», KRAMER — œuvres de Noémie Ninot et Yury Belyavskiy" },
     { f: "kr02-inst-03-ninot-belyavskiy.jpg", ph: 'Matteo Kramer', car: 1, alt: "Vue d'installation de «SELF™», KRAMER — œuvres de Noémie Ninot et Yury Belyavskiy" },
     { f: "kr02-inst-04-ninot-hall.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «SELF™», KRAMER — œuvres de Noémie Ninot et Sonny Hall" },
+    ],
+    workSlides: [
+    { artist: 'sonny-hall', f: 'sonny-hall--eating-kisses--obj-2.jpg' },
+    { artist: 'pouria-khojastehpay', f: 'pouria-khojastehpay--sans-titre--obj-1.jpg' },
+    { artist: 'yury-belyavskiy', f: 'yury-belyavskiy--positive-results--obj-1.jpg' },
     ],
     events: [
       { kind: 'Vernissage', code: 'KR02', day: '2026-09-28',

@@ -82,6 +82,32 @@ function showOfWork(a, w) {
   throw new Error(`${a.name}: work "${w.t}" needs x:'KRnn' — the artist is in ${ss.length ? 'several shows' : 'no show'}`);
 }
 
+/* Museum-tombstone captions for a work's plates — shared by the per-artist pages
+   (work-cap paragraphs) and the home carousel (work slides pulled in from shows.mjs). */
+/* Each plate carries its own photo credit. `i` + string `views` inherit the work's `ph`;
+   an object view {f, ph} overrides it (e.g. Matteo's install shots hung under an artist-
+   credited reproduction). Returns [{f, ph}] in display order. */
+const workImgs = w => [
+  ...(w.i ? [{ f: w.i, ph: w.ph || '' }] : []),
+  ...(w.views || []).map(v => typeof v === 'string' ? { f: v, ph: w.ph || '' } : { f: v.f, ph: v.ph || w.ph || '' }),
+];
+/* filename convention: an installation shot (…inst-N…) gets the exhibition caption;
+   a work shot (obj/det/repro) gets the tombstone. …det-N… gets a "(détail)" marker. */
+const isInst = f => /inst-\d/i.test(f);
+const isDet = f => /det-\d/i.test(f);
+const courtesy = w => w.c === undefined ? "Courtoisie de l'artiste" : w.c;
+/* Credit: the gallery's own shots (Matteo Kramer) are credited simply "Kramer";
+   any other photographer keeps the "Photo : Name" form. */
+const credit = ph => !ph ? '' : (/^(matteo\s+)?kramer$/i.test(ph) ? 'Kramer' : 'Photo : ' + esc(ph));
+const workCap = (a, w, ph, det) => [
+  `${esc(a.name)}, <em>${esc(w.t)}</em>${det ? ' (détail)' : ''}${w.d ? ', ' + esc(String(w.d)) : ''}.`,
+  [w.m, w.s, w.e].filter(Boolean).map(esc).join(', ') ? [w.m, w.s, w.e].filter(Boolean).map(esc).join(', ') + '.' : '',
+  courtesy(w) ? esc(courtesy(w)) + '.' : '',
+  credit(ph) ? credit(ph) + '.' : '',
+].filter(Boolean).join(' ');
+/* plain-text variant (no <em>) for attributes such as the carousel's img alt */
+const workCapText = (a, w, ph, det) => workCap(a, w, ph, det).replace(/<\/?em>/g, '');
+
 /* fail loudly on register mistakes rather than publishing them */
 {
   const seen = new Set();
@@ -376,16 +402,6 @@ function page(a, i) {
     affiliation: { '@id': GALLERY_ID },
     ...(a.links && a.links.length ? { sameAs: a.links } : {}),
   };
-  /* Each plate carries its own photo credit. `i` + string `views` inherit the work's `ph`;
-     an object view {f, ph} overrides it (e.g. Matteo's install shots hung under an artist-
-     credited reproduction). Returns [{f, ph}] in display order. */
-  const workImgs = w => [
-    ...(w.i ? [{ f: w.i, ph: w.ph || '' }] : []),
-    ...(w.views || []).map(v => typeof v === 'string' ? { f: v, ph: w.ph || '' } : { f: v.f, ph: v.ph || w.ph || '' }),
-  ];
-  /* filename convention shared with the caption logic further down (isInst there) —
-     duplicated here because toImg needs it before that block is defined */
-  const isInstFile = f => /inst-\d/i.test(f);
   /* Google's Image Metadata structured data (the "Licensable" badge) wants license,
      copyrightNotice, creator and acquireLicensePage on every ImageObject — added
      2026-09-17 from GSC's "Image Metadata" report. All four are derived from facts
@@ -409,7 +425,7 @@ function page(a, i) {
   const toImg = im => ({
     '@type': 'ImageObject', contentUrl: `${SITE}/images/works/${im.f}`,
     ...(im.ph ? { creditText: im.ph, creator: imgCreator(im.ph) } : {}),
-    copyrightNotice: isInstFile(im.f) ? '© KRAMER' : `© ${a.name}`,
+    copyrightNotice: isInst(im.f) ? '© KRAMER' : `© ${a.name}`,
     license: LICENSE_URL, acquireLicensePage: ACQUIRE_LICENSE_URL,
   });
   const artworks = a.works.map(w => {
@@ -443,23 +459,11 @@ function page(a, i) {
   /* first plate is the likely LCP → eager; everything after lazy-loads */
   let plateN = 0;
   const plateAttrs = () => plateN++ === 0 ? ' fetchpriority="high"' : ' loading="lazy" decoding="async"';
-  /* Every plate carries its own full caption underneath. An installation shot
-     (filename …inst-N…) gets the exhibition caption; a work shot (obj/det/repro)
-     gets the museum tombstone. Each caption names its own photographer, so a work
-     photographed by several people reads correctly plate by plate. */
-  const isInst = f => /inst-\d/i.test(f);
-  const isDet = f => /det-\d/i.test(f);
-  const courtesy = w => w.c === undefined ? "Courtoisie de l'artiste" : w.c;
-  /* Credit: the gallery's own shots (Matteo Kramer) are credited simply "Kramer";
-     any other photographer keeps the "Photo : Name" form. */
-  const credit = ph => !ph ? '' : (/^(matteo\s+)?kramer$/i.test(ph) ? 'Kramer' : 'Photo : ' + esc(ph));
-  /* det = true for detail shots (filename …det-N…) → title gets a "(détail)" marker */
-  const workCap = (w, ph, det) => [
-    `${esc(a.name)}, <em>${esc(w.t)}</em>${det ? ' (détail)' : ''}${w.d ? ', ' + esc(String(w.d)) : ''}.`,
-    [w.m, w.s, w.e].filter(Boolean).map(esc).join(', ') ? [w.m, w.s, w.e].filter(Boolean).map(esc).join(', ') + '.' : '',
-    courtesy(w) ? esc(courtesy(w)) + '.' : '',
-    credit(ph) ? credit(ph) + '.' : '',
-  ].filter(Boolean).join(' ');
+  /* Every plate carries its own full caption underneath (isInst/isDet/courtesy/credit/
+     workCap are module-level, shared with the home carousel's work slides). An installation
+     shot (filename …inst-N…) gets the exhibition caption; a work shot (obj/det/repro) gets
+     the museum tombstone. Each caption names its own photographer, so a work photographed
+     by several people reads correctly plate by plate. */
   /* Installation shots always carry an explicit "Photo :" prefix (even for the
      gallery's own Kramer shots) — unlike work plates, where "Kramer" stands bare. */
   const instCredit = ph => !ph ? '' : 'Photo : ' + (/^(matteo\s+)?kramer$/i.test(ph) ? 'Kramer' : esc(ph));
@@ -474,13 +478,13 @@ function page(a, i) {
         const baseAlt = esc(w.t + (w.m ? ', ' + w.m : '') + (w.s ? ' · ' + w.s : ''));
         /* no photograph yet → caption only; never a stand-in image */
         if (!imgs.length) return `<div class="work-item">
-        <p class="work-cap">${workCap(w, '', false)}</p>
+        <p class="work-cap">${workCap(a, w, '', false)}</p>
         ${inquire(w)}
       </div>`;
         const plates = imgs.map(im => {
           const inst = isInst(im.f);
           const alt = inst ? esc(`Vue d'installation de «${show.title}», KRAMER — ${a.name}`) : baseAlt;
-          const cap = inst ? instCap(im.ph, show) : workCap(w, im.ph, isDet(im.f));
+          const cap = inst ? instCap(im.ph, show) : workCap(a, w, im.ph, isDet(im.f));
           return `<div class="work-plate"><img src="../../images/works/${im.f}" alt="${alt}"${plateAttrs()}></div>
         <p class="work-cap">${cap}</p>`;
         });
@@ -764,10 +768,26 @@ home = swap(home, /<meta name="twitter:description" content="[^"]*">/, `<meta na
 const homeLd = { '@context': 'https://schema.org', '@graph': [WEBSITE, HOME_GALLERY, exhibitionNode(CURRENT), ...eventNodes(CURRENT)] };
 home = swap(home, /<script type="application\/ld\+json">[\s\S]*?<\/script>/, `<script type="application/ld+json">\n${JSON.stringify(homeLd, null, 2)}\n</script>`, 'JSON-LD block');
 
-/* carousel: the current show's flagged installation views. None → no carousel at all. */
-const slides = (CURRENT.views || []).filter(v => v.car).map(v => ({
-  img: `images/installation/${v.f}`, alt: v.alt, href: `expositions/${CURRENT.slug}/`, main: `« ${CURRENT.title} »`, sub: "vue d'installation",
-}));
+/* carousel: the current show's flagged installation views, plus any individual work
+   plates named in workSlides (images/works/, with the same museum-tombstone caption
+   the artist page uses, as alt text). No views and no workSlides → no carousel at all. */
+const workSlides = (CURRENT.workSlides || []).map(ws => {
+  const wa = ARTISTS.find(x => x.slug === ws.artist);
+  if (!wa) throw new Error(`shows.mjs: workSlides references unknown artist slug "${ws.artist}"`);
+  const w = wa.works.find(w => workImgs(w).some(im => im.f === ws.f));
+  if (!w) throw new Error(`shows.mjs: workSlides — "${ws.f}" is not one of ${wa.name}'s work images`);
+  const im = workImgs(w).find(im => im.f === ws.f);
+  return {
+    img: `images/works/${ws.f}`, alt: workCapText(wa, w, im.ph, isDet(ws.f)),
+    href: `artistes/${wa.slug}/`, main: wa.name, sub: w.t,
+  };
+});
+const slides = [
+  ...(CURRENT.views || []).filter(v => v.car).map(v => ({
+    img: `images/installation/${v.f}`, alt: v.alt, href: `expositions/${CURRENT.slug}/`, main: `« ${CURRENT.title} »`, sub: "vue d'installation",
+  })),
+  ...workSlides,
+];
 const sliderHtml = slides.length ? `    <div class="slider-wrap" id="section-artworks">
       <div class="slide-cursor" id="slide-cursor">→</div>
       <div class="slide-area">
