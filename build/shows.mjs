@@ -84,7 +84,12 @@ export const SHOWS = [
     desc: '« SELF™ » (KR02) — exposition collective de six artistes, commissariat Shelly Lea Reich & Claire Koron Elat (Angels), du 28 septembre au 1er octobre 2026.',
     org: [{ '@type': 'Organization', name: 'Angels' }],
     artists: ['F1LTHY', 'Kristoffer Borgli', 'Sonny Hall', 'Pouria Khojastehpay', 'Noémie Ninot', 'Yury Belyavskiy'],
-    views: [],
+    views: [
+    { f: "kr02-inst-01-ninot.jpg", ph: 'Matteo Kramer', car: 1, alt: "Vue d'installation de «SELF™», KRAMER — œuvre de Noémie Ninot" },
+    { f: "kr02-inst-02-ninot-belyavskiy.jpg", ph: 'Matteo Kramer', car: 1, alt: "Vue d'installation de «SELF™», KRAMER — œuvres de Noémie Ninot et Yury Belyavskiy" },
+    { f: "kr02-inst-03-ninot-belyavskiy.jpg", ph: 'Matteo Kramer', car: 1, alt: "Vue d'installation de «SELF™», KRAMER — œuvres de Noémie Ninot et Yury Belyavskiy" },
+    { f: "kr02-inst-04-ninot-hall.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «SELF™», KRAMER — œuvres de Noémie Ninot et Sonny Hall" },
+    ],
     events: [
       { kind: 'Vernissage', code: 'KR02', day: '2026-09-28',
         title: 'SELF™ — 28 septembre 2026, 18h–21h',
