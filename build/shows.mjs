@@ -86,8 +86,8 @@ export const SHOWS = [
     code: 'KR02', slug: 'kr02-self', title: 'SELF™',
     from: '2026-09-28', to: '2026-10-01',
     dates: '28 septembre – 1er octobre 2026', hours: 'Sur rendez-vous',
-    cur: 'Shelly Lea Reich & Claire Koron Elat (Angels)',
-    desc: '« SELF™ » (KR02) — exposition collective de six artistes, commissariat Shelly Lea Reich & Claire Koron Elat (Angels), du 28 septembre au 1er octobre 2026.',
+    cur: 'Shelly Lea Reich & Claire Koron Elat (Angels), assistanat curatorial Yäelle Amad',
+    desc: '« SELF™ » (KR02) — exposition collective de six artistes, commissariat Shelly Lea Reich & Claire Koron Elat (Angels), assistanat curatorial Yäelle Amad, du 28 septembre au 1er octobre 2026.',
     org: [{ '@type': 'Organization', name: 'Angels' }],
     artists: ['F1LTHY', 'Kristoffer Borgli', 'Sonny Hall', 'Pouria Khojastehpay', 'Noémie Ninot', 'Yury Belyavskiy'],
     views: [
