@@ -64,7 +64,7 @@ const SHOW_BY = Object.fromEntries(SHOWS.map(s => [s.code, s]));
 const showsAsc = [...SHOWS].sort((a, b) => a.from.localeCompare(b.from));
 const showsDesc = [...showsAsc].reverse();
 /* the show the home page is about: the one running, else the next one, else the latest;
-   PREVIOUS is the most recent finished show besides it («Précédemment» on the home page) */
+   PREVIOUS is the most recent finished show besides it (build-summary line only) */
 const CURRENT = showsAsc.find(s => statusOf(s) === 'en cours') || showsAsc.find(s => statusOf(s) === 'à venir') || showsAsc[showsAsc.length - 1];
 const PREVIOUS = showsDesc.find(s => s !== CURRENT && statusOf(s) === 'terminée');
 
@@ -215,10 +215,10 @@ ${CF_BEACON}
 `;
 };
 
-/* the home page's footer line, on every other page too: the events register + legal */
+/* the home page's footer line, on every other page too: just the legal link */
 const pageFoot = depth => {
   const up = '../'.repeat(depth);
-  return `<p class="page-foot"><a href="${up}#section-archive">Registre des événements</a> · <a href="${up}#mentions-legales">Mentions légales</a></p>`;
+  return `<p class="page-foot"><a href="${up}#mentions-legales">Mentions légales</a></p>`;
 };
 
 /* email assembled at runtime so it stays out of the static source */
@@ -265,14 +265,15 @@ const showRoster = (s, artistBase) => s.artists.map(n => {
   return artistItem(n, rec ? `${artistBase}${rec.slug}/` : '');
 }).join('\n');
 
-/* one event, as a register entry (home page register + each show page) */
-const eventItem = ev => {
+/* one event, as a register entry (home page register + each show page). showCode:false
+   drops the internal registry code (e.g. "KR01V") — meaningless to a visitor; the show's
+   own page already carries its code once, at the top. */
+const eventItem = (ev, { showCode = true } = {}) => {
   const L = [];
   L.push('        <li class="ev-item">');
-  L.push(`          <p class="exh-ref">${esc(ev.kind)} · ${esc(ev.code)}</p>`);
+  L.push(`          <p class="exh-ref">${showCode ? `${esc(ev.kind)} · ${esc(ev.code)}` : esc(ev.kind)}</p>`);
   L.push(`          <p class="ac-big">${ev.title}</p>`);
   (ev.meta || []).forEach(m => L.push(`          <p class="ev-meta">${m}</p>`));
-  L.push('          <p class="ev-meta" style="margin-top:8px">132 Bd de Magenta · 75010 Paris</p>');
   if (ev.note) L.push(`          <p class="ev-note">${ev.note}</p>`);
   if (ev.prog && ev.prog.length) {
     L.push('          <ul class="prog-list">');
@@ -285,13 +286,16 @@ const eventItem = ev => {
 };
 
 /* a show as a register entry; `href` is where the title points. Under a status heading
-   (/expositions/) the reference line carries only the code — the heading already says it. */
-const showItem = (s, href, { artists = false, status = true } = {}) => `        <li class="ev-item">
-          <p class="exh-ref">${s.code}${status ? ' · ' + statusOf(s) : ''}</p>
-          <p class="ac-big"><a href="${href}">${esc(s.title)}</a> — ${esc(s.dates)}</p>${s.cur ? `
+   (/expositions/) the reference line carries only the code — the heading already says it.
+   showCode:false (the home page) drops the code too, leaving just the status word. */
+const showItem = (s, href, { artists = false, status = true, showCode = true } = {}) => {
+  const ref = [showCode ? s.code : '', status ? statusOf(s) : ''].filter(Boolean).join(' · ');
+  return `        <li class="ev-item">
+${ref ? `          <p class="exh-ref">${ref}</p>\n` : ''}          <p class="ac-big"><a href="${href}">${esc(s.title)}</a> — ${esc(s.dates)}</p>${s.cur ? `
           <p class="ev-meta">Commissariat · ${esc(s.cur)}</p>` : ''}${artists && s.artists.length ? `
           <p class="ev-note">Avec ${esc(s.artists.join(', '))}.</p>` : ''}
         </li>`;
+};
 
 /* every distinct name in the register, with the codes it appears under:
    the artists of each show, and the artists of each event's programme (KR01V) */
@@ -805,48 +809,52 @@ const sliderHtml = slides.length ? `    <div class="slider-wrap" id="section-art
 home = region(home, 'slider', sliderHtml);
 home = region(home, 'slides', `const SLIDES=${JSON.stringify(slides).replace(/</g, '\\u003c')};`, ['/*BUILD:slides*/', '/*/BUILD:slides*/']);
 
-/* Registre des artistes: the current show's artists, then the previous show's, then the full register */
+/* Registre des artistes: the current show's artists only — no code in the heading, it means
+   nothing to a visitor. Everyone else (every past show) lives at /artistes/, one click away. */
 {
-  const cur = CURRENT.artists.length ? `      <h2 class="s-head">Registre des artistes — ${plural(CURRENT.artists.length, 'entrée')} · ${CURRENT.code}</h2>
+  const cur = CURRENT.artists.length ? `      <h2 class="s-head">Registre des artistes — ${plural(CURRENT.artists.length, 'entrée')}</h2>
       <ul class="artist-list">
 ${showRoster(CURRENT, 'artistes/')}
-      </ul>` : '';
-  const prev = PREVIOUS && PREVIOUS.artists.length ? `      <h${cur ? 3 : 2} class="s-head${cur ? ' sub' : ''}">${cur ? 'Précédemment' : 'Registre des artistes'} · ${PREVIOUS.code} — ${plural(PREVIOUS.artists.length, 'entrée')}</h${cur ? 3 : 2}>
-      <ul class="artist-list">
-${showRoster(PREVIOUS, 'artistes/')}
-      </ul>` : '';
+      </ul>` : '      <h2 class="s-head">Registre des artistes</h2>';
   home = region(home, 'artistes', `    <div class="section" id="section-artistes">
-${[cur, prev].filter(Boolean).join('\n')}
+${cur}
       <p class="reg-more"><a href="artistes/">Registre complet — ${plural(REG.length, 'entrée')} →</a></p>
     </div>`);
 }
 
-/* Registre des expositions (replaces the old single-show «Exposition» section) */
+/* Registre des expositions (replaces the old single-show «Exposition» section). showCode:false —
+   the home page shows the status word, not the internal code. */
 home = region(home, 'expositions', `    <div class="section" id="section-exposition">
       <h2 class="s-head">Registre des expositions — ${plural(SHOWS.length, 'entrée')}</h2>
       <ul class="ev-list">
-${showsDesc.map(s => showItem(s, `expositions/${s.slug}/`)).join('\n')}
+${showsDesc.map(s => showItem(s, `expositions/${s.slug}/`, { showCode: false })).join('\n')}
       </ul>
     </div>`);
 
-/* Registre des événements: records only — an event enters once its day has passed */
-const pastEvents = showsAsc.flatMap(s => (s.events || [])).filter(ev => ev.day < TODAY).sort((a, b) => b.day.localeCompare(a.day));
+/* Registre des événements — home page: upcoming/current only, no internal code. Past events
+   aren't lost, they stay on record on their own show's page (the real archive); llms.txt's
+   separate pastEvents list further below still needs every event that has already happened. */
+const upcomingEvents = showsAsc.flatMap(s => (s.events || [])).filter(ev => ev.day >= TODAY).sort((a, b) => a.day.localeCompare(b.day));
 home = region(home, 'events', `    <div class="section" id="section-archive">
-      <h2 class="s-head">Registre des événements — ${plural(pastEvents.length, 'entrée')}</h2>
+      <h2 class="s-head">Registre des événements — ${plural(upcomingEvents.length, 'entrée')}</h2>
       <ul class="ev-list">
-${pastEvents.length ? '\n' + pastEvents.map(eventItem).join('\n\n') + '\n' : '        <li class="ev-item"><p class="ev-note" style="margin-top:0">Aucune entrée pour l\'instant.</p></li>'}
+${upcomingEvents.length ? '\n' + upcomingEvents.map(ev => eventItem(ev, { showCode: false })).join('\n\n') + '\n' : '        <li class="ev-item"><p class="ev-note" style="margin-top:0">Aucune entrée pour l\'instant.</p></li>'}
       </ul>
     </div>`);
+/* llms.txt (below) still audits against every PAST event, so it stays accurate once an event has happened */
+const pastEvents = showsAsc.flatMap(s => (s.events || [])).filter(ev => ev.day < TODAY).sort((a, b) => b.day.localeCompare(a.day));
 
 writeFileSync(join(WEB, 'index.html'), home);
 
 /* ------------------------------------------------------------
    GUARDS — the ways this site has gone stale before
 ------------------------------------------------------------ */
-/* Actualité is written by hand; make sure it still says what is true */
+/* Actualité is written by hand; make sure it still says what is true. It no longer prints a
+   bare registry code (meaningless to a visitor), so staleness is detected off the title text
+   ("« Show Title »") instead. */
 {
   const news = (home.match(/<div class="section" id="section-news"[\s\S]*?\n    <\/div>\n/) || [''])[0];
-  const announced = [...news.matchAll(/class="exh-ref">(KR\d+)</g)].map(m => m[1]);
+  const announced = SHOWS.filter(s => news.includes(`« ${s.title} »`)).map(s => s.code);
   for (const c of announced) if (SHOW_BY[c] && statusOf(SHOW_BY[c]) === 'terminée') warn(`Actualité still announces ${c}, which ended ${SHOW_BY[c].to} — put the holding line back, or announce the next show`);
   if (statusOf(CURRENT) !== 'terminée' && !announced.includes(CURRENT.code)) warn(`Actualité does not announce ${CURRENT.code} (${statusOf(CURRENT)}) — announce it, or leave the holding line on purpose`);
 }
