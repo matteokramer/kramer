@@ -52,7 +52,7 @@ export const SHOWS = [
   {
     code: 'KR03', slug: 'kr03-magenta-made-me-hardcore', title: 'Magenta Made Me Hardcore',
     from: '2026-10-08', to: '2026-10-30',
-    dates: '8 – 30 octobre 2026', hours: 'Samedi 12h–18h, et sur rendez-vous',
+    dates: '8 – 30 octobre 2026', hours: 'Sur rendez-vous',
     cur: 'Kramer & Erratum',
     desc: '« Magenta Made Me Hardcore » (KR03) — exposition collective de sept artistes, commissariat Kramer & Erratum, du 8 au 30 octobre 2026.',
     org: [{ '@type': 'Organization', name: 'Erratum' }],
