@@ -181,6 +181,7 @@ const shell = ({ depth, title, desc, url, ogTitle, ogDesc, ogImage, ogAlt, ogTyp
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${url}">
 <link rel="icon" href="${up}images/edelweiss.svg">
+<link rel="preconnect" href="https://use.typekit.net" crossorigin>
 <meta property="og:type" content="${ogType}">
 <meta property="og:title" content="${esc(ogTitle)}">
 <meta property="og:description" content="${esc(ogDesc)}">
