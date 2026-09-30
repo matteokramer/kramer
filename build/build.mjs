@@ -159,7 +159,6 @@ const GALLERY = {
 /* the home page adds the two fields only it carries */
 const HOME_GALLERY = {
   ...GALLERY,
-  openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: 'Saturday', opens: '12:00', closes: '18:00' }],
   knowsAbout: ['art contemporain', "galerie d'appartement", 'art et technologie', 'art et nature', 'diaspora', 'altérité', 'classe', 'peinture', 'sculpture', 'photographie', 'dessin', 'gravure', 'installation', 'collage', 'sérigraphie', 'art vidéo'],
 };
 const WEBSITE = { '@type': 'WebSite', '@id': WEBSITE_ID, name: 'Kramer', url: `${SITE}/`, inLanguage: 'fr', publisher: { '@id': GALLERY_ID } };
