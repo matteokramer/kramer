@@ -88,6 +88,7 @@ export const SHOWS = [
     dates: '28 septembre – 1er octobre 2026', hours: 'Sur rendez-vous',
     cur: 'Shelly Lea Reich & Claire Koron Elat (Angels), assistanat curatorial Yäelle Amad',
     desc: '« SELF™ » (KR02) — exposition collective de six artistes, commissariat Shelly Lea Reich & Claire Koron Elat (Angels), assistanat curatorial Yäelle Amad, du 28 septembre au 1er octobre 2026.',
+    metaDesc: "Kramer — galerie d'art contemporain, Paris 10e. Galerie d'appartement. Exposition « SELF™ » (KR02), 28 septembre–1er octobre 2026 : six artistes.",
     org: [{ '@type': 'Organization', name: 'Angels' }],
     artists: ['F1LTHY', 'Kristoffer Borgli', 'Sonny Hall', 'Pouria Khojastehpay', 'Noémie Ninot', 'Yury Belyavskiy'],
     views: [
