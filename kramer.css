@@ -54,9 +54,11 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .a-field{display:flex;flex-direction:column;padding:2px 0}
 .a-lbl{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55);line-height:14px;margin-bottom:1px}
 .a-val{font-size:13px;line-height:20px}
-/* «Au registre» names the shows the artist is in and links to each one — it navigates to
-   another document, so it takes the same blue-link treatment as the artist names do */
-.a-val a{color:var(--link);text-decoration:underline}
+/* «Au registre» names the shows the artist is in and now links to each one. Plain ink,
+   underlined on hover, red while pressed — the same treatment the artist names take, so a
+   field value doesn't become the one blue thing on the page */
+.a-val a{color:inherit}
+.a-val a:hover{text-decoration:underline}
 .a-val a:active{color:var(--link-active)}
 
 /* Bio (intentionally empty until copy is written) */
@@ -135,9 +137,11 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
    record page is plain text; its box stays invisible so the names keep one column. */
 .artist-list{list-style:none;padding:0 10px 20px}
 .artist-item{padding:2px 0}
+/* the cb-box next to a linked name is the "this has a record" signal (hidden entirely
+   for names with none), so the name stays plain ink rather than repeating that in blue —
+   same logic as index.html's .cb-link/.artist-link */
 .artist-link{display:inline-flex;align-items:center;color:#000}
-a.artist-link{color:var(--link)}
-a.artist-link .artist-nm{text-decoration:underline}
+a.artist-link:hover .artist-nm{text-decoration:underline}
 a.artist-link:active{color:var(--link-active)}
 /* align-items:center centers the box against the text's full line-height box, but the
    font's ascent/descent split isn't symmetric, so the box reads as sitting too high
