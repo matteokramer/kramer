@@ -290,17 +290,23 @@ const eventItem = (ev, { showCode = true } = {}) => {
    own page (field('Commissariat', …) below). */
 const showItem = (s, href, { artists = false, status = true, showCode = true, checkbox = false, cur = true } = {}) => {
   const ref = [showCode ? s.code : '', status ? statusOf(s) : ''].filter(Boolean).join(' · ');
-  const body = `${ref ? `          <p class="exh-ref">${ref}</p>\n` : ''}          <p class="ac-big"><a href="${href}">${esc(s.title)}</a> — ${esc(s.dates)}</p>${cur && s.cur ? `
+  /* checkbox:true wraps the whole row (box + title + dates) in one <a>, so the box and
+     the date range are just as clickable as the title text — can't nest an <a> inside
+     that, so the title stays plain text there instead of its own link */
+  const titleLine = checkbox
+    ? `          <p class="ac-big">${esc(s.title)} — ${esc(s.dates)}</p>`
+    : `          <p class="ac-big"><a href="${href}">${esc(s.title)}</a> — ${esc(s.dates)}</p>`;
+  const body = `${ref ? `          <p class="exh-ref">${ref}</p>\n` : ''}${titleLine}${cur && s.cur ? `
           <p class="ev-meta">Commissariat · ${esc(s.cur)}</p>` : ''}${artists && s.artists.length ? `
           <p class="ev-note">Avec ${esc(s.artists.join(', '))}.</p>` : ''}`;
   return checkbox
     ? `        <li class="ev-item">
-          <div class="ev-link">
+          <a class="ev-link" href="${href}">
             <div class="cb-box"></div>
             <div class="ev-body">
 ${body}
             </div>
-          </div>
+          </a>
         </li>`
     : `        <li class="ev-item">
 ${body}
@@ -388,8 +394,26 @@ function page(a, i) {
   /* JSON-LD graph: WebPage (mainEntity → Person) + enriched Person + the gallery
      + a VisualArtwork per consigned work */
   const personId = `${url}#person`;
-  const titleTxt = `${a.name}${titleMedium} · ${latest.title} · Kramer, Paris`;
-  const descTxt = `${a.name}${descMedium}${descBased} — exposition « ${latest.title} » (${latest.code}), registre des artistes. Kramer, galerie d'art contemporain, Paris 10e.`;
+  /* Google cuts a title at roughly 60 characters. Name first, gallery last — so when the
+     show's title makes the line too long it is the show that goes, not «Kramer, Paris»
+     (the page says which show it is twice over, in the «Au registre» field and the H1's
+     reference line). The JSON-LD WebPage.name reuses this same string, as it always has. */
+  const fullTitle = `${a.name}${titleMedium} · ${latest.title} · Kramer, Paris`;
+  const titleTxt = fullTitle.length > 60 ? `${a.name}${titleMedium} · Kramer, Paris` : fullTitle;
+  /* ~155 characters is what a result page shows; past that the tail is cut, and the tail is
+     where the gallery and the city are. So the line is assembled from segments and the least
+     useful ones are dropped — in order — until it fits: «registre des artistes» (the breadcrumb
+     already says it), then the city, then the medium list. The <meta>, the OG/Twitter
+     description and the JSON-LD description all read this one string. */
+  const descTxt = (() => {
+    const build = (reg, based, medium) =>
+      `${a.name}${medium ? descMedium : ''}${based ? descBased : ''} — exposition « ${latest.title} » (${latest.code})${reg ? ', registre des artistes' : ''}. Kramer, galerie d'art contemporain, Paris 10e.`;
+    for (const [reg, based, medium] of [[1, 1, 1], [0, 1, 1], [0, 0, 1], [0, 0, 0]]) {
+      const t = build(reg, based, medium);
+      if (t.length <= 160) return t;
+    }
+    return build(0, 0, 0);
+  })();
   const variants = nameVariants(a);
   const heroImg = artistHeroImg(a);
   const webpage = {
