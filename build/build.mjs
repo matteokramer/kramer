@@ -282,13 +282,25 @@ const eventItem = (ev, { showCode = true } = {}) => {
 
 /* a show as a register entry; `href` is where the title points. Under a status heading
    (/expositions/) the reference line carries only the code — the heading already says it.
-   showCode:false (the home page) drops the code too, leaving just the status word. */
-const showItem = (s, href, { artists = false, status = true, showCode = true } = {}) => {
+   showCode:false (the home page) drops the code too, leaving just the status word.
+   checkbox:true (the home page's Registre des expositions) renders the entry beside a
+   cb-box, like the artist list, instead of opening with a reference line. */
+const showItem = (s, href, { artists = false, status = true, showCode = true, checkbox = false } = {}) => {
   const ref = [showCode ? s.code : '', status ? statusOf(s) : ''].filter(Boolean).join(' · ');
-  return `        <li class="ev-item">
-${ref ? `          <p class="exh-ref">${ref}</p>\n` : ''}          <p class="ac-big"><a href="${href}">${esc(s.title)}</a> — ${esc(s.dates)}</p>${s.cur ? `
+  const body = `${ref ? `          <p class="exh-ref">${ref}</p>\n` : ''}          <p class="ac-big"><a href="${href}">${esc(s.title)}</a> — ${esc(s.dates)}</p>${s.cur ? `
           <p class="ev-meta">Commissariat · ${esc(s.cur)}</p>` : ''}${artists && s.artists.length ? `
-          <p class="ev-note">Avec ${esc(s.artists.join(', '))}.</p>` : ''}
+          <p class="ev-note">Avec ${esc(s.artists.join(', '))}.</p>` : ''}`;
+  return checkbox
+    ? `        <li class="ev-item">
+          <div class="ev-link">
+            <div class="cb-box"></div>
+            <div class="ev-body">
+${body}
+            </div>
+          </div>
+        </li>`
+    : `        <li class="ev-item">
+${body}
         </li>`;
 };
 
@@ -842,13 +854,19 @@ ${cur}
 }
 
 /* Registre des expositions (replaces the old single-show «Exposition» section). showCode:false —
-   the home page shows the status word, not the internal code. */
-home = region(home, 'expositions', `    <div class="section" id="section-exposition">
-      <h2 class="s-head">Registre des expositions — ${plural(SHOWS.length, 'entrée')}</h2>
+   the home page shows the status word, not the internal code. CURRENT is excluded here: the
+   Actualité block above already names it, with its own link to the show's page, so it isn't
+   repeated twice on the same page. (The standalone /expositions/ page still lists every show,
+   current included — that register is the complete archive, not the home page's quick view.) */
+{
+  const pastShows = showsDesc.filter(s => s !== CURRENT);
+  home = region(home, 'expositions', `    <div class="section" id="section-exposition">
+      <h2 class="s-head">Registre des expositions — ${plural(pastShows.length, 'entrée')}</h2>
       <ul class="ev-list">
-${showsDesc.map(s => showItem(s, `expositions/${s.slug}/`, { showCode: false })).join('\n')}
+${pastShows.map(s => showItem(s, `expositions/${s.slug}/`, { showCode: false, status: false, checkbox: true })).join('\n')}
       </ul>
     </div>`);
+}
 
 /* Registre des événements — home page: upcoming/current only, no internal code. Past events
    aren't lost, they stay on record on their own show's page (the real archive); llms.txt's
