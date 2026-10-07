@@ -54,6 +54,10 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .a-field{display:flex;flex-direction:column;padding:2px 0}
 .a-lbl{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55);line-height:14px;margin-bottom:1px}
 .a-val{font-size:13px;line-height:20px}
+/* «Au registre» names the shows the artist is in and links to each one — it navigates to
+   another document, so it takes the same blue-link treatment as the artist names do */
+.a-val a{color:var(--link);text-decoration:underline}
+.a-val a:active{color:var(--link-active)}
 
 /* Bio (intentionally empty until copy is written) */
 .a-bio{padding:0 10px 8px;max-width:70ch}
@@ -114,10 +118,11 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .ev-item{border-top:1px solid #222;padding:12px 0 28px}
 .ev-item:first-child{border-top:none}   /* .s-head above already draws one */
 .exh-ref{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55);margin-bottom:3px}
-.ac-big{font-size:clamp(16px,2.2vw,20px);font-weight:400;line-height:1.3}
+/* plain-text size, matching index.html — see its comment on .ac-big */
+.ac-big{font-size:13px;line-height:20px;font-weight:400}
 .ev-item .ac-big a{color:var(--link);font-family:inherit;text-decoration:underline}
 .ev-item .ac-big a:active{color:var(--link-active)}
-.ev-meta{font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:4px}
+.ev-meta{font-size:9px;line-height:14px;letter-spacing:.03em;color:rgba(0,0,0,.55);margin-top:4px}
 .ev-note{font-size:13px;line-height:20px;margin-top:10px;max-width:68ch}
 
 /* Screening programme — one entry per work: director (body) + fiche technique (9px muted) */
@@ -130,11 +135,15 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
    record page is plain text; its box stays invisible so the names keep one column. */
 .artist-list{list-style:none;padding:0 10px 20px}
 .artist-item{padding:2px 0}
-.artist-link{display:inline-flex;align-items:flex-start;color:#000}
+.artist-link{display:inline-flex;align-items:center;color:#000}
 a.artist-link{color:var(--link)}
 a.artist-link .artist-nm{text-decoration:underline}
 a.artist-link:active{color:var(--link-active)}
-.cb-box{border:1px solid #222;width:13px;height:13px;background:#f1f4ff;flex-shrink:0;margin-top:3px}
+/* align-items:center centers the box against the text's full line-height box, but the
+   font's ascent/descent split isn't symmetric, so the box reads as sitting too high
+   without this small optical correction — same fix and the same 2px, as index.html's
+   .cb-box */
+.cb-box{border:1px solid #222;width:13px;height:13px;background:#f1f4ff;flex-shrink:0;margin-top:2px}
 .artist-item.plain .cb-box{visibility:hidden}
 .artist-nm{padding-left:8px;font-size:13px;line-height:20px}
 .artist-nm em{font-size:9px;letter-spacing:.03em;font-style:normal;color:rgba(0,0,0,.55)}
