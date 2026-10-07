@@ -147,8 +147,11 @@ a.artist-link:active{color:var(--link-active)}
    font's ascent/descent split isn't symmetric, so the box reads as sitting too high
    without this small optical correction — same fix and the same 2px, as index.html's
    .cb-box */
-.cb-box{border:1px solid #222;width:13px;height:13px;background:#f1f4ff;flex-shrink:0;margin-top:2px}
+.cb-box{border:1px solid #222;width:13px;height:13px;background:#f1f4ff;flex-shrink:0;margin-top:2px;position:relative}
 .artist-item.plain .cb-box{visibility:hidden}
+/* ticks on click, same instant feedback as the home page's step-nav checkboxes */
+a.artist-link:active .cb-box{background:#000}
+a.artist-link:active .cb-box::after{content:'';position:absolute;top:2px;left:2px;width:7px;height:7px;background:#fff}
 .artist-nm{padding-left:8px;font-size:13px;line-height:20px}
 .artist-nm em{font-size:9px;letter-spacing:.03em;font-style:normal;color:rgba(0,0,0,.55)}
 
