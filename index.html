@@ -357,26 +357,18 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 .slide-detail{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.45)}
 
 /* ============================================================
-   STEP NAV — border-top AND border-bottom (clearly bounded)
+   STEP NAV — flat, single column at every width; no panel fill.
+   Hairlines only, same idiom as the section rules below.
 ============================================================ */
 .step{
-  display:flex;flex:0 0 auto;flex-wrap:wrap;
-  background:#e8e8e8;
+  display:flex;flex-direction:column;flex:0 0 auto;
   border-top:1px solid #222;   /* top rule: separates from slider */
   border-bottom:1px solid #222; /* bottom rule: separates from content */
 }
-.step-info{
-  padding:7px 10px;width:100%;
-  display:flex;flex-direction:column;
-}
-@media(min-width:960px){
-  .step-info{width:33%;border-right:1px solid #222;border-bottom:none}
-}
+.step-info{padding:7px 10px 4px}
 .step-q{font-size:13px;line-height:20px;font-weight:bold}
 .step-items-wrap{width:100%}
-@media(min-width:960px){.step-items-wrap{width:67%}}
-.step-items{background:#fff;padding:7px 10px;border-top:1px solid #222}
-@media(min-width:960px){.step-items{border-top:none}}
+.step-items{padding:0 10px 7px}
 .cb-list{list-style:none}
 .cb-item{padding:1px 0}
 .cb-link{display:inline-flex;align-items:flex-start;color:#000;text-decoration:none;cursor:pointer}
@@ -414,14 +406,17 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 /* Registry reference line — code + status above a register entry */
 .exh-ref{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.45);margin-bottom:3px}
 
-/* Actualité status tag (e.g. "Cycle de projections") — condensed Acumin bold, large display */
+/* Actualité status tag (e.g. "Cycle de projections") — plain body text, same register
+   as the rest of the Actualité block; no display-scale jump */
 .tag-encours{
-  font-family:var(--ec);font-weight:700;font-size:clamp(28px,4.5vw,48px);
-  letter-spacing:0;margin-right:0;display:block;margin-bottom:8px;line-height:.9;
+  font-size:13px;line-height:20px;font-weight:400;
+  display:block;margin-bottom:8px;
 }
 
-/* Actualité / news */
+/* Actualité / news — the title links straight to the show's own page */
 .news-block{padding:0 10px 8px}
+.news-block a{color:var(--link);text-decoration:underline}
+.news-block a:active{color:var(--link-active)}
 
 /* Programme de projection — one entry per work: réalisateur (body) + fiche
    technique (9px muted), same register as the artist list. */
@@ -436,6 +431,13 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 .ev-list{list-style:none;padding:0 10px}
 .ev-item{border-top:1px solid #222;padding:12px 0 28px}
 .ev-item:first-child{border-top:none}   /* .section>.s-head already draws one */
+/* Registre des expositions only: no divider between entries — just the two past
+   shows now that the current one lives in Actualité above — and set closer together,
+   each opening on a cb-box like the artist list instead of a status line. */
+#section-exposition .ev-item{border-top:none;padding:2px 0}
+.ev-link{display:flex;align-items:flex-start}
+.ev-body{padding-left:8px;min-width:0}
+.ev-body .ac-big{margin-top:1px}
 .ev-meta{font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:4px}
 .ev-note{font-size:13px;line-height:20px;margin-top:10px;max-width:68ch}
 
@@ -489,9 +491,15 @@ a.artist-link:active{color:var(--link-active)}
 .fcheck input[type=checkbox]{
   appearance:none;-webkit-appearance:none;
   width:13px;height:13px;border:1px solid #222;
-  background:#f1f4ff;flex-shrink:0;cursor:pointer;
+  background-color:#f1f4ff;flex-shrink:0;cursor:pointer;
 }
-.fcheck input[type=checkbox]:checked{background:#000}
+/* Checked state matches .cb-box.on: solid black with an inset white square,
+   drawn as a background image rather than ::after (unreliable on <input>). */
+.fcheck input[type=checkbox]:checked{
+  background-color:#000;
+  background-image:linear-gradient(#fff,#fff);
+  background-size:7px 7px;background-position:center;background-repeat:no-repeat;
+}
 
 /* Button — grey gradient, NO underline on first letter */
 .btn{
@@ -597,13 +605,16 @@ a.artist-link:active{color:var(--link-active)}
          finished. No fixed vernissage hours and no street address: the show runs by appointment only
          — the .tag-encours headline says so instead of naming a time slot, and access (address + floor)
          is given only once a visit is confirmed, same wording as the access section's "Rendez-vous"
-         field, not printed here where a drop-in visitor might read it as an open invitation. -->
+         field, not printed here where a drop-in visitor might read it as an open invitation. This
+         block now stands in for the current show's row in the Registre des expositions below — the
+         title links straight to the show's own page, and build.mjs excludes CURRENT from that list
+         so the show isn't named twice on the same page. -->
     <div class="section" id="section-news" style="padding-top:20px">
       <h2 class="s-head">Actualité</h2>
       <div class="news-block">
         <span class="tag-encours">Exposition en cours</span>
         <p class="ev-meta" style="margin-top:0">Sur rendez-vous uniquement</p>
-        <p class="ev-note"><strong>« Magenta Made Me Hardcore »</strong></p>
+        <p class="ev-note"><a href="expositions/kr03-magenta-made-me-hardcore/"><strong>« Magenta Made Me Hardcore »</strong></a></p>
         <p class="ev-meta">Commissariat · Kramer &amp; Erratum</p>
         <p class="ev-note">8 – 30 octobre 2026. Les modalités d'accès sont communiquées à la confirmation du rendez-vous.</p>
       </div>
@@ -666,21 +677,24 @@ a.artist-link:active{color:var(--link-active)}
          from the dates, never typed here. Each show has its own page at /expositions/<slug>/. -->
     <!--BUILD:expositions-->
     <div class="section" id="section-exposition">
-      <h2 class="s-head">Registre des expositions — 3 entrées</h2>
+      <h2 class="s-head">Registre des expositions — 2 entrées</h2>
       <ul class="ev-list">
         <li class="ev-item">
-          <p class="exh-ref">à venir</p>
-          <p class="ac-big"><a href="expositions/kr03-magenta-made-me-hardcore/">Magenta Made Me Hardcore</a> — 8 – 30 octobre 2026</p>
-          <p class="ev-meta">Commissariat · Kramer &amp; Erratum</p>
-        </li>
-        <li class="ev-item">
-          <p class="exh-ref">terminée</p>
+          <div class="ev-link">
+            <div class="cb-box"></div>
+            <div class="ev-body">
           <p class="ac-big"><a href="expositions/kr02-self/">SELF™</a> — 28 septembre – 1er octobre 2026</p>
           <p class="ev-meta">Commissariat · Shelly Lea Reich &amp; Claire Koron Elat (Angels), assistanat curatorial Yäelle Amad</p>
+            </div>
+          </div>
         </li>
         <li class="ev-item">
-          <p class="exh-ref">terminée</p>
+          <div class="ev-link">
+            <div class="cb-box"></div>
+            <div class="ev-body">
           <p class="ac-big"><a href="expositions/kr01-la-bride/">La Bride</a> — 25 juin – 29 août 2026</p>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
