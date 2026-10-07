@@ -284,10 +284,13 @@ const eventItem = (ev, { showCode = true } = {}) => {
    (/expositions/) the reference line carries only the code — the heading already says it.
    showCode:false (the home page) drops the code too, leaving just the status word.
    checkbox:true (the home page's Registre des expositions) renders the entry beside a
-   cb-box, like the artist list, instead of opening with a reference line. */
-const showItem = (s, href, { artists = false, status = true, showCode = true, checkbox = false } = {}) => {
+   cb-box, like the artist list, instead of opening with a reference line.
+   cur:false (the home page only) drops the commissariat line — the home register is a
+   quick index; commissariat is a detail, already shown on /expositions/ and the show's
+   own page (field('Commissariat', …) below). */
+const showItem = (s, href, { artists = false, status = true, showCode = true, checkbox = false, cur = true } = {}) => {
   const ref = [showCode ? s.code : '', status ? statusOf(s) : ''].filter(Boolean).join(' · ');
-  const body = `${ref ? `          <p class="exh-ref">${ref}</p>\n` : ''}          <p class="ac-big"><a href="${href}">${esc(s.title)}</a> — ${esc(s.dates)}</p>${s.cur ? `
+  const body = `${ref ? `          <p class="exh-ref">${ref}</p>\n` : ''}          <p class="ac-big"><a href="${href}">${esc(s.title)}</a> — ${esc(s.dates)}</p>${cur && s.cur ? `
           <p class="ev-meta">Commissariat · ${esc(s.cur)}</p>` : ''}${artists && s.artists.length ? `
           <p class="ev-note">Avec ${esc(s.artists.join(', '))}.</p>` : ''}`;
   return checkbox
@@ -462,7 +465,10 @@ function page(a, i) {
   const fields = [
     a.born ? `<div class="a-field"><span class="a-lbl">${bornLbl}</span><span class="a-val">${esc(a.born)}</span></div>` : '',
     a.based ? `<div class="a-field"><span class="a-lbl">Résidence</span><span class="a-val">${esc(a.based)}</span></div>` : '',
-    `<div class="a-field"><span class="a-lbl">Au registre</span><span class="a-val">${aShows.map(s => esc(`${s.title} · ${s.code}`)).join(' / ')}</span></div>`,
+    /* the show name links to its own page — the show pages already link back to the
+       artists, so this closes the loop both ways (and gives the show page a link from
+       every artist who was in it) */
+    `<div class="a-field"><span class="a-lbl">Au registre</span><span class="a-val">${aShows.map(s => `<a href="../../expositions/${s.slug}/">${esc(`${s.title} · ${s.code}`)}</a>`).join(' / ')}</span></div>`,
   ].join('\n      ');
 
   /* first plate is the likely LCP → eager; everything after lazy-loads */
@@ -492,7 +498,10 @@ function page(a, i) {
       </div>`;
         const plates = imgs.map(im => {
           const inst = isInst(im.f);
-          const alt = inst ? esc(`Vue d'installation de «${show.title}», KRAMER — ${a.name}`) : baseAlt;
+          /* a work with several plates used to repeat one alt string verbatim; the detail
+             shots say so, as the caption under them already does */
+          const alt = inst ? esc(`Vue d'installation de «${show.title}», KRAMER — ${a.name}`)
+            : isDet(im.f) ? `${baseAlt} (détail)` : baseAlt;
           const cap = inst ? instCap(im.ph, show) : workCap(a, w, im.ph, isDet(im.f));
           return `<div class="work-plate"><img src="../../images/works/${im.f}" alt="${alt}"${plateAttrs()}></div>
         <p class="work-cap">${cap}</p>`;
@@ -863,7 +872,7 @@ ${cur}
   home = region(home, 'expositions', `    <div class="section" id="section-exposition">
       <h2 class="s-head">Registre des expositions — ${plural(pastShows.length, 'entrée')}</h2>
       <ul class="ev-list">
-${pastShows.map(s => showItem(s, `expositions/${s.slug}/`, { showCode: false, status: false, checkbox: true })).join('\n')}
+${pastShows.map(s => showItem(s, `expositions/${s.slug}/`, { showCode: false, status: false, checkbox: true, cur: false })).join('\n')}
       </ul>
     </div>`);
 }
@@ -891,9 +900,21 @@ writeFileSync(join(WEB, 'index.html'), home);
    ("« Show Title »") instead. */
 {
   const news = (home.match(/<div class="section" id="section-news"[\s\S]*?\n    <\/div>\n/) || [''])[0];
-  const announced = SHOWS.filter(s => news.includes(`« ${s.title} »`)).map(s => s.code);
+  /* the title may be set in guillemets or bare — don't make the guard depend on punctuation */
+  const announced = SHOWS.filter(s => news.includes(s.title)).map(s => s.code);
   for (const c of announced) if (SHOW_BY[c] && statusOf(SHOW_BY[c]) === 'terminée') warn(`Actualité still announces ${c}, which ended ${SHOW_BY[c].to} — put the holding line back, or announce the next show`);
   if (statusOf(CURRENT) !== 'terminée' && !announced.includes(CURRENT.code)) warn(`Actualité does not announce ${CURRENT.code} (${statusOf(CURRENT)}) — announce it, or leave the holding line on purpose`);
+  /* …and that the status tag above the title still matches the date-derived status: the tag
+     is hand-written, so it went on reading «Exposition en cours» for a show that had not
+     opened yet */
+  const st = statusOf(CURRENT);
+  if (announced.includes(CURRENT.code)) {
+    if (/Exposition en cours/.test(news) && st !== 'en cours') warn(`Actualité's tag says «Exposition en cours» but ${CURRENT.code} is ${st} — fix the tag`);
+    if (/Prochaine exposition/.test(news) && st !== 'à venir') warn(`Actualité's tag says «Prochaine exposition» but ${CURRENT.code} is ${st} — fix the tag`);
+  }
+  /* the show's own dates belong in the announcement — they are nowhere else on the home page
+     (the register below lists only shows that have finished) */
+  if (announced.includes(CURRENT.code) && !news.includes(CURRENT.dates)) warn(`Actualité does not give ${CURRENT.code}'s dates («${CURRENT.dates}») — the home page then states them nowhere`);
 }
 /* llms.txt is hand-written and has gone stale twice: every show must be in it, with its page */
 if (existsSync(join(WEB, 'llms.txt'))) {

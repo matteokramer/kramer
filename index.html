@@ -259,6 +259,11 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 /* Classic hyperlink blue for navigation/menu links */
 .addr-link{color:inherit;text-decoration:none}
 .addr-link:hover{text-decoration:underline}
+/* The obfuscated contact email (assembled in JS below) is a real mailto: link, so it
+   takes the same blue-link treatment as any other link — nothing else about the
+   obfuscation changes. */
+.obf-link{color:var(--link);text-decoration:underline}
+.obf-link:active{color:var(--link-active)}
 
 /* ============================================================
    LAYOUT
@@ -357,30 +362,48 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 .slide-detail{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.45)}
 
 /* ============================================================
-   STEP NAV — flat, single column at every width; no panel fill.
-   Hairlines only, same idiom as the section rules below.
+   STEP NAV — border-top AND border-bottom (clearly bounded)
 ============================================================ */
 .step{
-  display:flex;flex-direction:column;flex:0 0 auto;
+  display:flex;flex:0 0 auto;flex-wrap:wrap;
+  background:#e8e8e8;
   border-top:1px solid #222;   /* top rule: separates from slider */
   border-bottom:1px solid #222; /* bottom rule: separates from content */
 }
-.step-info{padding:7px 10px 4px}
-.step-q{font-size:13px;line-height:20px;font-weight:bold}
+.step-info{
+  padding:7px 10px;width:100%;
+  display:flex;flex-direction:column;
+}
+@media(min-width:960px){
+  .step-info{width:33%;border-right:1px solid #222;border-bottom:none}
+}
+/* .step-q is the one piece of plain "text" style in this block — not a link, so no blue;
+   no bold anywhere, per the three-style rule below. */
+.step-q{font-size:13px;line-height:20px;font-weight:400}
 .step-items-wrap{width:100%}
-.step-items{padding:0 10px 7px}
+@media(min-width:960px){.step-items-wrap{width:67%}}
+.step-items{background:#fff;padding:7px 10px;border-top:1px solid #222}
+@media(min-width:960px){.step-items{border-top:none}}
 .cb-list{list-style:none}
 .cb-item{padding:1px 0}
-.cb-link{display:inline-flex;align-items:flex-start;color:#000;text-decoration:none;cursor:pointer}
-.cb-link:hover .cb-txt{text-decoration:underline}
+/* The five rows navigate (goTo() scrolls to another section) — same "blue text" style as
+   any other link on the page: var(--link), permanent underline, red while pressed. The
+   checkbox square stays as it is; only the label's colour/weight changes. */
+.cb-link{display:inline-flex;align-items:center;color:var(--link);text-decoration:underline;cursor:pointer}
+.cb-link:active{color:var(--link-active)}
 .cb-box{
   border:1px solid #222;width:13px;height:13px;
-  background:#f1f4ff;flex-shrink:0;margin-top:3px;position:relative;
+  background:#f1f4ff;flex-shrink:0;position:relative;
+  /* align-items:center on the parent centers this box against the text's full line-height
+     box, but the font's ascent/descent split isn't symmetric — verified by rendering, the
+     box reads as sitting too high (its bottom lands right on the underline) without this
+     small optical correction. Same correction on .fcheck's checkbox below. */
+  margin-top:2px;
 }
 .cb-box.on{background:#000}
 .cb-box.on::after{content:'';position:absolute;top:2px;left:2px;width:7px;height:7px;background:#fff}
 .cb-txt{padding-left:8px;font-size:13px;line-height:20px}
-.cb-txt strong{font-weight:bold}
+.cb-txt strong{font-weight:400}
 
 /* ============================================================
    SECTIONS — spacing only, NO border rules between sections
@@ -417,6 +440,7 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
 .news-block{padding:0 10px 8px}
 .news-block a{color:var(--link);text-decoration:underline}
 .news-block a:active{color:var(--link-active)}
+.news-block strong{font-weight:400} /* no bold anywhere — the <strong> stays for semantics only */
 
 /* Programme de projection — one entry per work: réalisateur (body) + fiche
    technique (9px muted), same register as the artist list. */
@@ -435,16 +459,16 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
    shows now that the current one lives in Actualité above — and set closer together,
    each opening on a cb-box like the artist list instead of a status line. */
 #section-exposition .ev-item{border-top:none;padding:2px 0}
-.ev-link{display:flex;align-items:flex-start}
+.ev-link{display:flex;align-items:center}
 .ev-body{padding-left:8px;min-width:0}
 .ev-body .ac-big{margin-top:1px}
-.ev-meta{font-size:9px;line-height:14px;letter-spacing:.03em;margin-top:4px}
+.ev-meta{font-size:9px;line-height:14px;letter-spacing:.03em;color:rgba(0,0,0,.45);margin-top:4px}
 .ev-note{font-size:13px;line-height:20px;margin-top:10px;max-width:68ch}
 
 /* Artist list */
 .artist-list{list-style:none;padding:0 10px 20px}
 .artist-item{padding:2px 0}
-.artist-link{display:inline-flex;align-items:flex-start;color:#000;text-decoration:none;cursor:pointer}
+.artist-link{display:inline-flex;align-items:center;color:#000;text-decoration:none;cursor:pointer}
 a.artist-link{color:var(--link)}
 a.artist-link .artist-nm{text-decoration:underline}
 a.artist-link:active{color:var(--link-active)}
@@ -466,7 +490,10 @@ a.artist-link:active{color:var(--link-active)}
 /* Access section */
 .access-grid{display:flex;flex-wrap:wrap;padding:0 10px;gap:20px;margin-bottom:32px}
 .ac-lbl{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.45);margin-bottom:3px}
-.ac-big{font-family:'acumin-pro',Arial,sans-serif;font-size:clamp(16px,2.2vw,20px);font-weight:400;line-height:1.3}
+/* plain-text size — register rows and the access address read at the same scale as any
+   other text (text/blue-link/muted-header are the only three sizes on the site); it used
+   to be a display-scale clamp(16-20px), the fourth size that didn't belong */
+.ac-big{font-size:13px;line-height:20px;font-weight:400}
 
 /* Page footer — quiet legal link at the bottom of the content flow */
 .page-foot{border-top:1px solid #222;margin:8px 10px 0;padding:8px 0 24px;font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.45)}
@@ -475,7 +502,10 @@ a.artist-link:active{color:var(--link-active)}
 /* Contact form */
 .rsvp{padding:0 10px 32px;max-width:480px}
 .ff{margin-bottom:8px}
-.ff label{display:block;font-size:9px;letter-spacing:.03em;margin-bottom:2px}
+/* :not(.fcheck) — a plain selector match here has higher specificity than .fcheck's own
+   display:flex and was silently overriding it, so the checkbox and its label text stacked
+   instead of sitting side by side */
+.ff label:not(.fcheck){display:block;font-size:9px;letter-spacing:.03em;margin-bottom:2px}
 /* Form inputs — keep the #f1f4ff blue the user likes */
 .ff input,.ff textarea{
   width:100%;border:1px solid #222;border-radius:0;
@@ -489,10 +519,14 @@ a.artist-link:active{color:var(--link-active)}
 .ff input:focus-visible,.ff textarea:focus-visible{outline:2px solid #000;outline-offset:0}
 .fcheck{display:flex;align-items:center;gap:8px;margin-bottom:3px;cursor:pointer;font-size:13px;line-height:20px}
 .fcheck input[type=checkbox]{
-  appearance:none;-webkit-appearance:none;
-  width:13px;height:13px;border:1px solid #222;
+  appearance:none;-webkit-appearance:none;-moz-appearance:none;
+  box-sizing:border-box;display:block;
+  width:13px;height:13px;min-width:13px;min-height:13px;
+  margin:0;padding:0;border:1px solid #222;border-radius:0;
   background-color:#f1f4ff;flex-shrink:0;cursor:pointer;
+  margin-top:2px; /* same optical correction as .cb-box — see its comment */
 }
+.fcheck span{display:flex;align-items:center}
 /* Checked state matches .cb-box.on: solid black with an inset white square,
    drawn as a background image rather than ::after (unreliable on <input>). */
 .fcheck input[type=checkbox]:checked{
@@ -602,7 +636,11 @@ a.artist-link:active{color:var(--link-active)}
          « Magenta Made Me Hardcore », announced 2026-10-07). No prices, no RSVP link. When that show
          ends, put the holding line back — «Aucune annonce en cours. La prochaine entrée sera inscrite
          au registre.» — or announce the next one; the build warns if this block names a show that has
-         finished. No fixed vernissage hours and no street address: the show runs by appointment only
+         finished. The status tag is hand-written too: «Prochaine exposition» until the show opens,
+         «Exposition en cours» from its first day — the build warns when the tag and the date-derived
+         status disagree, and when the dates are missing (they appear nowhere else on the home page,
+         since the register below lists only shows that have finished).
+         No fixed vernissage hours and no street address: the show runs by appointment only
          — the .tag-encours headline says so instead of naming a time slot, and access (address + floor)
          is given only once a visit is confirmed, same wording as the access section's "Rendez-vous"
          field, not printed here where a drop-in visitor might read it as an open invitation. This
@@ -610,11 +648,10 @@ a.artist-link:active{color:var(--link-active)}
          title links straight to the show's own page, and build.mjs excludes CURRENT from that list
          so the show isn't named twice on the same page. -->
     <div class="section" id="section-news" style="padding-top:20px">
-      <h2 class="s-head">Actualité</h2>
       <div class="news-block">
-        <span class="tag-encours">Exposition en cours</span>
+        <span class="tag-encours">Prochaine exposition</span>
         <p class="ev-meta" style="margin-top:0">Sur rendez-vous uniquement</p>
-        <p class="ev-note"><a href="expositions/kr03-magenta-made-me-hardcore/"><strong>« Magenta Made Me Hardcore »</strong></a></p>
+        <p class="ev-note"><a href="expositions/kr03-magenta-made-me-hardcore/"><strong>Magenta Made Me Hardcore</strong></a></p>
         <p class="ev-meta">Commissariat · Kramer &amp; Erratum</p>
         <p class="ev-note">8 – 30 octobre 2026. Les modalités d'accès sont communiquées à la confirmation du rendez-vous.</p>
       </div>
@@ -684,7 +721,6 @@ a.artist-link:active{color:var(--link-active)}
             <div class="cb-box"></div>
             <div class="ev-body">
           <p class="ac-big"><a href="expositions/kr02-self/">SELF™</a> — 28 septembre – 1er octobre 2026</p>
-          <p class="ev-meta">Commissariat · Shelly Lea Reich &amp; Claire Koron Elat (Angels), assistanat curatorial Yäelle Amad</p>
             </div>
           </div>
         </li>
@@ -735,8 +771,8 @@ a.artist-link:active{color:var(--link-active)}
         </div>
         <div>
           <p class="ac-lbl">Rendez-vous</p>
-          <p style="font-size:13px;line-height:20px">Les modalités d'accès sont communiquées à la prise de rendez-vous, via le formulaire ci-dessous ou par <span id="contact-email-inline"></span>.</p>
-          <p style="font-size:13px;line-height:20px;margin-top:6px" lang="en">Access details are given when you book an appointment, through the form below or at <span id="contact-email-inline-2"></span>.</p>
+          <p style="font-size:13px;line-height:20px">Les modalités d'accès sont communiquées à la prise de rendez-vous, via le formulaire ci-dessous ou par mail.</p>
+          <p style="font-size:13px;line-height:20px;margin-top:6px" lang="en">Access details are given when you book an appointment, through the form below or by mail.</p>
         </div>
       </div>
 
@@ -753,8 +789,8 @@ a.artist-link:active{color:var(--link-active)}
           <div class="ff"><label for="f-email">Adresse e-mail</label><input type="email" id="f-email" name="email" required></div>
           <div class="ff"><label for="f-affiliation">Affiliation (facultatif)</label><input type="text" id="f-affiliation" name="affiliation"></div>
           <div class="ff">
-            <label class="fcheck"><input type="checkbox" name="rendez-vous" value="oui"> Demander un rendez-vous</label>
-            <label class="fcheck"><input type="checkbox" name="newsletter" value="oui"> S'inscrire à la newsletter</label>
+            <label class="fcheck"><input type="checkbox" name="rendez-vous" value="oui"><span>Demander un rendez-vous</span></label>
+            <label class="fcheck"><input type="checkbox" name="newsletter" value="oui"><span>S'inscrire à la newsletter</span></label>
           </div>
           <div class="ff"><label for="f-note">Note (facultatif)</label><textarea id="f-note" name="note" rows="2"></textarea></div>
           <button class="btn" type="submit">Envoyer</button>
@@ -1173,12 +1209,10 @@ document.addEventListener('keydown',e=>{
 ================================================================ */
 (function(){
   const u='contact',d='kramer'+String.fromCharCode(46)+'paris',addr=u+'@'+d;
-  const link='<a href="mailto:'+addr+'" style="color:inherit">'+addr+'</a>';
+  const link='<a href="mailto:'+addr+'" class="obf-link">'+addr+'</a>';
   const p=document.getElementById('contact-email-p');
   if(p)p.innerHTML=link;
-  const s=document.getElementById('contact-email-inline');
-  if(s)s.innerHTML=link;
-  ['legal-email','legal-email-2','contact-email-inline-2'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=link;});
+  ['legal-email','legal-email-2'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=link;});
 })();
 
 (function(){
