@@ -72,14 +72,7 @@ export const SHOWS = [
 `,
     },
     views: [],
-    events: [
-      { kind: 'Vernissage', code: 'KR03', day: '2026-10-08',
-        title: 'Magenta Made Me Hardcore — 8 octobre 2026, 18h–21h',
-        note: "Ouverture de l'exposition « Magenta Made Me Hardcore ».",
-        ld: [{ '@type': 'SocialEvent', '@id': `${SITE}/expositions/kr03-magenta-made-me-hardcore/#vernissage`, name: 'Vernissage — Magenta Made Me Hardcore',
-          startDate: '2026-10-08T18:00:00+02:00', endDate: '2026-10-08T21:00:00+02:00',
-          description: "Ouverture de l'exposition « Magenta Made Me Hardcore » (KR03)." }] },
-    ],
+    events: [],
     press: [], docs: [],
   },
   {
