@@ -172,8 +172,6 @@
         </li>
 
       </ul>
-
-    <p class="reg-note">Pour une demande concernant une œuvre : <span class="js-mail"></span></p>
   </article>
   <p class="page-foot"><a href="../../#mentions-legales">Mentions légales</a></p>
 </main>
@@ -188,10 +186,6 @@ function setProseLang(l){
   document.getElementById('lt-fr').classList.toggle('on',l==='fr');
   document.getElementById('lt-en').classList.toggle('on',l==='en');
 }
-(function(){
-  var a='contact'+'@'+'kramer'+String.fromCharCode(46)+'paris';
-  document.querySelectorAll('.js-mail').forEach(function(el){el.innerHTML='<a href="mailto:'+a+'">'+a+'</a>';});
-})();
 
 </script>
 <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"89f5b84374df4f9f916220221b029d3d"}'></script>

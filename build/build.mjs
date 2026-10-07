@@ -226,16 +226,6 @@ const pageFoot = depth => {
   return `<p class="page-foot"><a href="${up}#mentions-legales">Mentions légales</a></p>`;
 };
 
-/* email assembled at runtime so it stays out of the static source */
-const MAIL_JS = `(function(){
-  var a='contact'+'@'+'kramer'+String.fromCharCode(46)+'paris';
-  document.querySelectorAll('.js-mail').forEach(function(el){el.innerHTML='<a href="mailto:'+a+'">'+a+'</a>';});
-})();
-`;
-
-/* one line: how to ask about a work. The form link is the no-JS fallback. */
-const inquiryNote = () => `<p class="reg-note">Pour une demande concernant une œuvre : <span class="js-mail"></span></p>`;
-
 /* Presse: reverse-chronological outbound links (publication — «title», author), the
    registry way of citing coverage. Dates are YYYY, YYYY-MM or YYYY-MM-DD, shown DD.MM.YYYY.
    Rendered only when there is something to show — never an empty «Presse» heading. */
@@ -574,10 +564,8 @@ ${works}${cv}
 function showPage(s) {
   const url = showUrl(s);
   const status = statusOf(s);
-  const rec = n => ARTIST_BY_NAME.get(n);
   const events = [...(s.events || [])].sort((a, b) => b.day.localeCompare(a.day));
   const views = s.views || [];
-  const hasWorks = s.artists.some(n => rec(n));
   const metaDesc = s.metaDesc || `« ${s.title} » (${s.code}) — exposition, ${metaDates(s)}${s.cur ? ', commissariat ' + s.cur : ''}. Kramer, galerie d'art contemporain, Paris 10e.`;
   const titleTxt = `${s.title} — exposition (${s.code}) · Kramer, Paris`;
   const ogImage = views.length ? `${SITE}/images/installation/${views[0].f}` : LOGO;
@@ -630,7 +618,6 @@ ${events.map(eventItem).join('\n\n')}
       <div class="cv">
         ${docs.join('\n        ')}
       </div>`);
-  if (hasWorks) blocks.push(`    ${inquiryNote()}`);
 
   const main = `  <p class="crumb"><a href="../">Registre des expositions</a> › ${esc(s.title)}</p>
 
@@ -652,7 +639,7 @@ function setProseLang(l){
   document.getElementById('lt-fr').classList.toggle('on',l==='fr');
   document.getElementById('lt-en').classList.toggle('on',l==='en');
 }
-` : '') + (hasWorks ? MAIL_JS : '');
+` : '');
 
   return shell({
     depth: 2, title: titleTxt, desc: metaDesc, url,
@@ -727,12 +714,10 @@ function artistesIndex(rows) {
   <ul class="artist-list">
 ${items}
   </ul>
-
-  ${inquiryNote()}
   </article>
   ${pageFoot(1)}
   <div class="artist-hover-preview" id="ahp" aria-hidden="true"><img id="ahp-img" alt=""></div>`;
-  return shell({ depth: 1, title: titleTxt, desc, url, ogTitle: 'Registre des artistes — Kramer', ogDesc: desc, ogImage: LOGO, ogAlt: 'Kramer', ld, topRight: 'Registre', main, script: MAIL_JS + ARTIST_HOVER_JS });
+  return shell({ depth: 1, title: titleTxt, desc, url, ogTitle: 'Registre des artistes — Kramer', ogDesc: desc, ogImage: LOGO, ogAlt: 'Kramer', ld, topRight: 'Registre', main, script: ARTIST_HOVER_JS });
 }
 
 /* /artistes/ only: floats a work plate beside a name on hover/focus — a quick look before
