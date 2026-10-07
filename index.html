@@ -449,8 +449,9 @@ a.artist-link:hover .artist-nm{text-decoration:underline}
 /* second group under the current show's artists, and the link to the full register */
 .s-head.sub{padding-top:4px}
 .reg-more{font-size:9px;letter-spacing:.03em;padding:0 10px 20px}
-.reg-more a,.ev-item .ac-big a{color:var(--link)}
+.reg-more a,.ev-item .ac-big a{color:inherit;font-family:inherit}
 .reg-more a:hover,.ev-item .ac-big a:hover{text-decoration:underline}
+.reg-more a:active,.ev-item .ac-big a:active{color:var(--link)}
 
 /* Access section */
 .access-grid{display:flex;flex-wrap:wrap;padding:0 10px;gap:20px;margin-bottom:32px}
@@ -585,16 +586,18 @@ a.artist-link:hover .artist-nm{text-decoration:underline}
          « Magenta Made Me Hardcore », announced 2026-10-07). No prices, no RSVP link. When that show
          ends, put the holding line back — «Aucune annonce en cours. La prochaine entrée sera inscrite
          au registre.» — or announce the next one; the build warns if this block names a show that has
-         finished. The show's vernissage enters the Registre des événements by itself once its day
-         has passed. -->
+         finished. No fixed vernissage hours and no street address: the show runs by appointment only
+         — the .tag-encours headline says so instead of naming a time slot, and access (address + floor)
+         is given only once a visit is confirmed, same wording as the access section's "Rendez-vous"
+         field, not printed here where a drop-in visitor might read it as an open invitation. -->
     <div class="section" id="section-news" style="padding-top:20px">
       <h2 class="s-head">Actualité</h2>
       <div class="news-block">
-        <span class="tag-encours">Vernissage · 8 octobre, 18h–21h</span>
-        <p class="ev-note" style="margin-top:0"><strong>« Magenta Made Me Hardcore »</strong></p>
+        <span class="tag-encours">Exposition en cours</span>
+        <p class="ev-meta" style="margin-top:0">Sur rendez-vous uniquement</p>
+        <p class="ev-note"><strong>« Magenta Made Me Hardcore »</strong></p>
         <p class="ev-meta">Commissariat · Kramer &amp; Erratum</p>
-        <p class="ev-note">8 – 30 octobre 2026, sur rendez-vous.<br>
-          132 Bd de Magenta, 75010 Paris · 4e étage.</p>
+        <p class="ev-note">8 – 30 octobre 2026. Les modalités d'accès sont communiquées à la confirmation du rendez-vous.</p>
         <p class="ev-note">Avec Alexis Puget, Caroline Ventura, Enam Granoth, Hyewon Mia Lee, Luka Naujoks, Nicole et Yeva Khrapova.</p>
       </div>
     </div>

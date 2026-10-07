@@ -1,22 +1,215 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="icon" href="/images/edelweiss.svg">
-<meta name="robots" content="noindex,follow">
-<title>Kramer — Formulaire de contact</title>
-<link rel="canonical" href="https://kramer.paris/#form-rsvp">
-<!-- No-JS fallback: bounce to the home page form anchor -->
-<meta http-equiv="refresh" content="0;url=/#form-rsvp">
-<script>location.replace('/#form-rsvp');</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Confirmation d'un créneau assigné. Pas d'inscription libre : il n'y a rien à choisir
+     sur cette page, seulement un créneau déjà réservé à confirmer.
+     NE JAMAIS mettre de nom, de liste ou de table de correspondance ici — ce dossier est un
+     dépôt git public avec commit automatique. La page ne reçoit qu'un jeton opaque et une
+     date, par l'URL ; la correspondance jeton → personne reste hors du dépôt. -->
+<meta name="robots" content="noindex,nofollow">
+<title>Confirmation de créneau · Kramer</title>
+<link rel="icon" href="../images/edelweiss.svg">
+<link rel="preconnect" href="https://use.typekit.net" crossorigin>
+<link rel="stylesheet" href="https://use.typekit.net/svm4vfk.css">
+<link rel="stylesheet" href="../kramer.css">
 <style>
-  html,body{margin:0;height:100%;background:#fff;color:#000;font-family:'acumin-pro',Arial,sans-serif}
-  .x{display:flex;align-items:center;justify-content:center;height:100%;font-size:13px;letter-spacing:.02em}
-  a{color:#0000EE}
+  /* Formulaire — mêmes règles que le formulaire de contact de la page d'accueil */
+  .cf{padding:0 10px 32px;max-width:480px}
+  .ff{margin-bottom:8px}
+  .ff label{display:block;font-size:9px;letter-spacing:.03em;margin-bottom:2px}
+  .ff input{
+    width:100%;border:1px solid #222;border-radius:0;
+    background:#f1f4ff;
+    font-family:'acumin-pro',Arial,sans-serif;
+    font-size:13px;line-height:20px;padding:3px 8px;color:#000;height:28px;
+  }
+  .ff input:focus{outline:none;background:#e8efff}
+  .ff input:focus-visible{outline:2px solid #000;outline-offset:0}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    border:1px solid #222;border-radius:2px;
+    padding:0 10px;height:30px;
+    background:linear-gradient(0deg,#949494,#EAEAEA 50%);
+    color:#000;cursor:pointer;font-family:'acumin-pro',Arial,sans-serif;font-size:11px;
+    text-decoration:none;white-space:nowrap;
+  }
+  .btn:hover{background:linear-gradient(0deg,#999,#F1F1F1 50%)}
+  .btn:active{background:linear-gradient(180deg,#949494 50%,#EAEAEA)}
+  .btn[disabled]{opacity:.5;cursor:default}
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .form-note{font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.6);margin-top:10px;max-width:60ch}
+  /* Le créneau — présenté comme une entrée de registre, pas comme une carte d'invitation */
+  .slot-val{font-size:clamp(20px,3.4vw,30px);line-height:1.2;padding:0 10px 2px}
+  .done{padding:0 10px 32px;max-width:60ch}
+  .done p{margin-bottom:.6em}
 </style>
 </head>
 <body>
-  <div class="x"><p>Redirection vers le formulaire de contact — <a href="/#form-rsvp">continuer</a>.</p></div>
+<div class="chrome ct"><a class="cnav c9" href="../"><span class="hb-arrow" aria-hidden="true">←</span> Retour</a><div class="c9i">KR03</div></div>
+
+<main class="wrap">
+  <p class="crumb">Registre des visites › Confirmation</p>
+
+  <h1 class="a-name">Votre créneau</h1>
+  <p class="a-ref" id="ref-line">Visite sur rendez-vous</p>
+
+  <p class="slot-val" id="slot-line"></p>
+
+  <div class="a-fields">
+    <div class="a-field"><span class="a-lbl">Lieu</span><span class="a-val">132 Bd de Magenta, 75010 Paris</span></div>
+    <div class="a-field"><span class="a-lbl">Étage</span><span class="a-val">4e étage · ascenseur</span></div>
+    <div class="a-field"><span class="a-lbl">Durée</span><span class="a-val">Environ 45 minutes</span></div>
+  </div>
+
+  <p class="s-head">Confirmation</p>
+
+  <form class="cf" id="cf" action="https://formspree.io/f/xzdqvpbg" method="POST">
+    <!-- Honeypot : invisible pour les humains, piège les robots. Formspree rejette toute
+         soumission où _gotcha est rempli. Ne pas retirer le masquage en ligne. -->
+    <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+    <input type="hidden" name="token" id="f-token">
+    <input type="hidden" name="slot" id="f-slot">
+    <input type="hidden" name="choice" id="f-choice">
+    <input type="hidden" name="_subject" id="f-subject" value="Confirmation de créneau">
+    <div class="ff">
+      <label for="f-comp">Accompagné de (facultatif)</label>
+      <input type="text" id="f-comp" name="accompagne de" maxlength="80" autocomplete="off">
+    </div>
+    <div class="btn-row">
+      <button class="btn" type="submit" id="b-yes" value="confirme">Je confirme</button>
+      <button class="btn" type="submit" id="b-no" value="decline">Je ne peux pas</button>
+    </div>
+    <p class="form-note" id="hold-note"></p>
+  </form>
+
+  <div class="done" id="done" hidden></div>
+
+  <noscript>
+    <p class="form-note" style="padding:0 10px 24px">
+      Cette page a besoin de JavaScript pour afficher votre créneau. Vous pouvez simplement
+      répondre au message d'invitation — une ligne suffit.
+    </p>
+  </noscript>
+
+  <p class="page-foot"><a href="../#mentions-legales">Mentions légales</a></p>
+</main>
+
+<div class="chrome cb"><div class="c9">© Kramer 2026</div><a href="../#section-acces" class="cnav c9">Contact</a></div>
+
+<script>
+/* ================================================================
+   Le créneau arrive par l'URL : ?r=<jeton>&d=AAAA-MM-JJ&h=HH:MM&s=<titre>
+   Rien n'est stocké ici, rien n'est choisi ici. Tout ce qui vient de l'URL est inséré
+   en textContent (jamais en innerHTML) et validé avant affichage.
+================================================================ */
+(function(){
+  var JOURS=['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
+  var MOIS=['janvier','février','mars','avril','mai','juin',
+            'juillet','août','septembre','octobre','novembre','décembre'];
+
+  var q=new URLSearchParams(location.search);
+  var token=q.get('r')||'', d=q.get('d')||'', h=q.get('h')||'', show=q.get('s')||'';
+
+  var ok=/^[A-Za-z0-9_-]{6,32}$/.test(token)
+      && /^\d{4}-\d{2}-\d{2}$/.test(d)
+      && /^([01]\d|2[0-3]):[0-5]\d$/.test(h);
+
+  /* Sans jeton valide, cette page n'a rien à dire : on retombe sur le formulaire de
+     contact, comme le faisait la redirection qui occupait ce fichier auparavant. */
+  if(!ok){ location.replace('../#form-rsvp'); return; }
+
+  var parts=d.split('-').map(Number);
+  var dt=new Date(parts[0],parts[1]-1,parts[2],Number(h.slice(0,2)),Number(h.slice(3,5)));
+  if(isNaN(dt.getTime())){ location.replace('../#form-rsvp'); return; }
+  var jour=JOURS[(dt.getDay()+6)%7];           /* JS: 0 = dimanche */
+
+  document.getElementById('slot-line').textContent =
+    jour+' '+dt.getDate()+' '+MOIS[dt.getMonth()]+' '+dt.getFullYear()+' à '+h.replace(':','h');
+  if(show){ document.getElementById('ref-line').textContent='Visite sur rendez-vous · '+show; }
+  document.getElementById('hold-note').textContent =
+    'Ce créneau vous est réservé jusqu’à votre réponse. Sans confirmation, il sera '+
+    'proposé à quelqu’un d’autre. Si la date ne convient pas, « Je ne peux pas » '+
+    'suffit — une autre vous sera proposée.';
+
+  document.getElementById('f-token').value=token;
+  document.getElementById('f-slot').value=d+' '+h;
+  document.getElementById('f-subject').value='Confirmation de créneau — '+d+' '+h;
+
+  /* ---- fichier .ics, fabriqué dans le navigateur (aucun fichier dans le dépôt) ---- */
+  function pad(n){ return (n<10?'0':'')+n; }
+  function stamp(x){
+    return x.getUTCFullYear()+pad(x.getUTCMonth()+1)+pad(x.getUTCDate())+'T'+
+           pad(x.getUTCHours())+pad(x.getUTCMinutes())+'00Z';
+  }
+  function icsUrl(){
+    var local=d.replace(/-/g,'')+'T'+h.replace(':','')+'00';
+    var endH=new Date(dt.getTime()+45*60000);
+    var localEnd=endH.getFullYear()+pad(endH.getMonth()+1)+pad(endH.getDate())+'T'+
+                 pad(endH.getHours())+pad(endH.getMinutes())+'00';
+    var ics=[
+      'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//KRAMER//visits//FR','CALSCALE:GREGORIAN',
+      'BEGIN:VTIMEZONE','TZID:Europe/Paris',
+      'BEGIN:DAYLIGHT','TZOFFSETFROM:+0100','TZOFFSETTO:+0200','TZNAME:CEST',
+      'DTSTART:19700329T020000','RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU','END:DAYLIGHT',
+      'BEGIN:STANDARD','TZOFFSETFROM:+0200','TZOFFSETTO:+0100','TZNAME:CET',
+      'DTSTART:19701025T030000','RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU','END:STANDARD',
+      'END:VTIMEZONE',
+      'BEGIN:VEVENT','UID:'+token+'@kramer.paris','DTSTAMP:'+stamp(new Date()),
+      'DTSTART;TZID=Europe/Paris:'+local,'DTEND;TZID=Europe/Paris:'+localEnd,
+      'SUMMARY:KRAMER'+(show?' — '+show:''),
+      'LOCATION:132 Bd de Magenta, 75010 Paris (4e étage)',
+      'DESCRIPTION:Visite sur rendez-vous · 132 Bd de Magenta, 75010 Paris · 4e étage',
+      'END:VEVENT','END:VCALENDAR'
+    ].join('\r\n')+'\r\n';
+    return 'data:text/calendar;charset=utf-8,'+encodeURIComponent(ics);
+  }
+
+  /* ---- envoi ---- */
+  var form=document.getElementById('cf'), done=document.getElementById('done');
+  var yes=document.getElementById('b-yes'), no=document.getElementById('b-no');
+  var choice=document.getElementById('f-choice');
+  yes.addEventListener('click',function(){ choice.value='confirme'; });
+  no.addEventListener('click',function(){ choice.value='decline'; });
+
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();
+    var confirming=(choice.value!=='decline');
+    yes.disabled=no.disabled=true;
+    (confirming?yes:no).textContent='Envoi…';
+    try{
+      var r=await fetch(form.action,{method:'POST',body:new FormData(form),
+                                     headers:{'Accept':'application/json'}});
+      if(!r.ok){ throw new Error('formspree '+r.status); }
+      form.hidden=true;
+      done.hidden=false;
+      if(confirming){
+        var p=document.createElement('p');
+        p.textContent='C’est noté : '+document.getElementById('slot-line').textContent+
+                      '. Vous recevrez un rappel la veille.';
+        var a=document.createElement('a');
+        a.className='btn'; a.href=icsUrl();
+        a.setAttribute('download','kramer-'+d+'.ics');
+        a.textContent='Ajouter au calendrier';
+        done.appendChild(p); done.appendChild(a);
+      } else {
+        var p2=document.createElement('p');
+        p2.textContent='Merci de l’avoir dit — le créneau est libéré. '+
+                       'Je vous en proposerai un autre.';
+        done.appendChild(p2);
+      }
+    } catch(err){
+      console.error('[kramer] confirmation non transmise :',err);
+      yes.disabled=no.disabled=false;
+      yes.textContent='Je confirme'; no.textContent='Je ne peux pas';
+      var n=document.getElementById('hold-note');
+      n.textContent='L’envoi a échoué. Réessayez, ou répondez simplement au message '+
+                    'd’invitation — une ligne suffit.';
+    }
+  });
+})();
+</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token":"89f5b84374df4f9f916220221b029d3d"}'></script>
 </body>
 </html>
