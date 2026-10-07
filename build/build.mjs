@@ -69,6 +69,10 @@ const CURRENT = showsAsc.find(s => statusOf(s) === 'en cours') || showsAsc.find(
 const PREVIOUS = showsDesc.find(s => s !== CURRENT && statusOf(s) === 'terminée');
 
 const ARTIST_BY_NAME = new Map(ARTISTS.map(a => [a.name, a]));
+/* an artist's representative image — the carousel hero if one's set, else their first
+   consigned work's plate. Shared by the Person JSON-LD image and the /artistes/ hover preview. */
+const artistHeroImg = a => ARTIST_IMG[a.slug] ? `${SITE}/${ARTIST_IMG[a.slug]}`
+  : (a.works[0] && a.works[0].i ? `${SITE}/images/works/${a.works[0].i}` : '');
 /* which shows an artist is in — derived from SHOWS[].artists, so membership is recorded once */
 const showsOf = a => showsAsc.filter(s => s.artists.includes(a.name));
 /* a work's show: its own `x` code, else the artist's only show */
@@ -230,7 +234,7 @@ const MAIL_JS = `(function(){
 `;
 
 /* one line: how to ask about a work. The form link is the no-JS fallback. */
-const inquiryNote = depth => `<p class="reg-note">Pour une demande concernant une œuvre : <span class="js-mail"></span> · <a href="${'../'.repeat(depth)}#form-rsvp">formulaire de contact</a></p>`;
+const inquiryNote = () => `<p class="reg-note">Pour une demande concernant une œuvre : <span class="js-mail"></span></p>`;
 
 /* Presse: reverse-chronological outbound links (publication — «title», author), the
    registry way of citing coverage. Dates are YYYY, YYYY-MM or YYYY-MM-DD, shown DD.MM.YYYY.
@@ -245,11 +249,11 @@ const pressRows = list => [...(list || [])]
 const docRows = list => (list || []).map(d => `<div class="cv-row"><span class="cv-yr"></span><span><a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.t)}</a></span></div>`);
 
 /* register lists — one row per artist; a name with a record page links to it, any other is plain text */
-const artistItem = (name, href, code) => {
+const artistItem = (name, href, code, img) => {
   const label = esc(name) + (code ? ` <em>${esc(code)}</em>` : '');
   return href
     ? `        <li class="artist-item">
-          <a class="artist-link" href="${href}">
+          <a class="artist-link" href="${href}"${img ? ` data-hover-img="${esc(img)}"` : ''}>
             <div class="cb-box"></div>
             <span class="artist-nm">${label}</span>
           </a>
@@ -382,8 +386,7 @@ function page(a, i) {
   const titleTxt = `${a.name}${titleMedium} · ${latest.title} · Kramer, Paris`;
   const descTxt = `${a.name}${descMedium}${descBased} — exposition « ${latest.title} » (${latest.code}), registre des artistes. Kramer, galerie d'art contemporain, Paris 10e.`;
   const variants = nameVariants(a);
-  const heroImg = ARTIST_IMG[a.slug] ? `${SITE}/${ARTIST_IMG[a.slug]}`
-    : (a.works[0] && a.works[0].i ? `${SITE}/images/works/${a.works[0].i}` : '');
+  const heroImg = artistHeroImg(a);
   const webpage = {
     '@type': 'WebPage', '@id': url, url, name: titleTxt, description: descTxt,
     inLanguage: 'fr', mainEntity: { '@id': personId },
@@ -627,7 +630,7 @@ ${events.map(eventItem).join('\n\n')}
       <div class="cv">
         ${docs.join('\n        ')}
       </div>`);
-  if (hasWorks) blocks.push(`    ${inquiryNote(2)}`);
+  if (hasWorks) blocks.push(`    ${inquiryNote()}`);
 
   const main = `  <p class="crumb"><a href="../">Registre des expositions</a> › ${esc(s.title)}</p>
 
@@ -703,7 +706,7 @@ function artistesIndex(rows) {
   const desc = `Registre des artistes de Kramer, galerie d'art contemporain, Paris 10e — ${plural(rows.length, 'entrée')} : les artistes exposés et les programmes vidéo.`;
   const items = rows.map(r => {
     const rec = ARTIST_BY_NAME.get(r.name);
-    return artistItem(r.name, rec ? `${rec.slug}/` : '', r.codes.join(' · '));
+    return artistItem(r.name, rec ? `${rec.slug}/` : '', r.codes.join(' · '), rec ? artistHeroImg(rec) : '');
   }).join('\n');
   const linked = rows.filter(r => ARTIST_BY_NAME.has(r.name));
   const ld = {
@@ -725,11 +728,41 @@ function artistesIndex(rows) {
 ${items}
   </ul>
 
-  ${inquiryNote(1)}
+  ${inquiryNote()}
   </article>
-  ${pageFoot(1)}`;
-  return shell({ depth: 1, title: titleTxt, desc, url, ogTitle: 'Registre des artistes — Kramer', ogDesc: desc, ogImage: LOGO, ogAlt: 'Kramer', ld, topRight: 'Registre', main, script: MAIL_JS });
+  ${pageFoot(1)}
+  <div class="artist-hover-preview" id="ahp" aria-hidden="true"><img id="ahp-img" alt=""></div>`;
+  return shell({ depth: 1, title: titleTxt, desc, url, ogTitle: 'Registre des artistes — Kramer', ogDesc: desc, ogImage: LOGO, ogAlt: 'Kramer', ld, topRight: 'Registre', main, script: MAIL_JS + ARTIST_HOVER_JS });
 }
+
+/* /artistes/ only: floats a work plate beside a name on hover/focus — a quick look before
+   clicking through. Desktop-only (gated on hover+fine-pointer so touch gets no dead preview). */
+const ARTIST_HOVER_JS = `(function(){
+  if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  var box=document.getElementById('ahp'), img=document.getElementById('ahp-img');
+  if(!box||!img) return;
+  function place(x,y){
+    var w=box.offsetWidth||220,h=box.offsetHeight||220;
+    if(x+w>window.innerWidth-12) x=x-48-w;
+    if(x<12) x=12;
+    if(y<12) y=12;
+    if(y+h>window.innerHeight-12) y=window.innerHeight-12-h;
+    box.style.transform='translate('+x+'px,'+y+'px)';
+  }
+  document.querySelectorAll('.artist-item a[data-hover-img]').forEach(function(a){
+    a.addEventListener('mouseenter',function(){ img.src=a.getAttribute('data-hover-img'); box.classList.add('on'); });
+    a.addEventListener('mousemove',function(e){ place(e.clientX+24,e.clientY-40); });
+    a.addEventListener('mouseleave',function(){ box.classList.remove('on'); });
+    a.addEventListener('focus',function(){
+      img.src=a.getAttribute('data-hover-img');
+      var r=a.getBoundingClientRect();
+      place(r.right+24,r.top);
+      box.classList.add('on');
+    });
+    a.addEventListener('blur',function(){ box.classList.remove('on'); });
+  });
+})();
+`;
 
 /* ------------------------------------------------------------
    WRITE THE PAGES

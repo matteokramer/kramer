@@ -222,32 +222,7 @@
           "name": "Yeva Khrapova",
           "url": "https://kramer.paris/artistes/yeva-khrapova/"
         }
-      ],
-      "subEvent": [
-        {
-          "@id": "https://kramer.paris/expositions/kr03-magenta-made-me-hardcore/#vernissage"
-        }
       ]
-    },
-    {
-      "@type": "SocialEvent",
-      "@id": "https://kramer.paris/expositions/kr03-magenta-made-me-hardcore/#vernissage",
-      "name": "Vernissage — Magenta Made Me Hardcore",
-      "startDate": "2026-10-08T18:00:00+02:00",
-      "endDate": "2026-10-08T21:00:00+02:00",
-      "description": "Ouverture de l'exposition « Magenta Made Me Hardcore » (KR03).",
-      "eventStatus": "https://schema.org/EventScheduled",
-      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
-      "image": "https://kramer.paris/images/kramer_wordmark.png",
-      "location": {
-        "@id": "https://kramer.paris/#gallery"
-      },
-      "organizer": {
-        "@id": "https://kramer.paris/#gallery"
-      },
-      "superEvent": {
-        "@id": "https://kramer.paris/expositions/kr03-magenta-made-me-hardcore/#exposition"
-      }
     }
   ]
 }
@@ -707,15 +682,9 @@ a.artist-link:hover .artist-nm{text-decoration:underline}
          on their own show's page at /expositions/<slug>/. -->
     <!--BUILD:events-->
     <div class="section" id="section-archive">
-      <h2 class="s-head">Registre des événements — 1 entrée</h2>
+      <h2 class="s-head">Registre des événements — 0 entrée</h2>
       <ul class="ev-list">
-
-        <li class="ev-item">
-          <p class="exh-ref">Vernissage</p>
-          <p class="ac-big">Magenta Made Me Hardcore — 8 octobre 2026, 18h–21h</p>
-          <p class="ev-note">Ouverture de l'exposition « Magenta Made Me Hardcore ».</p>
-        </li>
-
+        <li class="ev-item"><p class="ev-note" style="margin-top:0">Aucune entrée pour l'instant.</p></li>
       </ul>
     </div>
 <!--/BUILD:events-->
@@ -743,6 +712,7 @@ a.artist-link:hover .artist-nm{text-decoration:underline}
         <div>
           <p class="ac-lbl">Rendez-vous</p>
           <p style="font-size:13px;line-height:20px">Les modalités d'accès sont communiquées à la prise de rendez-vous, via le formulaire ci-dessous ou par <span id="contact-email-inline"></span>.</p>
+          <p style="font-size:13px;line-height:20px;margin-top:6px" lang="en">Access details are given when you book an appointment, through the form below or at <span id="contact-email-inline-2"></span>.</p>
         </div>
       </div>
 
@@ -1184,7 +1154,7 @@ document.addEventListener('keydown',e=>{
   if(p)p.innerHTML=link;
   const s=document.getElementById('contact-email-inline');
   if(s)s.innerHTML=link;
-  ['legal-email','legal-email-2'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=link;});
+  ['legal-email','legal-email-2','contact-email-inline-2'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=link;});
 })();
 
 (function(){

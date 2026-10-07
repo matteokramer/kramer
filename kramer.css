@@ -132,6 +132,14 @@ a.artist-link:hover .artist-nm{text-decoration:underline}
 .artist-nm{padding-left:8px;font-size:13px;line-height:20px}
 .artist-nm em{font-size:9px;letter-spacing:.03em;font-style:normal;color:rgba(0,0,0,.55)}
 
+/* /artistes/ register only: a work plate floats beside the name on hover/focus, positioned
+   by JS (ARTIST_HOVER_JS in build.mjs). Desktop/mouse only — hidden on touch so nothing
+   dead-ends there. */
+.artist-hover-preview{position:fixed;top:0;left:0;width:clamp(160px,20vw,240px);height:clamp(160px,20vw,240px);pointer-events:none;opacity:0;transition:opacity .15s ease;z-index:50}
+.artist-hover-preview.on{opacity:1}
+.artist-hover-preview img{width:100%;height:100%;object-fit:contain;display:block}
+@media (hover:none),(pointer:coarse){.artist-hover-preview{display:none}}
+
 /* Installation views — one large plate per row, caption centred below */
 .view-grid{display:flex;flex-direction:column;padding-top:12px}
 .view-item{width:100%;padding-bottom:48px}
@@ -139,10 +147,10 @@ a.artist-link:hover .artist-nm{text-decoration:underline}
 .view-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .view-cap{font-size:9px;line-height:16px;letter-spacing:.03em;color:rgba(0,0,0,.55);padding:0 10px;text-align:center}
 
-/* How to ask about a work */
+/* How to ask about a work — ink by default, like plain text; blue only while clicked */
 .reg-note{padding:8px 10px 16px}
-.reg-note a{color:var(--link)}
 .reg-note a:hover{text-decoration:underline}
+.reg-note a:active{color:var(--link)}
 
 /* Footer line: the events register + legal, the same line as the home page's */
 .page-foot{border-top:1px solid #222;margin:8px 10px 0;padding:8px 0 24px;font-size:9px;letter-spacing:.03em;color:rgba(0,0,0,.55)}
