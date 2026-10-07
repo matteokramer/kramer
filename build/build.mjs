@@ -905,12 +905,20 @@ ${pastShows.map(s => showItem(s, `expositions/${s.slug}/`, { showCode: false, st
    aren't lost, they stay on record on their own show's page (the real archive); llms.txt's
    separate pastEvents list further below still needs every event that has already happened. */
 const upcomingEvents = showsAsc.flatMap(s => (s.events || [])).filter(ev => ev.day >= TODAY).sort((a, b) => a.day.localeCompare(b.day));
-home = region(home, 'events', `    <div class="section" id="section-archive">
+/* With nothing upcoming the section used to print «0 entrée · Aucune entrée pour l'instant»,
+   an empty register with a menu row pointing at it. It is left out entirely instead (Matteo,
+   2026-10-07) — and so is its row in the step menu, so the two can't fall out of step. Put an
+   event with a future day in shows.mjs and both come back on the next build. */
+home = region(home, 'events', !upcomingEvents.length ? '' : `    <div class="section" id="section-archive">
       <h2 class="s-head">Registre des événements — ${plural(upcomingEvents.length, 'entrée')}</h2>
       <ul class="ev-list">
-${upcomingEvents.length ? '\n' + upcomingEvents.map(ev => eventItem(ev, { showCode: false })).join('\n\n') + '\n' : '        <li class="ev-item"><p class="ev-note" style="margin-top:0">Aucune entrée pour l\'instant.</p></li>'}
+${'\n' + upcomingEvents.map(ev => eventItem(ev, { showCode: false })).join('\n\n') + '\n'}
       </ul>
     </div>`);
+home = region(home, 'navevents', !upcomingEvents.length ? '' : `            <li class="cb-item"><a class="cb-link" onclick="goTo('section-archive');return false" href="#">
+              <div class="cb-box" id="cb-archive"></div>
+              <span class="cb-txt">Le <strong>registre des événements</strong></span>
+            </a></li>`);
 /* llms.txt (below) still audits against every PAST event, so it stays accurate once an event has happened */
 const pastEvents = showsAsc.flatMap(s => (s.events || [])).filter(ev => ev.day < TODAY).sort((a, b) => b.day.localeCompare(a.day));
 
