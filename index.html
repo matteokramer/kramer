@@ -108,6 +108,18 @@
       "workFeatured": [
         {
           "@type": "VisualArtwork",
+          "@id": "https://kramer.paris/artistes/alexis-puget/#oeuvre-and-other-poems-iv",
+          "name": "... and other poems (IV)",
+          "url": "https://kramer.paris/artistes/alexis-puget/"
+        },
+        {
+          "@type": "VisualArtwork",
+          "@id": "https://kramer.paris/artistes/alexis-puget/#oeuvre-bingo-ii",
+          "name": "Bingo (II)",
+          "url": "https://kramer.paris/artistes/alexis-puget/"
+        },
+        {
+          "@type": "VisualArtwork",
           "@id": "https://kramer.paris/artistes/caroline-ventura/#oeuvre-sans-titre-air",
           "name": "Sans titre (air)",
           "url": "https://kramer.paris/artistes/caroline-ventura/"
@@ -135,6 +147,18 @@
           "@id": "https://kramer.paris/artistes/enam-granoth/#oeuvre-ritual-of-becoming",
           "name": "Ritual of becoming",
           "url": "https://kramer.paris/artistes/enam-granoth/"
+        },
+        {
+          "@type": "VisualArtwork",
+          "@id": "https://kramer.paris/artistes/hyewon-mia-lee/#oeuvre-maria-s-tip-how-to-make-a-baby-without",
+          "name": "Maria’s tip: How to make a baby without -",
+          "url": "https://kramer.paris/artistes/hyewon-mia-lee/"
+        },
+        {
+          "@type": "VisualArtwork",
+          "@id": "https://kramer.paris/artistes/hyewon-mia-lee/#oeuvre-holder-1",
+          "name": "Holder 1",
+          "url": "https://kramer.paris/artistes/hyewon-mia-lee/"
         },
         {
           "@type": "VisualArtwork",
@@ -206,7 +230,9 @@
       "performer": [
         {
           "@type": "Person",
-          "name": "Alexis Puget"
+          "@id": "https://kramer.paris/artistes/alexis-puget/#person",
+          "name": "Alexis Puget",
+          "url": "https://kramer.paris/artistes/alexis-puget/"
         },
         {
           "@type": "Person",
@@ -222,7 +248,9 @@
         },
         {
           "@type": "Person",
-          "name": "Hyewon Mia Lee"
+          "@id": "https://kramer.paris/artistes/hyewon-mia-lee/#person",
+          "name": "Hyewon Mia Lee",
+          "url": "https://kramer.paris/artistes/hyewon-mia-lee/"
         },
         {
           "@type": "Person",
@@ -697,11 +725,11 @@ a.artist-link:active .cb-box::after,.ev-link:active .cb-box::after{content:'';po
     <div class="section" id="section-artistes">
       <h2 class="s-head">Registre des artistes — 7 entrées</h2>
       <ul class="artist-list">
-        <li class="artist-item plain">
-          <div class="artist-link">
+        <li class="artist-item">
+          <a class="artist-link" href="artistes/alexis-puget/">
             <div class="cb-box"></div>
             <span class="artist-nm">Alexis Puget</span>
-          </div>
+          </a>
         </li>
         <li class="artist-item">
           <a class="artist-link" href="artistes/caroline-ventura/">
@@ -715,11 +743,11 @@ a.artist-link:active .cb-box::after,.ev-link:active .cb-box::after{content:'';po
             <span class="artist-nm">Enam Granoth</span>
           </a>
         </li>
-        <li class="artist-item plain">
-          <div class="artist-link">
+        <li class="artist-item">
+          <a class="artist-link" href="artistes/hyewon-mia-lee/">
             <div class="cb-box"></div>
             <span class="artist-nm">Hyewon Mia Lee</span>
-          </div>
+          </a>
         </li>
         <li class="artist-item">
           <a class="artist-link" href="artistes/luka-naujoks/">
@@ -893,6 +921,17 @@ a.artist-link:active .cb-box::after,.ev-link:active .cb-box::after{content:'';po
    DATA
 ================================================================ */
 const ARTISTS=[
+  {slug:'alexis-puget',name:'Alexis Puget',born:'2000',based:'Paris',nat:'France',medium:'Sculpture, installation',code:'AP',g:'m',links:['https://www.alexispuget.com'],
+   works:[{t:'... and other poems (IV)',d:'2026',m:'Chemise, magazines, photomaton de début d’Hivers, lettre à A., Ticket d’Or perdant, résine epoxy',s:'4 × 21 × 30 cm'},{t:'Bingo (II)',d:'2026',m:'Bingo, sac plastique de plage, billes en plastique, bille en céramique',s:'25 × 20 × 20 cm'}],
+   solo:[['2024','Playlist for an eternal Autumn, diploma show, cur. Allok7.fr, AA, Strasbourg (FR)'],['2026','Nocturnals, cur. Andrii Dostiliev, Barbara Baryzewska Gallery, Poznan (PL)'],['2026','Żniwa smutku / Les moissons de la tristesse / Harvests of sorrow, cur. Oriana Radziuk, Gdansk Center for Contemporary Art, Gdansk (PL)'],['2026','Just like heaven, Palazzo Re Rebaudengo – Fondazione Sandretto Re Rebaudengo, cur. Leonardo Pietropaolo, Guarene (IT)'],['2027','Openspace, Nancy (FR), cur. Vincent Verlé']],
+   group:[['2026','Never let me go, cur. Olivia Jenni and Micheal Babics, Kunsthalle Palazzo, Liestal (CH)'],['2026','Godspeed, cur. Margaux Ducerisier, Galerie Andréhn-Schiptjenko, Paris (FR)'],['2026','Interlude, cur. Ugo Pecoraio, Kunstsurfer, online, based in Basel (CH)'],['2026','Les heures creuses, cur. Julie Portier, Les Grandes Locos, Biennale de Lyon (FR)'],['2026','Amarrage Villa Médicis – Biennale Archipels #Chaos-Monde, sound performance, cur. Stéphanie Pécourt, Villa Medicis, Rome (IT); hors-les-murs du Centre Wallonie Bruxelles'],['2026','Augure et frémissements, cur. Stéphanie Pécourt, Centre Wallonie Bruxelles – Paris, Paris (FR)'],['2026','Des éclats, un reflet, cur. Faux Plafond, Laboîtoires d’Aubervilliers, Aubervilliers (FR)'],['2026','Des éclats, un reflet, cur. Faux Plafond, Galerie Michel Journiac, Paris (FR)'],['2026','Shhhturz Aman Yavash, cur. Julie Portier, Monopôle, Lyon (FR)'],['2025','Körper Maschine II, cur. Lea Fraktur·e, La Maison Rose, Strasbourg (FR)'],['2025','Le temps des fleurs, cur. Jean-Baptiste Janisset, Sculpture Garden, Marseille (FR)'],['2025','La Relève VII – Notre part belle, cur. Plateforme Parallèle, Château de Servières, Marseille (FR)'],['2024','Kaugummi im Motherboard 2.0, cur. Erratum Gallery, Gr_und, Berlin (DE)'],['2024','Körper Maschine, cur. Océane Julmann et Léa Roger, La Maison Rose, Strasbourg (FR)'],['2024','Ghostly Matters Travel Agency, cur. Louisa Schmitt, Waldlust, Freudenstadt (DE)'],['2024','Here and now, cur. Antoine Lejolivet, Haute Ecole des Arts du Rhin, Strasbourg (FR)'],['2024','Pavillon Invisible, cur. Dimae, off-site, Venise (IT)'],['2024','La bourse aux rêves, cur. Alisa Kotelnikova, Camille Moulin, Florine Rouault, DOC!, Paris (FR)'],['2024','Milieu of [fictions] in milieu, cur. Charles Rouleau, Casino Display, Luxembourg (LU)'],['2023','Will I still perform tomorrow?, cur. Heinrich Dietz and Marilena Raufeisen, part of Regionale 24, Kunstverein Freiburg (DE)'],['2023','Indistinct Realities, cur. Sabine Himmelsbach, part of Regionale 24, HEK, Basel (CH)'],['2023','Bubble Bath, cur. Jakob Otter et Lena Stewens, Magma Maria, Offenbach-am-Main (DE)'],['2023','Transience, cur. Automaton:lab, Großer Wasserspeicher, Berlin (DE)'],['2023','A place and another place (III), cur. A place in the woods, Karlsruhe Hardtwald (DE)'],['2023','A place and another place (I), cur. A place in the woods, Floating University, Berlin (DE)'],['2023','J’ai vu les guitares voler, collaboration to Enzo Pernet’s solo show, Dernière Bande, Paris (FR)'],['2023','Toute sortie est définitive, cur. Valérie Perrin, Espace Multimédia Gantner, Bourogne (FR)'],['2023','Invisible, cur. Jeongbin Lee (Invisible Society), Métal Neuve, Paris (FR)'],['2023','Long Play, release de l’album Flush, cur. DUUU Radio, La Chaufferie, Strasbourg (FR)'],['2023','NFT Paris 2023, cur. AIKA, Grand Palais Éphémère, Paris (FR)'],['2023','Ordinary Kingdom, introduction piece to Zoé Metra’s solo, cur. Maud Prangey, IESA, Paris (FR)'],['2022','(Co)habiter, cur. Elisa Osterta and Léna Urbany, Apollonia European Art Exanges, Strasbourg (FR)'],['2022','ULTRALIGHT (motel room live), cur. Enzo Pernet and Alexis Puget, Hôtel des Arts, Paris (FR)'],['2022','Ultra Artistes, cur. Azadeh Cohen-Mercury and Augustin Jans, espace public, Gougenheim (FR)'],['2022','Prix Juvenars 2022, cur. Maud Prangey, IESA, Paris (FR)'],['2021','Je ne reviens jamais sur mes pas, cur. Julien Bécourt, La Chaufferie, Strasbourg (FR)'],['2021','Je file, bon courage, à bientôt!, cur. No Name, Syndicat Potentiel, Strasbourg (FR)'],['2020','L’onde, Atelier 18, Pont-Scorff (FR)'],['2019','Nuit de la Sinne, performance, Théâtre de la Sinne, Mulhouse (FR)']],
+   extra:[
+    {l:'Education',rows:[['2022–2024','MFA with honours, Haute Ecole des Arts du Rhin (HEAR), Strasbourg (FR)'],['2023–2024','Staatliche Hochschule für Gestaltung Karlsruhe, Media Art Department (DE)'],['2019–2022','BFA with honours, Haute Ecole des Arts du Rhin (HEAR), Strasbourg (FR)']]},
+    {l:'Residencies',rows:[['2026','Post-Diploma, ENSBA Lyon (FR)'],['2024–2026','Artagon, Pantin (FR)'],['2025','LAZNIA Center for Contemporary Art, Gdansk (PL)'],['2025','Bel Ordinaire – Espace d’Art Contemporain, Billère (FR)'],['2024','LAZNIA Center for Contemporary Art, Gdansk (PL)'],['2023–2024','Artistic Research Lab, Casino Display, Luxembourg (LU)'],['2023','The Ghosts of Grand Hotels, Schloßhotel Waldlust, Freudenstadt (DE)'],['2023','A place and another place, Floating University, Berlin (DE)']]},
+    {l:'Grants & prizes',rows:[['2026','Région Grand-Est, Visual Arts Research and production grant'],['2025','DRAC Grand-Est, AIC, research and production grant'],['2025','Fondation des Artistes, research and production grant'],['2024','Région Grand-Est, production grant « Youth Experiences »'],['2024','Production grant, Haute Ecole des Arts du Rhin'],['2022','Prix d’honneur, Juvenarts 2022'],['2022','Production grant, Haute Ecole des Arts du Rhin']]},
+    {l:'Publications & talks',rows:[['2026','Artist talk, Barbara Baryzewska Gallery, Poznan (PL), invit. Andrii Dostiliev'],['2026','Artist talk, ENSBA Lyon, presentation of the post-graduates'],['2026','Milieu of [fiction] in milieu, Casino Display editions, cur. Charles Rouleau'],['2025','Bubbles and butterbot, Icon Verlag editions for Space n.n., dir. Louise Wank'],['2024','Catalogue des diplômé·es, HEAR editions'],['2023','Contracted Leasing, Space n.n. editions, dir. Tatjana Vall'],['2023','A place and another place, HfG editions, dir. Bruno Jacoby and Johanna Schäfer'],['2023','Flush, vinyl record, DUUU radio publishing, cur. Clotilde Viannay'],['2023','✩✩✩, HEAR editions, dir. Clotilde Viannay']]},
+    {l:'Press',rows:[['2026','Fisheye Immersive, Alexis Puget, l’artiste qui parle la langue d’Internet, Aug 2026'],['2026','Art Press n°544 – June 2026, « INTRODUCING, Alexis Puget – Le paradoxe des horloges » by Camille Velluet'],['2026','Teraz!, Tears, sweat and blood, interview by Diana Lenart, August 2026'],['2025','LAZNIA CCA, Gustaw, or the harvest of sorrow, interview by Aleksandra Ksiezopolska'],['2025','Le Bel Ordinaire, interview by Didier Courtade']]},
+    {l:'Curatorial',rows:[['2024','La bourse aux rêves, co-cur. Alisa Kotelnikova, Camille Moulin, Florine Rouault, DOC!, Paris'],['2024','MOVIE NIGHT!, short film screening, Casino Display, Luxembourg (LU)'],['2023–24','ALLOK7.FR (the haunted videoclub), online, presented at HEK (Basel, CH) [2023] and Kunstverein Freiburg (DE) [DOC!, Paris (FR)] [2024]'],['2022','ULTRALIGHT, co-cur. Enzo Pernet, group show, Hôtel des Arts, Paris (FR)'],['2019','L’onde, Atelier 18, Pont-Scorff (FR)']]}]},
   {slug:'annael-shavit',name:'Annael Shavit',born:'1998, Tel Aviv',based:'Paris',medium:'Peinture',code:'AS',g:'f',links:['https://www.instagram.com/annael_shavit/'],
    works:[{t:'Chocolate labrador (not black)',d:'2026',m:'Huile, pastel et acrylique sur toile',s:'130 × 97 cm',i:'annael-shavit--chocolate-labrador--obj-1.jpg',ph:'Matteo Kramer',ic:1,views:['annael-shavit--chocolate-labrador--inst-1.jpg','annael-shavit--chocolate-labrador--det-1.jpg','annael-shavit--chocolate-labrador--det-3.jpg','annael-shavit--chocolate-labrador--inst-2.jpg']}],
    solo:[],
@@ -935,6 +974,16 @@ const ARTISTS=[
    extra:[
     {l:'Formation',rows:[['2025–2026','École nationale supérieure des beaux-arts de Paris — Atelier : Tatiana Trouvé'],['2025','DNA avec mention, Beaux-Arts de Paris (félicitations du jury, mention « travail remarquable »)'],['2024–2025','École nationale supérieure des beaux-arts de Paris — Ateliers : Michel Blazy ; Petrit Halilaj & Álvaro Urbano'],['2022–2024','École nationale supérieure des beaux-arts de Lyon'],['2021–2022','Classe préparatoire de l’ENSBA Lyon'],['2020–2021','Université Lumière Lyon 2']]},
     {l:'Prix',rows:[['2026','Prix Dior — finaliste']]}]},
+  {slug:'hyewon-mia-lee',name:'Hyewon Mia Lee',born:'1996, Gwangju',based:'Paris / Séoul',nat:'South Korea',medium:'Sculpture, peinture',code:'HL',g:'f',links:['https://hyewonmialee.com','https://www.instagram.com/h_circleeeee/'],
+   works:[{t:'Maria’s tip: How to make a baby without -',d:'2026',m:'Silicone, résine époxy, acrylique, plateau en métal, verre, perle, dents de lait, cheveux, tiroir de frigo, bois, Plexiglass, tablette lumineuse',s:'27.5 × 44 × 11.5 cm'},{t:'Holder 1',d:'2026',m:'Silicone, lanière de cuir, étui pour cartouches de rasoir, présentoir à bijoux, clavicules de canard, boucle de ceinture, rallonge de soutien-gorge',s:'38.5 × 9 × 7.5 cm'}],
+   solo:[['2024','Tongueless Mother Tongue, ENSAPC, Cergy'],['2025','Home of Irony, le Pavillon des Canaux, Paris'],['2026','Ne pas venir pleurer comme un mur qui s’est pris une douche dorée, ENSAPC, Cergy']],
+   group:[['2022','Kit d’installation, la Maison Fraternelle, Paris'],['2023','Daughters of Lilith Kim, Cité Internationale, Paris'],['2023','Funny Horse Club, Treize & Glassbox-Nord, Paris'],['2024','festival Arts et Humanités, Points Communs, Cergy'],['2024','Soupe de cailloux, Saint-Aignan (la Peyrigne)'],['2024','Odyssea – Le chant des sirènes, LA PLAGE, Marseille (Spiaggia Libera x Scroll Galerie)'],['2024','Salon des arts plastiques, Espace culturel Maurice Utrillo, Pierrefitte'],['2025','Dans la démesure du possible [acte 1], galerie Michel Journiac, Paris'],['2025','Dans la démesure du possible [acte 3], les Laboratoires d’Aubervilliers'],['2025','Bisou Magique [chapitre trois], Sissi Club, Marseille'],['2025','Dokkaebi dead skin, Art space Tum[:숨], Séoul, Corée du Sud'],['2025','BUNA – Forum for Contemporary Visual Art – Vol.3, Varna, Bulgarie (Spiaggia Libera x Punta Gallery)'],['2025','Entrez sans sonner, galerie du Crous de Malakoff'],['2025','ghostly distilled matters, system D, Malakoff'],['2026','Here be small monsters, Possibly Sometime Tomorrow, Paris'],['2026','Feux de joie, Centre Culturel Jean-Cocteau, Les Lilas'],['2026','Sauver les meubles, galerie du Crous, Paris'],['2026','Reliquaire (exposition collective de 9966), Keyshape, Séoul, Corée du Sud'],['2026','A piece of cake, Art space border, Séoul, Corée du Sud'],['2026','Biennale de la jeune création 2026, la Graineterie Centre d’Art de la Ville de Houilles, France']],
+   extra:[
+    {l:'Formation',rows:[['2018','Chungkang College of Cultural Industries, Icheon, Corée du Sud — diplômée en cinéma d’animation'],['2020–2022','École Nationale Supérieure des Arts Décoratifs de Paris, secteur « Image Imprimée »'],['2022–2026','École Nationale Supérieure d’Arts de Paris-Cergy (ENSAPC) — DNA obtenu en 2024, DNSEP obtenu en 05/2026']]},
+    {l:'Bourses',rows:[['2024','lauréate de la Bourse Adam en partenariat avec Artagon']]},
+    {l:'Résidences',rows:[['2024','résidence d’un mois à La Peyrigne, Gers, France']]},
+    {l:'Ateliers de médiation',rows:[['2025','« Réincarnation d’une lettre que j’ai écrite en CM1 » — Les Laboratoires d’Aubervilliers, animation d’un atelier de sculpture/poésie, pour l’exposition « Dans la démesure du Possible », avec les étudiant·es du lycée Hélène Boucher à Paris']]},
+    {l:'Projets collectifs',rows:[['','Fondatrice de Pelle au Jardin (2021–), collectif de jeunes artistes internationaux et maison d’édition'],['','Fondatrice de Ssister Outsider (2023–), rassemblant des femmes coréennes actrices du monde de l’art basées en Europe'],['','Membre de 9966 (2025–), collectif de 4 artistes coréennes nées en 1996']]}]},
   {slug:'jaakko-uljas',name:'Jaakko Uljas',born:'1999',based:'Helsinki',medium:'Peinture, installation',code:'JU',g:'m',links:['https://jaakkouljas.com','https://www.instagram.com/jaakkouljas/'],
    works:[{t:'Escort',d:'2026',m:'Colle PVA sur verre, MDF, aluminium, acier inoxydable',s:'49 × 26 × 6.5 cm',i:'jaakko-uljas--escort.jpg',ph:'Jaakko Uljas',ic:1},{t:'Hard launch',d:'2026',m:'Colle PVA sur verre, MDF, aluminium, acier inoxydable',s:'49 × 26 × 6.5 cm',i:'jaakko-uljas--hard-launch.jpg',ph:'Jaakko Uljas',ic:1},{t:'Showdown',d:'2026',m:'Colle PVA sur verre, MDF, aluminium, acier inoxydable',s:'49 × 26 × 6.5 cm',i:'jaakko-uljas--showdown.jpg',ph:'Jaakko Uljas',ic:1,views:[{f:'jaakko-uljas--inst-1.jpg',ph:'Matteo Kramer'},{f:'jaakko-uljas--inst-2.jpg',ph:'Matteo Kramer'},{f:'jaakko-uljas--showdown--obj-1.jpg',ph:'Matteo Kramer'},{f:'jaakko-uljas--baumann-inst-1.jpg',ph:'Matteo Kramer'}]}],
    solo:[['2019','Ykkyhy, Äänekoski City Hall, Äänekoski']],
