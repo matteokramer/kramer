@@ -27,6 +27,7 @@ const WEB = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://kramer.paris';
 
 let home = readFileSync(join(WEB, 'index.html'), 'utf8'); // rewritten region by region, written once at the end
+const homeOriginal = home; // pre-mutation snapshot, so the sitemap can tell whether '/' actually changed
 const ARTISTS = eval(home.match(/const ARTISTS=(\[[\s\S]*?\]);/)[1]);
 /* Cloudflare Web Analytics token — single-sourced from index.html (const CF_TOKEN='…') */
 const CF_TOKEN = (home.match(/const CF_TOKEN='([^']*)'/) || [])[1] || '';
@@ -89,11 +90,15 @@ function showOfWork(a, w) {
 /* Museum-tombstone captions for a work's plates — shared by the per-artist pages
    (work-cap paragraphs) and the home carousel (work slides pulled in from shows.mjs). */
 /* Each plate carries its own photo credit. `i` + string `views` inherit the work's `ph`;
-   an object view {f, ph} overrides it (e.g. Matteo's install shots hung under an artist-
-   credited reproduction). Returns [{f, ph}] in display order. */
+   an object view {f, ph, dir} overrides it (e.g. Matteo's install shots hung under an artist-
+   credited reproduction). `dir` lets a view point at images/installation/ instead of
+   images/works/ — used for an installation shot an artist is pictured in, so the photo has
+   ONE file and ONE URL (the show's own copy) rather than a byte-identical second copy sitting
+   under the artist, which just competes with itself in image search. Returns [{f, ph, dir}]
+   in display order. */
 const workImgs = w => [
-  ...(w.i ? [{ f: w.i, ph: w.ph || '' }] : []),
-  ...(w.views || []).map(v => typeof v === 'string' ? { f: v, ph: w.ph || '' } : { f: v.f, ph: v.ph || w.ph || '' }),
+  ...(w.i ? [{ f: w.i, ph: w.ph || '', dir: 'works' }] : []),
+  ...(w.views || []).map(v => typeof v === 'string' ? { f: v, ph: w.ph || '', dir: 'works' } : { f: v.f, ph: v.ph || w.ph || '', dir: v.dir || 'works' }),
 ];
 /* filename convention: an installation shot (…inst-N…) gets the exhibition caption;
    a work shot (obj/det/repro) gets the tombstone. …det-N… gets a "(détail)" marker. */
@@ -459,7 +464,7 @@ function page(a, i) {
   /* each plate → ImageObject so its per-plate photographer credit (workImgs sets `ph`)
      rides along as creditText; bare-URL images lose that credit */
   const toImg = im => ({
-    '@type': 'ImageObject', contentUrl: `${SITE}/images/works/${im.f}`,
+    '@type': 'ImageObject', contentUrl: `${SITE}/images/${im.dir}/${im.f}`,
     ...(im.ph ? { creditText: im.ph, creator: imgCreator(im.ph) } : {}),
     copyrightNotice: isInst(im.f) ? '© KRAMER' : `© ${a.name}`,
     license: LICENSE_URL, acquireLicensePage: ACQUIRE_LICENSE_URL,
@@ -527,7 +532,7 @@ function page(a, i) {
           const alt = inst ? esc(`Vue d'installation de «${show.title}», KRAMER — ${a.name}`)
             : isDet(im.f) ? `${baseAlt} (détail)` : baseAlt;
           const cap = inst ? instCap(im.ph, show) : workCap(a, w, im.ph, isDet(im.f));
-          return `<div class="work-plate"><img src="../../images/works/${im.f}" alt="${alt}"${plateAttrs()}></div>
+          return `<div class="work-plate"><img src="../../images/${im.dir}/${im.f}" alt="${alt}"${plateAttrs()}></div>
         <p class="work-cap">${cap}</p>`;
         });
         /* the "Demander la fiche" link belongs under the WORK, never an installation
@@ -797,7 +802,16 @@ const ARTIST_HOVER_JS = `(function(){
 /* ------------------------------------------------------------
    WRITE THE PAGES
 ------------------------------------------------------------ */
-const put = (rel, txt) => { const f = join(WEB, rel); mkdirSync(dirname(f), { recursive: true }); writeFileSync(f, txt); };
+/* changedPaths tracks which generated files this run actually rewrote content for (not just
+   touched) — the sitemap uses it below so lastmod reflects a real change, not just a rebuild. */
+const changedPaths = new Set();
+const put = (rel, txt) => {
+  const f = join(WEB, rel);
+  mkdirSync(dirname(f), { recursive: true });
+  const prev = existsSync(f) ? readFileSync(f, 'utf8') : null;
+  if (prev !== txt) changedPaths.add(rel);
+  writeFileSync(f, txt);
+};
 
 for (let i = 0; i < ARTISTS.length; i++) put(`artistes/${ARTISTS[i].slug}/index.html`, page(ARTISTS[i], i));
 const REG = registerRows();
@@ -805,13 +819,7 @@ put('artistes/index.html', artistesIndex(REG));
 for (const s of SHOWS) put(`expositions/${s.slug}/index.html`, showPage(s));
 put('expositions/index.html', expositionsIndex());
 
-/* sitemap: home, the two registers, every show and artist page; lastmod = build date */
 const urls = [`${SITE}/`, `${SITE}/expositions/`, ...showsDesc.map(showUrl), `${SITE}/artistes/`, ...ARTISTS.map(a => `${SITE}/artistes/${a.slug}/`)];
-put('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(u => `  <url><loc>${u}</loc><lastmod>${TODAY}</lastmod></url>`).join('\n')}
-</urlset>
-`);
 
 /* ------------------------------------------------------------
    THE HOME PAGE — regenerate the fenced regions, nothing else
@@ -922,7 +930,30 @@ home = region(home, 'navevents', !upcomingEvents.length ? '' : `            <li 
 /* llms.txt (below) still audits against every PAST event, so it stays accurate once an event has happened */
 const pastEvents = showsAsc.flatMap(s => (s.events || [])).filter(ev => ev.day < TODAY).sort((a, b) => b.day.localeCompare(a.day));
 
+if (home !== homeOriginal) changedPaths.add('index.html');
 writeFileSync(join(WEB, 'index.html'), home);
+
+/* sitemap: lastmod is per-URL — TODAY only for a page this run actually changed the content
+   of; otherwise whatever date is already on record, read back from the sitemap before this
+   run overwrites it. A page that hasn't changed since June stops claiming a same-day edit on
+   every build, which is the point: a sitemap that always says "everything changed today" gets
+   discounted by crawlers. */
+const relOf = u => u === `${SITE}/` ? 'index.html'
+  : u === `${SITE}/expositions/` ? 'expositions/index.html'
+  : u === `${SITE}/artistes/` ? 'artistes/index.html'
+  : u.includes('/expositions/') ? `expositions/${u.split('/').filter(Boolean).pop()}/index.html`
+  : `artistes/${u.split('/').filter(Boolean).pop()}/index.html`;
+const oldSitemapPath = join(WEB, 'sitemap.xml');
+const oldLastmod = new Map();
+if (existsSync(oldSitemapPath)) {
+  for (const m of readFileSync(oldSitemapPath, 'utf8').matchAll(/<loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod>/g)) oldLastmod.set(m[1], m[2]);
+}
+const lastmodOf = u => changedPaths.has(relOf(u)) || !oldLastmod.has(u) ? TODAY : oldLastmod.get(u);
+put('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(u => `  <url><loc>${u}</loc><lastmod>${lastmodOf(u)}</lastmod></url>`).join('\n')}
+</urlset>
+`);
 
 /* ------------------------------------------------------------
    GUARDS — the ways this site has gone stale before

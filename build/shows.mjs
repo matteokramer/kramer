@@ -80,8 +80,6 @@ export const SHOWS = [
     { f: "kr03-inst-08-naujoks-nicole.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Luka Naujoks et Nicole" },
     { f: "kr03-inst-09-granoth-naujoks-nicole.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Enam Granoth, Luka Naujoks et Nicole" },
     { f: "kr03-inst-10-granoth-naujoks.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Enam Granoth et Luka Naujoks" },
-    { f: "kr03-inst-11-khrapova-lee-nicole-puget.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Yeva Khrapova, Hyewon Mia Lee, Nicole et Alexis Puget" },
-    { f: "kr03-inst-12-khrapova-lee-puget.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Yeva Khrapova, Hyewon Mia Lee et Alexis Puget" },
     { f: "kr03-inst-13-khrapova-ventura.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Yeva Khrapova et Caroline Ventura" },
     { f: "kr03-inst-14-khrapova-ventura.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Yeva Khrapova et Caroline Ventura" },
     { f: "kr03-inst-15-khrapova-ventura.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Yeva Khrapova et Caroline Ventura" },
