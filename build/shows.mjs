@@ -71,7 +71,16 @@ export const SHOWS = [
           <p>Kramer × Erratum</p>
 `,
     },
-    views: [],
+    views: [
+    { f: "kr03-inst-01-granoth.jpg", ph: 'Matteo Kramer', car: 1, alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvre de Enam Granoth" },
+    { f: "kr03-inst-02-khrapova-lee-nicole-puget.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Yeva Khrapova, Hyewon Mia Lee, Nicole et Alexis Puget" },
+    { f: "kr03-inst-03-khrapova-nicole-ventura.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Yeva Khrapova, Nicole et Caroline Ventura" },
+    { f: "kr03-inst-04-khrapova-lee-puget.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Yeva Khrapova, Hyewon Mia Lee et Alexis Puget" },
+    { f: "kr03-inst-05-nicole-puget.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Nicole et Alexis Puget" },
+    { f: "kr03-inst-06-granoth-naujoks-puget.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Enam Granoth, Luka Naujoks et Alexis Puget" },
+    { f: "kr03-inst-07-lee.jpg", ph: 'Matteo Kramer', alt: "Hyewon Mia Lee, « Maria's tip », 2026, détail — KRAMER, «Magenta Made Me Hardcore»" },
+    { f: "kr03-inst-08-naujoks-nicole.jpg", ph: 'Matteo Kramer', alt: "Vue d'installation de «Magenta Made Me Hardcore», KRAMER — œuvres de Luka Naujoks et Nicole" },
+    ],
     events: [],
     press: [], docs: [],
   },
