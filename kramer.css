@@ -90,8 +90,7 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 .cv-yr{font-size:9px;letter-spacing:.03em;min-width:64px;line-height:20px;color:rgba(0,0,0,.55)} /* wide enough for year ranges (2004–2012) so columns stay aligned */
 
 /* Press rows link out — ink by default, like plain text; blue only while clicked */
-.cv-row a{color:inherit;font-family:inherit}
-.cv-row a:hover{text-decoration:underline}
+.cv-row a{color:var(--link);font-family:inherit;text-decoration:underline}
 .cv-row a:active{color:var(--link-active)}
 
 /* ------------------------------------------------------------
@@ -140,8 +139,16 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 /* the cb-box next to a linked name is the "this has a record" signal (hidden entirely
    for names with none), so the name stays plain ink rather than repeating that in blue —
    same logic as index.html's .cb-link/.artist-link */
+/* Blue everywhere (2026-10-09, reversing the 2026-10-07 revision): any link that
+   really navigates takes --link + underline, including the ones sitting beside a
+   cb-box checkbox. The checkbox stays a checkbox — only the text is coloured and
+   underlined, and a non-linked row (no <a>) keeps plain ink. Still no :visited
+   colour anywhere: the step-nav is href="#" + goTo(), which matches :visited from
+   first paint, so purple would be its permanent resting state. */
 .artist-link{display:inline-flex;align-items:center;color:#000}
-a.artist-link:hover .artist-nm{text-decoration:underline}
+a.artist-link{color:var(--link)}
+a.artist-link .artist-nm{text-decoration:underline}
+a.artist-link .artist-nm em{text-decoration:none}
 a.artist-link:active{color:var(--link-active)}
 /* align-items:center centers the box against the text's full line-height box, but the
    font's ascent/descent split isn't symmetric, so the box reads as sitting too high
