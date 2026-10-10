@@ -73,7 +73,9 @@ const ARTIST_BY_NAME = new Map(ARTISTS.map(a => [a.name, a]));
 /* an artist's representative image — the carousel hero if one's set, else their first
    consigned work's plate. Shared by the Person JSON-LD image and the /artistes/ hover preview. */
 const artistHeroImg = a => ARTIST_IMG[a.slug] ? `${SITE}/${ARTIST_IMG[a.slug]}`
-  : (a.works[0] && a.works[0].i ? `${SITE}/images/works/${a.works[0].i}` : '');
+  : (a.works[0] && a.works[0].i
+      ? (p => `${SITE}/images/${p.dir}/${p.f}`)(plateOf(a.works[0].i, a.works[0]))
+      : '');
 /* which shows an artist is in — derived from SHOWS[].artists, so membership is recorded once */
 const showsOf = a => showsAsc.filter(s => s.artists.includes(a.name));
 /* a work's show: its own `x` code, else the artist's only show */
@@ -89,16 +91,22 @@ function showOfWork(a, w) {
 
 /* Museum-tombstone captions for a work's plates — shared by the per-artist pages
    (work-cap paragraphs) and the home carousel (work slides pulled in from shows.mjs). */
-/* Each plate carries its own photo credit. `i` + string `views` inherit the work's `ph`;
+/* Each plate carries its own photo credit. `i` and string `views` inherit the work's `ph`;
    an object view {f, ph, dir} overrides it (e.g. Matteo's install shots hung under an artist-
    credited reproduction). `dir` lets a view point at images/installation/ instead of
    images/works/ — used for an installation shot an artist is pictured in, so the photo has
    ONE file and ONE URL (the show's own copy) rather than a byte-identical second copy sitting
    under the artist, which just competes with itself in image search. Returns [{f, ph, dir}]
-   in display order. */
+   in display order. Both `i` and a view accept either form, so a work whose only
+   photograph is a room shot (Luka's Bouquets, Yeva's Tulipes, Caroline's étoile) can
+   point its hero straight at images/installation/ — before 2026-10-09 `i` was assumed
+   to be a string and an object there rendered as the literal "[object Object]". */
+const plateOf = (v, w) => typeof v === 'string'
+  ? { f: v, ph: w.ph || '', dir: 'works' }
+  : { f: v.f, ph: v.ph || w.ph || '', dir: v.dir || 'works' };
 const workImgs = w => [
-  ...(w.i ? [{ f: w.i, ph: w.ph || '', dir: 'works' }] : []),
-  ...(w.views || []).map(v => typeof v === 'string' ? { f: v, ph: w.ph || '', dir: 'works' } : { f: v.f, ph: v.ph || w.ph || '', dir: v.dir || 'works' }),
+  ...(w.i ? [plateOf(w.i, w)] : []),
+  ...(w.views || []).map(v => plateOf(v, w)),
 ];
 /* filename convention: an installation shot (…inst-N…) gets the exhibition caption;
    a work shot (obj/det/repro) gets the tombstone. …det-N… gets a "(détail)" marker. */
