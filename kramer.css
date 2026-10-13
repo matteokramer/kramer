@@ -139,15 +139,11 @@ a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid 
 /* the cb-box next to a linked name is the "this has a record" signal (hidden entirely
    for names with none), so the name stays plain ink rather than repeating that in blue —
    same logic as index.html's .cb-link/.artist-link */
-/* Blue everywhere (2026-10-09, reversing the 2026-10-07 revision): any link that
-   really navigates takes --link + underline, including the ones sitting beside a
-   cb-box checkbox. The checkbox stays a checkbox — only the text is coloured and
-   underlined, and a non-linked row (no <a>) keeps plain ink. Still no :visited
-   colour anywhere: the step-nav is href="#" + goTo(), which matches :visited from
-   first paint, so purple would be its permanent resting state. */
+/* Reverted to plain ink 2026-10-13 (Matteo), undoing the "blue everywhere" rule of
+   2026-10-09 — the cb-box already says "interactive"; see index.html's .obf-link
+   comment for the full rule. Underline on hover only, red flash on press. */
 .artist-link{display:inline-flex;align-items:center;color:#000}
-a.artist-link{color:var(--link)}
-a.artist-link .artist-nm{text-decoration:underline}
+a.artist-link:hover .artist-nm{text-decoration:underline}
 a.artist-link .artist-nm em{text-decoration:none}
 a.artist-link:active{color:var(--link-active)}
 /* align-items:center centers the box against the text's full line-height box, but the
