@@ -872,7 +872,7 @@ const slides = [
   ...workSlides,
 ];
 const sliderHtml = slides.length ? `    <div class="slider-wrap" id="section-artworks">
-      <div class="slide-cursor" id="slide-cursor" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M2 12h18M12 4l8 8-8 8" fill="none" stroke="#000" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/></svg></div>
+      <div class="slide-cursor" id="slide-cursor" aria-hidden="true"><span>→</span></div>
       <div class="slide-area">
         <a class="slide-plate" id="slide-link" href="#" aria-label="Voir l'exposition">
           <!-- Transparent 1×1 initial src: showSlide() sets the real image on init, so a
