@@ -385,8 +385,10 @@ a:focus-visible,button:focus-visible,.slider-wrap:focus-visible,[tabindex]:focus
   font-size:22px;font-weight:700;color:#000;
   transform:translate(-50%,-50%);
   opacity:0;transition:opacity .1s;
-  line-height:1;
+  line-height:0;
 }
+/* One SVG arrow for all three directions, rotated — never a font glyph (iOS draws ↗ as an emoji) */
+.slide-cursor svg{display:block;transform:rotate(var(--rot,0deg))}
 .slide-area{height:clamp(240px,60vh,600px);position:relative;overflow:hidden}
 /* Plates show the whole work — scale varies, content is never cropped */
 .plate-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
@@ -660,7 +662,7 @@ a.artist-link:active .cb-box::after,.ev-link:active .cb-box::after{content:'';po
          in build/shows.mjs. None flagged → nothing here, and the wordmark scrolls to the top. -->
     <!--BUILD:slider-->
     <div class="slider-wrap" id="section-artworks">
-      <div class="slide-cursor" id="slide-cursor">→</div>
+      <div class="slide-cursor" id="slide-cursor" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M2 12h18M12 4l8 8-8 8" fill="none" stroke="#000" stroke-width="2.75" stroke-linecap="square" stroke-linejoin="miter"/></svg></div>
       <div class="slide-area">
         <a class="slide-plate" id="slide-link" href="#" aria-label="Voir l'exposition">
           <!-- Transparent 1×1 initial src: showSlide() sets the real image on init, so a
@@ -1190,6 +1192,7 @@ function initSlider(){
   const multi=SLIDES.length>1; /* one slide: no arrows, counter or autoplay — the plate just opens the show */
   showSlide(Math.floor(Math.random()*SLIDES.length)); /* random opening slide so later ones also get seen */
   const cur=document.getElementById('slide-cursor');
+  let lastTouch=0; /* time of the last touch — set by the touch handlers below */
   cur.style.opacity='0'; /* inline 0 beats the CSS :hover rule — no corner flash before first move */
   /* keyboard access for the slider */
   wrap.setAttribute('tabindex','0');
@@ -1201,19 +1204,29 @@ function initSlider(){
     else if(e.key==='ArrowRight'){showSlide(idx+1);}
   });
   wrap.addEventListener('mousemove',function(e){
+    if(Date.now()-lastTouch<800)return; /* phones fire a fake mousemove on tap — no stranded arrow */
     const r=wrap.getBoundingClientRect();
     const x=e.clientX-r.left,y=e.clientY-r.top;
     cur.style.left=x+'px';cur.style.top=y+'px';cur.style.opacity='1';/* reveal once positioned */
     const f=x/r.width;
-    cur.textContent=!multi?'↗':f<.25?'←':f>.75?'→':'↗'; /* edges flip views · centre opens the show page */
+    cur.style.setProperty('--rot',!multi?'-45deg':f<.25?'180deg':f>.75?'0deg':'-45deg'); /* edges flip views · centre opens the show page */
   });
   wrap.addEventListener('mouseleave',function(){cur.style.opacity='0';});
   let tx=0,touchNav=false;
-  wrap.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+  wrap.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;lastTouch=Date.now();},{passive:true});
   wrap.addEventListener('touchend',e=>{
+    lastTouch=Date.now();
     const dx=e.changedTouches[0].clientX-tx;
-    if(multi&&Math.abs(dx)>40)showSlide(dx<0?idx+1:idx-1);
-    touchNav=true;setTimeout(()=>{touchNav=false;},500); /* swallow the ghost click that follows */
+    if(multi&&Math.abs(dx)>40){ /* a swipe: flip, and swallow the ghost click that follows */
+      showSlide(dx<0?idx+1:idx-1);
+      touchNav=true;setTimeout(()=>{touchNav=false;},500);
+    }else{ /* a plain tap: flash the same arrow where the finger was, then let the click
+              handler act on it — edges flip, centre opens the page */
+      const r=wrap.getBoundingClientRect(),t=e.changedTouches[0],x=t.clientX-r.left,f=x/r.width;
+      cur.style.left=x+'px';cur.style.top=(t.clientY-r.top)+'px';
+      cur.style.setProperty('--rot',!multi?'-45deg':f<.25?'180deg':f>.75?'0deg':'-45deg');
+      cur.style.opacity='1';clearTimeout(cur._t);cur._t=setTimeout(()=>{cur.style.opacity='0';},450);
+    }
   });
   /* Edges flip views (← left quarter / → right quarter); the centre opens the show page.
      The image stays an <a>, so middle-click / open-in-new-tab still work on the centre zone. */
