@@ -276,7 +276,7 @@ const showRoster = (s, artistBase) => s.artists.map(n => {
 /* one event, as a register entry (home page register + each show page). showCode:false
    drops the internal registry code (e.g. "KR01V") — meaningless to a visitor; the show's
    own page already carries its code once, at the top. */
-const eventItem = (ev, { showCode = true } = {}) => {
+const eventItem = (ev, { showCode = true, base = '../../' } = {}) => {
   const L = [];
   L.push('        <li class="ev-item">');
   L.push(`          <p class="exh-ref">${showCode ? `${esc(ev.kind)} · ${esc(ev.code)}` : esc(ev.kind)}</p>`);
@@ -289,6 +289,13 @@ const eventItem = (ev, { showCode = true } = {}) => {
     L.push('          </ul>');
   }
   if (ev.note2) L.push(`          <p class="ev-note">${ev.note2}</p>`);
+  /* optional documentation photos of the event itself (images/installation/), each with its
+     own caption line — `cap` is the caption, `ph` the photographer */
+  if (ev.views && ev.views.length) {
+    L.push('          <div class="view-grid">');
+    ev.views.forEach(v => L.push(`            <div class="view-item"><div class="view-img"><img src="${base}images/installation/${esc(v.f)}" class="plate-img" alt="${esc(v.alt)}" loading="lazy" decoding="async"></div><p class="view-cap">${esc(v.cap)}${v.ph ? ` Photo : ${esc(v.ph.replace(/\.$/, ''))}.` : ''}</p></div>`));
+    L.push('          </div>');
+  }
   L.push('        </li>');
   return L.join('\n');
 };
@@ -663,7 +670,7 @@ ${views.map(v => `        <div class="view-item"><div class="view-img"><img src=
   if (events.length) blocks.push(`${heading('Événements', events.length)}
       <ul class="ev-list">
 
-${events.map(eventItem).join('\n\n')}
+${events.map(ev => eventItem(ev)).join('\n\n')}
 
       </ul>`);
   const presse = pressRows(s.press);
@@ -928,7 +935,7 @@ const upcomingEvents = showsAsc.flatMap(s => (s.events || [])).filter(ev => ev.d
 home = region(home, 'events', !upcomingEvents.length ? '' : `    <div class="section" id="section-archive">
       <h2 class="s-head">Registre des événements — ${plural(upcomingEvents.length, 'entrée')}</h2>
       <ul class="ev-list">
-${'\n' + upcomingEvents.map(ev => eventItem(ev, { showCode: false })).join('\n\n') + '\n'}
+${'\n' + upcomingEvents.map(ev => eventItem(ev, { showCode: false, base: '' })).join('\n\n') + '\n'}
       </ul>
     </div>`);
 home = region(home, 'navevents', !upcomingEvents.length ? '' : `            <li class="cb-item"><a class="cb-link" onclick="goTo('section-archive');return false" href="#">

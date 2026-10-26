@@ -32,7 +32,9 @@
                              slug, f one of that work's image filenames (its own tombstone
                              caption — artist, title, date, medium, size, credit — becomes
                              the slide's alt text)
-     events [...]            vernissage, screening, dinner… see the entries below.
+     events [...]            vernissage, screening, dinner, performance… see the entries below.
+                             An event can carry views [{f, alt, cap, ph}]: its own photos
+                             (images/installation/), captioned individually
                              Once their day has passed they also fill the home
                              page's Registre des événements
      press [{d, pub, t, by, url}]
@@ -47,6 +49,7 @@
 const SITE = 'https://kramer.paris';
 const U1 = `${SITE}/expositions/kr01-la-bride/`;
 const U2 = `${SITE}/expositions/kr02-self/`;
+const U3 = `${SITE}/expositions/kr03-magenta-made-me-hardcore/`;
 
 export const SHOWS = [
   {
@@ -94,7 +97,21 @@ export const SHOWS = [
     { artist: 'nicole', f: 'nicole--at-your-feet--obj-1.jpg' },
     { artist: 'yeva-khrapova', f: 'yeva-khrapova--lily--obj-1.jpg' },
     ],
-    events: [],
+    events: [
+      { kind: 'Performance', code: 'KR03', day: '2026-10-22',
+        title: '<em>Contained / Containing</em> — 22 octobre 2026, 18h30',
+        note: "Performance de Nicole, dans le cadre de l'exposition « Magenta Made Me Hardcore ».",
+        views: [
+        { f: 'kr03-perf-01-nicole.jpg', ph: 'Andréas F.', cap: "Nicole, « Contained / Containing », performance, 22 octobre 2026.", alt: "Nicole, « Contained / Containing », performance, 22 octobre 2026 — performeuses en blanc, public au fond" },
+        { f: 'kr03-perf-02-nicole.jpg', ph: 'Andréas F.', cap: "Nicole, « Contained / Containing », performance, 22 octobre 2026.", alt: "Nicole, « Contained / Containing », performance, 22 octobre 2026 — jambes et talons blancs, bouteilles d'eau au sol, mannequins" },
+        { f: 'kr03-perf-03-nicole.jpg', ph: 'Andréas F.', cap: "Nicole, « Contained / Containing », performance, 22 octobre 2026.", alt: "Nicole, « Contained / Containing », performance, 22 octobre 2026 — performeuses en blanc entre portants et miroirs" },
+        ],
+        ld: [{ '@type': 'Event', '@id': `${U3}#performance`, name: 'Contained / Containing — performance de Nicole',
+          startDate: '2026-10-22T18:30:00+02:00', isAccessibleForFree: true,
+          performer: { '@type': 'Person', '@id': `${SITE}/artistes/nicole/#person`, name: 'Nicole' },
+          image: [`${SITE}/images/installation/kr03-perf-01-nicole.jpg`, `${SITE}/images/installation/kr03-perf-02-nicole.jpg`, `${SITE}/images/installation/kr03-perf-03-nicole.jpg`],
+          description: "Performance de Nicole, dans le cadre de l'exposition « Magenta Made Me Hardcore » (KR03)." }] },
+    ],
     press: [], docs: [],
   },
   {
