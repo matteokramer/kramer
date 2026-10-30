@@ -916,8 +916,23 @@ var FORM_PLACEHOLDER = 'REPLACE_WITH_NEW_FORMSPREE_ID';
 
 /* ---- Show configuration --------------------------------------------------
    Registry spelling is KR01/KR02/KR03 — no slash (vault rule, 2026-09-08).
-   Pick a show with ?x=KR03. Empty strings render as “to be confirmed”. */
+   Pick a show with ?x=KR04. Empty strings render as “to be confirmed”.
+   No ?x (or an unknown code) falls back to the next show — KR04 since 2026-10-30. */
 var SHOWS = {
+  KR04: {
+    code: 'KR04',
+    title: 'Visitors, Cruelty, Personal Hygiene',
+    dates: '12 November – 5 December 2026',
+    venue: 'KRAMER, 132 Bd de Magenta, 75010 Paris',
+    organizers: 'Matteo Kramer (KRAMER)',
+    /* Solo show, no co-organizer. Both deadlines match Clause 4 of the KR04 agreement draft
+       (EXHIBITIONS/KR04_VISITORS-CRUELTY-PERSONAL-HYGIENE/AGREEMENTS/DRAFT/HTML/), proposed
+       2026-10-30 and not yet agreed with Hugo: delivery by the end of the install week
+       (install is the first week of November, opening 12 November); collection three days
+       after the close, ahead of the next show. Change both places together. */
+    delivery: 'before 9 November 2026',
+    collection: 'before 9 December 2026'
+  },
   KR03: {
     code: 'KR03',
     title: '',
@@ -957,7 +972,7 @@ var q = function (s, r) { return (r || document).querySelector(s); };
 var qa = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
 
 /* ---- show ---------------------------------------------------------------- */
-var SHOW = SHOWS[(new URLSearchParams(location.search).get('x') || '').toUpperCase()] || SHOWS.KR03;
+var SHOW = SHOWS[(new URLSearchParams(location.search).get('x') || '').toUpperCase()] || SHOWS.KR04;
 
 (function paintShow() {
   var label = SHOW.code + (SHOW.title ? ' · « ' + SHOW.title + ' »' : '') + ' · ' + SHOW.dates;
