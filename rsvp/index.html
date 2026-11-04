@@ -45,6 +45,7 @@
   .done{padding:0 10px 32px;max-width:60ch}
   .done p{margin-bottom:.6em}
 </style>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 <div class="chrome ct"><a class="cnav c9" href="../"><span class="hb-arrow" aria-hidden="true">←</span> Retour</a><div class="c9i">KR03</div></div>
@@ -72,6 +73,8 @@
     <input type="hidden" name="slot" id="f-slot">
     <input type="hidden" name="choice" id="f-choice">
     <input type="hidden" name="_subject" id="f-subject" value="Confirmation de créneau">
+    <!-- Cloudflare Turnstile (invisible) : ajoute un champ cf-turnstile-response que Formspree vérifie. -->
+    <div class="cf-turnstile" data-sitekey="0x4AAAAAAFzUBMXvsQwiLyXK"></div>
     <div class="ff">
       <label for="f-comp">Accompagné de (facultatif)</label>
       <input type="text" id="f-comp" name="accompagne de" maxlength="80" autocomplete="off">
@@ -201,6 +204,7 @@
     } catch(err){
       console.error('[kramer] confirmation non transmise :',err);
       yes.disabled=no.disabled=false;
+      if(window.turnstile)turnstile.reset();
       yes.textContent='Je confirme'; no.textContent='Je ne peux pas';
       var n=document.getElementById('hold-note');
       n.textContent='L’envoi a échoué. Réessayez, ou répondez simplement au message '+
