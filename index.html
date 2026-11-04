@@ -482,6 +482,7 @@ a.artist-link:active .cb-box::after,.ev-link:active .cb-box::after{content:'';po
 #legal.open{display:block}
 .legal-body p{margin-bottom:.75em;max-width:70ch}
 </style>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=tsReady" async defer></script>
 </head>
 <body>
 <noscript><style>body{position:static;overflow:auto}#scroll{overflow:visible;border:none}.chrome{position:static}</style><p style="padding:12px;font-family:Arial,sans-serif;font-size:13px">Kramer · 132 Bd de Magenta, 75010 Paris · <a href="mailto:contact@kramer.paris">contact@kramer.paris</a> · JavaScript requis pour la navigation complète.</p></noscript>
@@ -665,6 +666,8 @@ a.artist-link:active .cb-box::after,.ev-link:active .cb-box::after{content:'';po
           <!-- Honeypot: invisible to humans, silently traps bots. Formspree drops any
                submission where _gotcha is filled. Do not remove the inline hiding. -->
           <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
+          <!-- Cloudflare Turnstile (invisible): renders a hidden cf-turnstile-response field that Formspree checks. -->
+          <div id="ts-form"></div>
           <!-- for/id on every field: the label is a sibling, not a wrapper, so without it
                screen readers announce these as unlabelled. .ff label is display:block, so
                this is purely semantic — nothing moves. -->
@@ -678,6 +681,8 @@ a.artist-link:active .cb-box::after,.ev-link:active .cb-box::after{content:'';po
           <div class="ff"><label for="f-note">Note (facultatif)</label><textarea id="f-note" name="note" rows="2"></textarea></div>
           <button class="btn" type="submit">Envoyer</button>
         </form>
+        <!-- Second Turnstile token, for the newsletter Worker: a token can be checked only once, and Formspree uses the form's. Outside the form so it is not submitted. -->
+        <div id="ts-nl"></div>
       </div>
     </div>
 
@@ -732,7 +737,7 @@ a.artist-link:active .cb-box::after,.ev-link:active .cb-box::after{content:'';po
     <p>Ce site n'utilise aucun cookie ni traceur publicitaire. La mesure d'audience est assurée par Cloudflare Web Analytics, de manière anonyme et sans cookie ; aucun bandeau de consentement n'est donc requis.</p>
 
     <p class="lb-cv-section">Services tiers</p>
-    <p>Le site s'appuie sur les prestataires suivants, susceptibles de traiter des données techniques (dont l'adresse IP) pour leur bon fonctionnement : Formspree (Formspree Inc., États-Unis) pour l'acheminement des formulaires (formulaire d'accès et formulaire de dépôt) ; Cloudflare pour la mesure d'audience anonyme ; Adobe Fonts (Adobe Inc.) pour l'affichage des polices ; GitHub Pages pour l'hébergement. Ces prestataires agissent en qualité de sous-traitants, pour les seules finalités décrites ci-dessus.</p>
+    <p>Le site s'appuie sur les prestataires suivants, susceptibles de traiter des données techniques (dont l'adresse IP) pour leur bon fonctionnement : Formspree (Formspree Inc., États-Unis) pour l'acheminement des formulaires (formulaire d'accès et formulaire de dépôt) ; Cloudflare pour la mesure d'audience anonyme et la protection anti-spam des formulaires (Turnstile) ; Adobe Fonts (Adobe Inc.) pour l'affichage des polices ; GitHub Pages pour l'hébergement. Ces prestataires agissent en qualité de sous-traitants, pour les seules finalités décrites ci-dessus.</p>
   </div>
 </div>
 
@@ -1082,7 +1087,8 @@ async function rsvpSubmit(e){
   const newsletter=fd.get('newsletter');
   const payload={
     nom:fd.get('nom'),email:fd.get('email'),
-    affiliation:fd.get('affiliation'),newsletter:newsletter
+    affiliation:fd.get('affiliation'),newsletter:newsletter,
+    token:(window.turnstile&&TS_NL!==null)?turnstile.getResponse(TS_NL):''
   };
   /* Newsletter sign-up is fire-and-forget: a Brevo failure must never
      block a valid RSVP, so it runs independently of the Formspree call.
@@ -1111,7 +1117,20 @@ async function rsvpSubmit(e){
     b.textContent='Erreur \u2014 r\u00e9essayer';
     b.disabled=false;
   }
+  tsReset();
   return false;
+}
+/* Turnstile: two invisible widgets, one per consumer (Formspree, newsletter Worker). */
+var TS_KEY='0x4AAAAAAFzUBMXvsQwiLyXK',TS_FORM=null,TS_NL=null;
+function tsReady(){
+  try{
+    TS_FORM=turnstile.render('#ts-form',{sitekey:TS_KEY});
+    TS_NL=turnstile.render('#ts-nl',{sitekey:TS_KEY});
+  }catch(err){console.warn('[kramer] Turnstile failed to load:',err);}
+}
+function tsReset(){
+  if(!window.turnstile)return;
+  try{if(TS_FORM!==null)turnstile.reset(TS_FORM);if(TS_NL!==null)turnstile.reset(TS_NL);}catch(_){}
 }
 function tick(){
   const s=Date.now(),el=document.getElementById('clock');

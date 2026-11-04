@@ -293,6 +293,7 @@ table.flow td{padding:0;vertical-align:top}
   .hint,.counter,.errmsg{display:none}
 }
 </style>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -661,6 +662,9 @@ table.flow td{padding:0;vertical-align:top}
     <div class="paper" data-for="notes"></div>
   </div>
 
+  <!-- Cloudflare Turnstile (invisible): adds a hidden cf-turnstile-response field that Formspree checks. -->
+  <div class="cf-turnstile no-print" data-sitekey="0x4AAAAAAFzUBMXvsQwiLyXK"></div>
+
   <div class="no-print" id="submit-zone" style="margin-top:18px">
     <p class="errmsg" id="form-err" hidden></p>
     <button class="btn" type="submit" id="submit-btn">Send</button>
@@ -678,7 +682,7 @@ table.flow td{padding:0;vertical-align:top}
     insure the works — legal basis: pre-contractual and contractual measures (art. 6.1.b GDPR).
     Section 02 is published on kramer.paris on the basis of your consent, given above and revocable
     at any time. Postal address and telephone number are never published. The artist social-security
-    number is not collected online. Form routing is handled by Formspree Inc. (United States).
+    number is not collected online. Form routing is handled by Formspree Inc. (United States); spam protection by Cloudflare Turnstile.
     Entries you type are held as a draft in your own browser only and are not transmitted until you
     send. Records are kept for the duration of the deposit and then for ten years, for accounting
     and provenance. To access, correct or erase your data, write to the address above.
@@ -1205,7 +1209,7 @@ function saveDraft() {
     try {
       var data = { n: workBlocks().length, f: {} };
       qa('#depot input, #depot textarea').forEach(function (el) {
-        if (!el.name || el.name === '_gotcha') return;
+        if (!el.name || el.name === '_gotcha' || el.name === 'cf-turnstile-response') return;
         if (el.type === 'checkbox' || el.type === 'radio') {
           if (el.checked) data.f[el.name + '::' + el.value] = 1;
         } else if (el.value) {
@@ -1354,6 +1358,7 @@ async function submitForm(e) {
         detail = (j.errors && j.errors.map(function (x) { return x.message; }).join('; ')) || j.error || '';
       } catch (_) {}
       console.error('[kramer] Formspree rejected the submission:', r.status, detail);
+      if (window.turnstile) turnstile.reset();
       errBox.textContent = 'Could not send' + (detail ? ' — ' + detail : '') + '. Please try again.';
       errBox.hidden = false;
       btn.textContent = 'Send';
@@ -1361,6 +1366,7 @@ async function submitForm(e) {
     }
   } catch (err) {
     console.error('[kramer] Formspree request failed:', err);
+    if (window.turnstile) turnstile.reset();
     errBox.textContent = 'Could not send — check your connection and try again.';
     errBox.hidden = false;
     btn.textContent = 'Send';
