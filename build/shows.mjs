@@ -54,10 +54,10 @@ const U3 = `${SITE}/expositions/kr03-magenta-made-me-hardcore/`;
 export const SHOWS = [
   {
     code: 'KR04', slug: 'kr04-visitors-cruelty-personal-hygiene', title: 'Visitors, Cruelty, Personal Hygiene',
-    from: '2026-11-12', to: '2026-12-05',
-    dates: '12 novembre – 5 décembre 2026', hours: 'Sur rendez-vous',
-    desc: '« Visitors, Cruelty, Personal Hygiene » (KR04) — exposition personnelle de Hugo Hectus, du 12 novembre au 5 décembre 2026.',
-    metaDesc: "« Visitors, Cruelty, Personal Hygiene » (KR04) — exposition personnelle de Hugo Hectus, 12 novembre–5 décembre 2026, sur rendez-vous. Kramer, galerie d'art contemporain, Paris 10e.",
+    from: '2026-11-12', to: '2027-01-10',
+    dates: '12 novembre 2026 – 10 janvier 2027', hours: 'Sur rendez-vous',
+    desc: '« Visitors, Cruelty, Personal Hygiene » (KR04) — exposition personnelle de Hugo Hectus, du 12 novembre 2026 au 10 janvier 2027.',
+    metaDesc: "« Visitors, Cruelty, Personal Hygiene » (KR04) — exposition personnelle de Hugo Hectus, 12 novembre 2026–10 janvier 2027, sur rendez-vous. Kramer, galerie d'art contemporain, Paris 10e.",
     artists: ['Hugo Hectus'],
     prose: {
       fr: `
