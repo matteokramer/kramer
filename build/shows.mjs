@@ -81,7 +81,7 @@ export const SHOWS = [
     },
     views: [],
     events: [],
-    press: [], docs: [{ t: 'Invitation', url: `${SITE}/images/newsletter/kr04-invitation.png` }],
+    press: [], docs: [],
   },
   {
     code: 'KR03', slug: 'kr03-magenta-made-me-hardcore', title: 'Magenta Made Me Hardcore',
