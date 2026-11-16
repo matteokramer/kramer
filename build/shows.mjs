@@ -79,7 +79,14 @@ export const SHOWS = [
           <p>— Hugo Hectus</p>
 `,
     },
-    views: [],
+    views: [
+    { f: "kr04-inst-01-hectus.jpg", ph: 'Mischa Schlegel', car: 1, alt: "Vue d'installation de «Visitors, Cruelty, Personal Hygiene», KRAMER — œuvres de Hugo Hectus" },
+    { f: "kr04-inst-02-hectus.jpg", ph: 'Mischa Schlegel', car: 1, alt: "Vue d'installation de «Visitors, Cruelty, Personal Hygiene», KRAMER — œuvres de Hugo Hectus" },
+    { f: "kr04-inst-03-hectus.jpg", ph: 'Mischa Schlegel', car: 1, alt: "Vue d'installation de «Visitors, Cruelty, Personal Hygiene», KRAMER — œuvres de Hugo Hectus" },
+    { f: "kr04-inst-04-hectus.jpg", ph: 'Mischa Schlegel', car: 1, alt: "Vue d'installation de «Visitors, Cruelty, Personal Hygiene», KRAMER — œuvres de Hugo Hectus" },
+    { f: "kr04-inst-05-hectus.jpg", ph: 'Mischa Schlegel', car: 1, alt: "Vue d'installation de «Visitors, Cruelty, Personal Hygiene», KRAMER — œuvres de Hugo Hectus" },
+    { f: "kr04-inst-06-hectus.jpg", ph: 'Mischa Schlegel', car: 1, alt: "Vue d'installation de «Visitors, Cruelty, Personal Hygiene», KRAMER — œuvres de Hugo Hectus" },
+    ],
     events: [],
     press: [], docs: [],
   },
